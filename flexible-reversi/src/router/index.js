@@ -14,7 +14,9 @@ const routes = [
     path: "/stage-select",
     name: "StageSelect",
     component: function () {
-      return import(/* webpackChunkName: "stage-select" */ "../views/StageSelect.vue");
+      return import(
+        /* webpackChunkName: "stage-select" */ "../views/StageSelect.vue"
+      );
     },
   },
   {

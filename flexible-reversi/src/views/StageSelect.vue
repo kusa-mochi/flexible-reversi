@@ -1,8 +1,8 @@
 <template>
   <div class="stage-select">
-      <p>stage select</p>
-      <router-link to="/">Top</router-link>
-      <router-link to="/game">Game</router-link>
+    <p>stage select</p>
+    <router-link to="/">Top</router-link>
+    <router-link to="/game">Game</router-link>
   </div>
 </template>
 
@@ -25,6 +25,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

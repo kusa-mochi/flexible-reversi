@@ -1,8 +1,8 @@
 <template>
   <div class="settings">
-      <p>settings</p>
-      <router-link to="/about">About</router-link>
-      <router-link to="/">Top</router-link>
+    <p>settings</p>
+    <router-link to="/about">About</router-link>
+    <router-link to="/">Top</router-link>
   </div>
 </template>
 
@@ -25,6 +25,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
