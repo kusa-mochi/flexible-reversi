@@ -1,14 +1,35 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Top from "../views/Top.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "Top",
+    component: Top,
+  },
+  {
+    path: "/stage-select",
+    name: "StageSelect",
+    component: function () {
+      return import(/* webpackChunkName: "stage-select" */ "../views/StageSelect.vue");
+    },
+  },
+  {
+    path: "/game",
+    name: "Game",
+    component: function () {
+      return import(/* webpackChunkName: "game" */ "../views/Game.vue");
+    },
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: function () {
+      return import(/* webpackChunkName: "settings" */ "../views/Settings.vue");
+    },
   },
   {
     path: "/about",
