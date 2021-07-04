@@ -2,11 +2,17 @@
   <div class="game">
     <p>game</p>
     <router-link to="/">Top</router-link>
+    <reversi-board></reversi-board>
   </div>
 </template>
 
 <script>
+import ReversiBoard from "@/components/ReversiBoard";
+
 export default {
+  components: {
+    ReversiBoard,
+  },
   computed: {
     currentPage: {
       get() {
