@@ -8,8 +8,21 @@
 
 <script>
 export default {
-    name: "StageSelect"
-}
+  computed: {
+    currentPage: {
+      get() {
+        return this.$store.state.currentPage;
+      },
+      set(newValue) {
+        this.$store.state.currentPage = newValue;
+      },
+    },
+  },
+  created() {
+    this.currentPage = "stage-select";
+  },
+  name: "StageSelect",
+};
 </script>
 
 <style>
