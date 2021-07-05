@@ -1,43 +1,67 @@
 <template>
   <div class="reversi-board" :style="boardSizeStyle">
     <div v-for="iCell in this.numCells" :key="iCell" class="reversi-cell">
-      {{ iCell }}
+      <reversi-stone
+        v-if="cellState(iCell - 1) === 1"
+        :state="1"
+      ></reversi-stone>
+      <reversi-stone
+        v-else-if="cellState(iCell - 1) === 2"
+        :state="2"
+      ></reversi-stone>
+      <div v-else></div>
     </div>
   </div>
 </template>
 
 <script>
+import ReversiStone from "@/components/ReversiStone";
+
 export default {
+  components: {
+    ReversiStone,
+  },
   computed: {
     boardSizeStyle: {
       get() {
-          return {
-              "--board-width": `${this.boardWidth}px`,
-              "--board-height": `${this.boardHeight}px`,
-              "--num-columns": this.numColmns,
-              "--num-rows": this.numRows
-          };
+        return {
+          "--board-width": `${this.boardWidth}px`,
+          "--board-height": `${this.boardHeight}px`,
+          "--num-columns": this.numColumns,
+          "--num-rows": this.numRows,
+        };
       },
     },
     numCells: {
       get() {
-        return this.numColmns * this.numRows;
+        return this.numColumns * this.numRows;
       },
+    },
+  },
+  methods: {
+    cellState(idx) {
+      const iRow = Math.floor(idx / this.numColumns);
+      const iColumn = idx % this.numColumns;
+      return this.boardStatus[iRow][iColumn];
     },
   },
   name: "ReversiBoard",
   props: {
     boardWidth: {
-        type: Number,
-        require: false,
-        default: 800
+      type: Number,
+      require: false,
+      default: 800,
     },
     boardHeight: {
-        type: Number,
-        require: false,
-        default: 800
+      type: Number,
+      require: false,
+      default: 800,
     },
-    numColmns: {
+    boardStatus: {
+      type: Array,
+      required: true,
+    },
+    numColumns: {
       type: Number,
       require: false,
       default: 8,
@@ -46,7 +70,7 @@ export default {
       type: Number,
       require: false,
       default: 8,
-    }
+    },
   },
 };
 </script>
@@ -69,9 +93,15 @@ export default {
   align-content: center;
   justify-content: center;
 
+  width: var(--board-width);
+  height: var(--board-height);
+  background-color: #00a858;
+  border: 4px solid #505050;
+
   .reversi-cell {
     width: 100%;
     height: 100%;
+    border: 1px solid #505050;
   }
 }
 </style>
