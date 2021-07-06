@@ -1,13 +1,15 @@
 <template>
-  <div class="reversi-stone">
-    <div v-if="state === 1" class="stone stone--black"></div>
+  <div class="reversi-cell">
+    <div v-if="state === 0"></div>
+    <div v-else-if="state === 1" class="stone stone--black"></div>
     <div v-else-if="state === 2" class="stone stone--white"></div>
+    <div v-else-if="state === 3" class="wall"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ReversiStone",
+  name: "ReversiCell",
   props: {
     state: {
       type: Number,
@@ -19,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.reversi-stone {
+.reversi-cell {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -42,5 +44,11 @@ export default {
   &--white {
     background-color: #f5f5f5;
   }
+}
+
+.wall {
+  width: 100%;
+  height: 100%;
+  background-color: #505050;
 }
 </style>

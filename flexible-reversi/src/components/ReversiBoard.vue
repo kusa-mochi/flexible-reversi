@@ -1,25 +1,17 @@
 <template>
   <div class="reversi-board" :style="boardSizeStyle">
     <div v-for="iCell in this.numCells" :key="iCell" class="reversi-cell">
-      <reversi-stone
-        v-if="cellState(iCell - 1) === 1"
-        :state="1"
-      ></reversi-stone>
-      <reversi-stone
-        v-else-if="cellState(iCell - 1) === 2"
-        :state="2"
-      ></reversi-stone>
-      <div v-else></div>
+      <reversi-cell :state="cellState(iCell - 1)"></reversi-cell>
     </div>
   </div>
 </template>
 
 <script>
-import ReversiStone from "@/components/ReversiStone";
+import ReversiCell from "@/components/ReversiCell";
 
 export default {
   components: {
-    ReversiStone,
+    ReversiCell,
   },
   computed: {
     boardSizeStyle: {
@@ -101,7 +93,7 @@ export default {
   .reversi-cell {
     width: 100%;
     height: 100%;
-    border: 1px solid #505050;
+    border: 0.5px solid #505050;
   }
 }
 </style>
