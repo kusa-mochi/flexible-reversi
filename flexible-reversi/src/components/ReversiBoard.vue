@@ -1,8 +1,12 @@
 <template>
   <div class="reversi-board" :style="boardSizeStyle">
-    <div v-for="iCell in this.numCells" :key="iCell" class="reversi-cell">
-      <reversi-cell :state="cellState(iCell - 1)"></reversi-cell>
-    </div>
+    <template v-for="(tmp1, iRow) in numRows">
+      <template v-for="(tmp2, iColumn) in numColumns">
+        <div :key="iRow * numColumns + iColumn" class="reversi-cell">
+          <reversi-cell :state="cellState(iColumn, iRow)"></reversi-cell>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 
@@ -24,16 +28,9 @@ export default {
         };
       },
     },
-    numCells: {
-      get() {
-        return this.numColumns * this.numRows;
-      },
-    },
   },
   methods: {
-    cellState(idx) {
-      const iRow = Math.floor(idx / this.numColumns);
-      const iColumn = idx % this.numColumns;
+    cellState(iColumn, iRow) {
       return this.boardStatus[iRow][iColumn];
     },
   },
