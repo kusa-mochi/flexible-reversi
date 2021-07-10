@@ -51,9 +51,11 @@ export default {
       return this.boardStatus._status[iRow][iColumn];
     },
     onClickCell(iColumn, iRow) {
+      const putSound = new Audio(require("@/assets/put-stone.mp3"));
       console.log("on click cell: " + iColumn + ", " + iRow);
-      this.boardStatus.putStone(iColumn, iRow);
+      const result = this.boardStatus.putStone(iColumn, iRow);
       this.boardStatus._status = this.boardStatus._status.slice(0);
+      if(result) putSound.play();
     },
   },
   name: "ReversiBoard",

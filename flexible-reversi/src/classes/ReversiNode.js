@@ -40,7 +40,7 @@ export default class ReversiNode {
   }
 
   putStone(iColumn, iRow) {
-    this.putStoneCore(iColumn, iRow, true);
+    return this.putStoneCore(iColumn, iRow, true);
   }
 
   canPutStone(iColumn, iRow) {
@@ -64,11 +64,7 @@ export default class ReversiNode {
     if (this._status[iRow][iColumn] !== 0) {
       console.log("it is not an empty cell.");
       // it cannot put a stone.
-      if (ifPut) {
-        return;
-      } else {
         return false;
-      }
     }
 
     const up = this.searchOnDirection(iColumn, iRow, 0, -1, ifPut);
@@ -92,9 +88,9 @@ export default class ReversiNode {
     if (ifPut && searchResult) {
       // switch a player.
       this._player = this._player === 1 ? 2 : 1;
-    } else {
-      return searchResult;
     }
+
+    return searchResult;
   }
 
   // columnDirection: -1/0/+1
