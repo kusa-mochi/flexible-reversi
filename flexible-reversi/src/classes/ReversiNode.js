@@ -64,7 +64,7 @@ export default class ReversiNode {
     if (this._status[iRow][iColumn] !== 0) {
       console.log("it is not an empty cell.");
       // it cannot put a stone.
-        return false;
+      return false;
     }
 
     const up = this.searchOnDirection(iColumn, iRow, 0, -1, ifPut);

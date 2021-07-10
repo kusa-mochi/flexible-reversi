@@ -55,7 +55,7 @@ export default {
       console.log("on click cell: " + iColumn + ", " + iRow);
       const result = this.boardStatus.putStone(iColumn, iRow);
       this.boardStatus._status = this.boardStatus._status.slice(0);
-      if(result) putSound.play();
+      if (result) putSound.play();
     },
   },
   name: "ReversiBoard",
