@@ -89,7 +89,8 @@ export default class ReversiNode {
       console.log("disable.");
     }
 
-    if (ifPut) {
+    if (ifPut && searchResult) {
+      // switch a player.
       this._player = this._player === 1 ? 2 : 1;
     } else {
       return searchResult;
