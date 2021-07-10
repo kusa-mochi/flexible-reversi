@@ -6,8 +6,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentPage: "none",
-    // 1:black, 2:white
-    currentPlayer: 1,
     stageSettings: {
       // 0:blank, 1:black, 2:white
       initialStatus: [

@@ -3,7 +3,10 @@
     <template v-for="(tmp1, iRow) in numRows">
       <template v-for="(tmp2, iColumn) in numColumns">
         <div :key="iRow * numColumns + iColumn" class="reversi-cell">
-          <reversi-cell :state="cellState(iColumn, iRow)"></reversi-cell>
+          <reversi-cell
+            @click="onClickCell(iColumn, iRow)"
+            :state="cellState(iColumn, iRow)"
+          ></reversi-cell>
         </div>
       </template>
     </template>
@@ -12,6 +15,7 @@
 
 <script>
 import ReversiCell from "@/components/ReversiCell";
+import ReversiNode from "@/classes/ReversiNode.js";
 
 export default {
   components: {
@@ -28,36 +32,55 @@ export default {
         };
       },
     },
+    currentBoardStatus: {
+      get() {
+        return this.boardStatus._status;
+      },
+    },
+  },
+  created() {
+    this.boardStatus = new ReversiNode(this.initialBoardStatus, 1);
+  },
+  data() {
+    return {
+      boardStatus: null,
+    };
   },
   methods: {
     cellState(iColumn, iRow) {
-      return this.boardStatus[iRow][iColumn];
+      return this.boardStatus._status[iRow][iColumn];
+    },
+    onClickCell(iColumn, iRow) {
+      console.log("on click cell: " + iColumn + ", " + iRow);
+      this.boardStatus.putStone(iColumn, iRow);
+      this.boardStatus._status = this.boardStatus._status.slice(0);
     },
   },
   name: "ReversiBoard",
   props: {
     boardWidth: {
       type: Number,
-      require: false,
+      required: false,
       default: 800,
     },
     boardHeight: {
       type: Number,
-      require: false,
+      required: false,
       default: 800,
     },
-    boardStatus: {
+    initialBoardStatus: {
       type: Array,
       required: true,
+      default: null,
     },
     numColumns: {
       type: Number,
-      require: false,
+      required: false,
       default: 8,
     },
     numRows: {
       type: Number,
-      require: false,
+      required: false,
       default: 8,
     },
   },

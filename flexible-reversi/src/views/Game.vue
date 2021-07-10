@@ -5,7 +5,7 @@
     <reversi-board
       :board-width="800"
       :board-height="400"
-      :board-status="currentBoardStatus"
+      :initial-board-status="initialBoardStatus"
       :num-columns="boardSize.width"
       :num-rows="boardSize.height"
     ></reversi-board>
@@ -46,20 +46,18 @@ export default {
       this.$router.push("/");
     }
     this.currentPage = "game";
-    this.currentBoardStatus = this.initialBoardStatus;
+
+    // // initialize board.
+    // this.currentBoardStatus = new Array(this.boardSize.height);
+    // for (let iRow = 0; iRow < this.boardSize.height; iRow++) {
+    //   this.currentBoardStatus[iRow] = this.initialBoardStatus[iRow].slice();
+    // }
   },
   data() {
     return {
-      currentBoardStatus: [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 2, 1, 0, 0, 0],
-        [0, 0, 0, 1, 2, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-      ],
+      // currentBoardStatus: null,
+      // 1:black, 2:white
+      currentPlayer: 1,
     };
   },
   name: "Game",

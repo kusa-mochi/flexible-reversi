@@ -1,5 +1,5 @@
 <template>
-  <div class="reversi-cell">
+  <div @click="$emit('click')" class="reversi-cell">
     <div v-if="state === 0"></div>
     <div v-else-if="state === 1" class="stone stone--black"></div>
     <div v-else-if="state === 2" class="stone stone--white"></div>
