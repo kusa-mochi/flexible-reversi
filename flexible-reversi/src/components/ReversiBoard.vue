@@ -40,6 +40,14 @@ export default {
   },
   created() {
     this.boardStatus = new ReversiNode(this.initialBoardStatus, 1);
+    const returnValue = {
+        nextPlayer: this.boardStatus._player,
+        numEmpty: this.boardStatus.getNumEmpty(),
+        numBlack: this.boardStatus.getNumBlack(),
+        numWhite: this.boardStatus.getNumWhite(),
+        canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
+      };
+      this.$emit("initialized", returnValue);
   },
   data() {
     return {
@@ -57,14 +65,35 @@ export default {
       this.boardStatus._status = this.boardStatus._status.slice(0);
       if (result) putSound.play();
 
-      this.$emit("click-cell", {
+      const returnValue = {
         nextPlayer: this.boardStatus._player,
-        afterStatus: {
-          numEmpty: this.boardStatus.getNumEmpty(),
-          numBlack: this.boardStatus.getNumBlack(),
-          numWhite: this.boardStatus.getNumWhite()
+        numEmpty: this.boardStatus.getNumEmpty(),
+        numBlack: this.boardStatus.getNumBlack(),
+        numWhite: this.boardStatus.getNumWhite(),
+        canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
+      };
+
+      if (
+        returnValue.numEmpty === 0 ||
+        returnValue.numBlack === 0 ||
+        returnValue.numWhite === 0
+      ) {
+        this.$emit("game-set", returnValue);
+        return;
+      }
+
+      if (!returnValue.canPutStone) {
+        this.boardStatus.goToNextTurn();
+        if(!this.boardStatus.canPutStoneOnAnyPlace()) {
+          this.$emit("game-set", returnValue);
+          return;
+        } else {
+          this.$emit("pass-turn", returnValue);
         }
-      });
+        return;
+      }
+
+      this.$emit("click-cell", returnValue);
     },
   },
   name: "ReversiBoard",

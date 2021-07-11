@@ -47,6 +47,15 @@ export default class ReversiNode {
     return this.putStoneCore(iColumn, iRow, false);
   }
 
+  canPutStoneOnAnyPlace() {
+    for (let iRow = 0; iRow < this._numRow; iRow++) {
+      for (let iColumn = 0; iColumn < this._numColumn; iColumn++) {
+        if (this.canPutStone(iColumn, iRow)) return true;
+      }
+    }
+    return false;
+  }
+
   getNumEmpty() {
     return this.getNumSpecificStateCells(0);
   }
@@ -61,10 +70,14 @@ export default class ReversiNode {
 
   getNumSpecificStateCells(state) {
     let output = 0;
-    for(let iRow = 0; iRow < this._numRow; iRow++) {
-      output += this._status[iRow].filter(item => item === state).length;
+    for (let iRow = 0; iRow < this._numRow; iRow++) {
+      output += this._status[iRow].filter((item) => item === state).length;
     }
     return output;
+  }
+
+  goToNextTurn() {
+    this.switchPlayer();
   }
 
   // ifPut: true:put stone, false:just check if it is able to put stone (no put)
@@ -106,8 +119,7 @@ export default class ReversiNode {
     }
 
     if (ifPut && searchResult) {
-      // switch a player.
-      this._player = this._player === 1 ? 2 : 1;
+      this.switchPlayer();
     }
 
     return searchResult;
@@ -119,7 +131,7 @@ export default class ReversiNode {
   searchOnDirection(iColumn, iRow, columnDirection, rowDirection, ifPut) {
     const xNeighbor = iColumn + columnDirection;
     const yNeighbor = iRow + rowDirection;
-    const opponent = this._player === 1 ? 2 : 1;
+    const opponent = this.opponentPlayer();
     if (
       !this.between(xNeighbor, 0, this._numColumn - 1) ||
       !this.between(yNeighbor, 0, this._numRow - 1)
@@ -184,6 +196,14 @@ export default class ReversiNode {
     }
 
     return false;
+  }
+
+  switchPlayer() {
+    this._player = this._player === 1 ? 2 : 1;
+  }
+
+  opponentPlayer() {
+    return this._player === 1 ? 2 : 1;
   }
 
   between(n, min, max) {

@@ -2,12 +2,15 @@
   <div class="game">
     <p>game</p>
     <router-link to="/">Top</router-link>
-    <p>Player: {{this.currentPlayer === 1 ? "Black" : "White"}}</p>
-    <p>Empty: {{this.numEmpty}}</p>
-    <p>Black: {{this.numBlack}}</p>
-    <p>White: {{this.numWhite}}</p>
+    <p>Player: {{ this.currentPlayer === 1 ? "Black" : "White" }}</p>
+    <p>Empty: {{ this.numEmpty }}</p>
+    <p>Black: {{ this.numBlack }}</p>
+    <p>White: {{ this.numWhite }}</p>
     <reversi-board
+      @initialized="onInitialized"
       @click-cell="onClickCell"
+      @pass-turn="onPassTurn"
+      @game-set="onGameSet"
       :board-width="800"
       :board-height="400"
       :initial-board-status="initialBoardStatus"
@@ -51,12 +54,6 @@ export default {
       this.$router.push("/");
     }
     this.currentPage = "game";
-
-    // // initialize board.
-    // this.currentBoardStatus = new Array(this.boardSize.height);
-    // for (let iRow = 0; iRow < this.boardSize.height; iRow++) {
-    //   this.currentBoardStatus[iRow] = this.initialBoardStatus[iRow].slice();
-    // }
   },
   data() {
     return {
@@ -65,18 +62,47 @@ export default {
       currentPlayer: 1,
       numEmpty: 0,
       numBlack: 0,
-      numWhite: 0
+      numWhite: 0,
     };
   },
   methods: {
+    onInitialized(evt) {
+      console.log("Game -onInitialied begin.");
+      console.log(evt);
+      this.currentPlayer = evt.nextPlayer;
+      this.numEmpty = evt.numEmpty;
+      this.numBlack = evt.numBlack;
+      this.numWhite = evt.numWhite;
+    },
     onClickCell(evt) {
       console.log("Game - onClickCell begin.");
       console.log(evt);
       this.currentPlayer = evt.nextPlayer;
-      this.numEmpty = evt.afterStatus.numEmpty;
-      this.numBlack = evt.afterStatus.numBlack;
-      this.numWhite = evt.afterStatus.numWhite;
-    }
+      this.numEmpty = evt.numEmpty;
+      this.numBlack = evt.numBlack;
+      this.numWhite = evt.numWhite;
+    },
+    onPassTurn(evt) {
+      console.log("Game - onPassTurn begin.");
+      console.log(evt);
+      this.numEmpty = evt.numEmpty;
+      this.numBlack = evt.numBlack;
+      this.numWhite = evt.numWhite;
+    },
+    onGameSet(evt) {
+      console.log("Game - onGameSet begin.");
+      console.log(evt);
+      this.numEmpty = evt.numEmpty;
+      this.numBlack = evt.numBlack;
+      this.numWhite = evt.numWhite;
+      if(evt.numBlack > evt.numWhite) {
+        console.log("Winner BLACK !!!");
+      } else if(evt.numWhite > evt.numBlack) {
+        console.log("Winner WHITE !!!");
+      } else if(evt.numBlack === evt.numWhite) {
+        console.log("Draw");
+      }
+    },
   },
   name: "Game",
 };
