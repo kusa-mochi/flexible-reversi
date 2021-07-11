@@ -47,6 +47,26 @@ export default class ReversiNode {
     return this.putStoneCore(iColumn, iRow, false);
   }
 
+  getNumEmpty() {
+    return this.getNumSpecificStateCells(0);
+  }
+
+  getNumBlack() {
+    return this.getNumSpecificStateCells(1);
+  }
+
+  getNumWhite() {
+    return this.getNumSpecificStateCells(2);
+  }
+
+  getNumSpecificStateCells(state) {
+    let output = 0;
+    for(let iRow = 0; iRow < this._numRow; iRow++) {
+      output += this._status[iRow].filter(item => item === state).length;
+    }
+    return output;
+  }
+
   // ifPut: true:put stone, false:just check if it is able to put stone (no put)
   putStoneCore(iColumn, iRow, ifPut) {
     console.log("putStoneCore begin.");

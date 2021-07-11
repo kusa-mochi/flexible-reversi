@@ -2,7 +2,12 @@
   <div class="game">
     <p>game</p>
     <router-link to="/">Top</router-link>
+    <p>Player: {{this.currentPlayer === 1 ? "Black" : "White"}}</p>
+    <p>Empty: {{this.numEmpty}}</p>
+    <p>Black: {{this.numBlack}}</p>
+    <p>White: {{this.numWhite}}</p>
     <reversi-board
+      @click-cell="onClickCell"
       :board-width="800"
       :board-height="400"
       :initial-board-status="initialBoardStatus"
@@ -58,7 +63,20 @@ export default {
       // currentBoardStatus: null,
       // 1:black, 2:white
       currentPlayer: 1,
+      numEmpty: 0,
+      numBlack: 0,
+      numWhite: 0
     };
+  },
+  methods: {
+    onClickCell(evt) {
+      console.log("Game - onClickCell begin.");
+      console.log(evt);
+      this.currentPlayer = evt.nextPlayer;
+      this.numEmpty = evt.afterStatus.numEmpty;
+      this.numBlack = evt.afterStatus.numBlack;
+      this.numWhite = evt.afterStatus.numWhite;
+    }
   },
   name: "Game",
 };

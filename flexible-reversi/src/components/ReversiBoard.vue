@@ -56,6 +56,15 @@ export default {
       const result = this.boardStatus.putStone(iColumn, iRow);
       this.boardStatus._status = this.boardStatus._status.slice(0);
       if (result) putSound.play();
+
+      this.$emit("click-cell", {
+        nextPlayer: this.boardStatus._player,
+        afterStatus: {
+          numEmpty: this.boardStatus.getNumEmpty(),
+          numBlack: this.boardStatus.getNumBlack(),
+          numWhite: this.boardStatus.getNumWhite()
+        }
+      });
     },
   },
   name: "ReversiBoard",
