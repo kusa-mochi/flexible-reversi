@@ -1,52 +1,56 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Top from "../views/Top.vue";
+import Top from "@/views/Top.vue";
+import Nickname from "@/views/Nickname.vue";
+import RoomList from "@/views/RoomList.vue";
+import Game from "@/views/Game.vue";
+import Settings from "@/views/Settings.vue";
+import StageEditor from "@/views/StageEditor.vue";
+import About from "@/views/About.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+  // トップページ
   {
     path: "/",
-    name: "Top",
     component: Top,
   },
+  // ニックネーム設定ページ
   {
-    path: "/stage-select",
-    name: "StageSelect",
-    component: function () {
-      return import(
-        /* webpackChunkName: "stage-select" */ "../views/StageSelect.vue"
-      );
-    },
+    path: "/nickname",
+    component: Nickname,
   },
+  // 部屋一覧ページ
+  {
+    path: "/room-list",
+    component: RoomList,
+  },
+  // 対局ページ
   {
     path: "/game",
-    name: "Game",
-    component: function () {
-      return import(/* webpackChunkName: "game" */ "../views/Game.vue");
-    },
+    component: Game,
   },
+  // 設定ページ
   {
     path: "/settings",
-    name: "Settings",
-    component: function () {
-      return import(/* webpackChunkName: "settings" */ "../views/Settings.vue");
-    },
+    component: Settings,
   },
+  // ステージ作成ページ
+  {
+    path: "/stage-editor",
+    component: StageEditor,
+  },
+  // このゲームについて
   {
     path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ "../views/About.vue");
-    },
+    component: About,
   },
 ];
 
 const router = new VueRouter({
-  routes,
+  mode: "history",
+  routes: routes,
 });
 
 export default router;

@@ -1,10 +1,34 @@
 <template>
   <div id="app">
     <div class="app-container">
-      <router-view />
+      <router-view :user.sync="user" />
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      user: {
+        name: "",
+      },
+    };
+  },
+  name: "App",
+  // props: {
+  //   user: {
+  //     type: Object,
+  //     required: true,
+  //     default() {
+  //       return {
+  //         name: ""
+  //       };
+  //     }
+  //   }
+  // }
+};
+</script>
 
 <style lang="scss">
 * {

@@ -2,8 +2,11 @@
   <div class="top">
     <p>top</p>
     <img alt="app logo" src="../assets/logo_mochi.png" />
-    <router-link to="/stage-select">Start</router-link>
-    <router-link to="/settings">Settings</router-link>
+    <ul>
+      <li><router-link to="/nickname">スタート</router-link></li>
+      <li><router-link to="/settings">設定</router-link></li>
+      <li><router-link to="/stage-editor">ステージをつくる</router-link></li>
+    </ul>
   </div>
 </template>
 
