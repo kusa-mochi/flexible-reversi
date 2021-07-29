@@ -31,6 +31,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -53,6 +55,7 @@ body {
 
   width: 100%;
   height: 100%;
+  font-family: "Roboto", sans-serif;
 }
 
 .app-container {
