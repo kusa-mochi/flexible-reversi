@@ -16,17 +16,6 @@ export default {
     };
   },
   name: "App",
-  // props: {
-  //   user: {
-  //     type: Object,
-  //     required: true,
-  //     default() {
-  //       return {
-  //         name: ""
-  //       };
-  //     }
-  //   }
-  // }
 };
 </script>
 
