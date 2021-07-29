@@ -95,11 +95,11 @@ export default {
       this.numEmpty = evt.numEmpty;
       this.numBlack = evt.numBlack;
       this.numWhite = evt.numWhite;
-      if(evt.numBlack > evt.numWhite) {
+      if (evt.numBlack > evt.numWhite) {
         console.log("Winner BLACK !!!");
-      } else if(evt.numWhite > evt.numBlack) {
+      } else if (evt.numWhite > evt.numBlack) {
         console.log("Winner WHITE !!!");
-      } else if(evt.numBlack === evt.numWhite) {
+      } else if (evt.numBlack === evt.numWhite) {
         console.log("Draw");
       }
     },

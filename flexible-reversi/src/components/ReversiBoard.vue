@@ -41,13 +41,13 @@ export default {
   created() {
     this.boardStatus = new ReversiNode(this.initialBoardStatus, 1);
     const returnValue = {
-        nextPlayer: this.boardStatus._player,
-        numEmpty: this.boardStatus.getNumEmpty(),
-        numBlack: this.boardStatus.getNumBlack(),
-        numWhite: this.boardStatus.getNumWhite(),
-        canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
-      };
-      this.$emit("initialized", returnValue);
+      nextPlayer: this.boardStatus._player,
+      numEmpty: this.boardStatus.getNumEmpty(),
+      numBlack: this.boardStatus.getNumBlack(),
+      numWhite: this.boardStatus.getNumWhite(),
+      canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
+    };
+    this.$emit("initialized", returnValue);
   },
   data() {
     return {
@@ -84,7 +84,7 @@ export default {
 
       if (!returnValue.canPutStone) {
         this.boardStatus.goToNextTurn();
-        if(!this.boardStatus.canPutStoneOnAnyPlace()) {
+        if (!this.boardStatus.canPutStoneOnAnyPlace()) {
           this.$emit("game-set", returnValue);
           return;
         } else {

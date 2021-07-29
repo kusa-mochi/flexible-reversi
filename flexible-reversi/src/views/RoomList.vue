@@ -4,10 +4,16 @@
     <router-link to="/game">Game</router-link>
     <div>ようこそ{{ user.name }}さん</div>
     <div class="rooms">
-      <div v-for="(roomState, index) in roomStatus" :key="index" :class="`room ${roomState.state}`">
-        <div class="room-number">No.{{index+1}}</div>
-        <div v-if="roomTitleVisible(roomState.state)" class="room-title">{{roomState.name}}</div>
-        <div class="room-state">{{roomStateLabel(roomState.state)}}</div>
+      <div
+        v-for="(roomState, index) in roomStatus"
+        :key="index"
+        :class="`room ${roomState.state}`"
+      >
+        <div class="room-number">No.{{ index + 1 }}</div>
+        <div v-if="roomTitleVisible(roomState.state)" class="room-title">
+          {{ roomState.name }}
+        </div>
+        <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
         <button v-if="entryButtonVisible(roomState)" class="room__entry-button">
           <div class="button-label">参加</div>
           <div class="button-badge">
@@ -49,7 +55,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "vacancy",
@@ -57,7 +63,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "standby",
@@ -65,7 +71,7 @@ export default {
           lockEntryButton: true,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "in-preparation",
@@ -73,7 +79,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "in-game",
@@ -81,7 +87,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "in-game",
@@ -89,7 +95,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: true,
           name: "",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "vacancy",
@@ -97,7 +103,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "vacancy",
@@ -105,7 +111,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "vacancy",
@@ -113,9 +119,9 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "",
-          viewingAvailable: false
-        }
-      ]
+          viewingAvailable: false,
+        },
+      ],
     };
   },
   methods: {
@@ -125,7 +131,7 @@ export default {
     roomStateLabel(state) {
       let ret = "";
 
-      switch(state) {
+      switch (state) {
         case "vacancy":
           ret = "空室";
           break;
@@ -139,7 +145,7 @@ export default {
           ret = "使用中";
           break;
         default:
-          ret = "エラー"
+          ret = "エラー";
           break;
       }
 
@@ -149,8 +155,11 @@ export default {
       return state === "standby" || state === "in-game";
     },
     viewButtonVisible(roomState) {
-      return roomState.viewingAvailable && (roomState.state === "standby" || roomState.state === "in-game");
-    }
+      return (
+        roomState.viewingAvailable &&
+        (roomState.state === "standby" || roomState.state === "in-game")
+      );
+    },
   },
   name: "RoomList",
   props: {
@@ -166,11 +175,11 @@ export default {
 <style lang="scss" scoped>
 .rooms {
   display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: flex-start;
-	align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 .room {
   width: 350px;
@@ -182,7 +191,8 @@ export default {
 
   &__entry-button,
   &__view-button {
-    .button-badge, img {
+    .button-badge,
+    img {
       width: 20px;
       height: 20px;
     }
