@@ -9,7 +9,7 @@
         :key="index"
         :class="`room ${roomState.state}`"
       >
-        <div class="room-number">No.{{ index + 1 }}</div>
+        <div class="room-number">#&nbsp;{{ index + 1 }}</div>
         <div v-if="roomTitleVisible(roomState.state)" class="room-title">
           {{ roomState.name }}
         </div>
@@ -191,6 +191,16 @@ export default {
 
   &__entry-button,
   &__view-button {
+    position: relative;
+    width: 80px;
+    height: 32px;
+
+    .button-badge {
+      position: absolute;
+      right: -7px;
+      top: -4px;
+    }
+
     .button-badge,
     img {
       width: 20px;
@@ -218,5 +228,13 @@ export default {
     background-color: rgba($bg, 0.3);
     border-color: $bg;
   }
+}
+
+.room-number {
+  font-size: 32px;
+}
+
+.room-state {
+  font-size: 56px;
 }
 </style>
