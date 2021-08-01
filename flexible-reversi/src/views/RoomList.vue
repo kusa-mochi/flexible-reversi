@@ -13,23 +13,34 @@
         <div v-if="roomTitleVisible(roomState.state)" class="room-title">
           {{ roomState.name }}
         </div>
-        <div v-if="roomOwnerVisible(roomState.state)" class="room-owner">開設者：{{roomState.hostname}}</div>
+        <div v-if="roomOwnerVisible(roomState.state)" class="room-owner">
+          開設者：{{ roomState.hostname }}
+        </div>
         <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
-        <button v-if="makeButtonVisible(roomState)" class="room__make-button">
+        <el-button
+          v-if="makeButtonVisible(roomState)"
+          class="room__make-button"
+        >
           <div class="button-label">部屋作成</div>
-        </button>
-        <button v-if="entryButtonVisible(roomState)" class="room__entry-button">
+        </el-button>
+        <el-button
+          v-if="entryButtonVisible(roomState)"
+          class="room__entry-button"
+        >
           <div class="button-label">参加</div>
           <div class="button-badge">
             <img v-if="roomState.lockEntryButton" src="@/assets/key.svg" />
           </div>
-        </button>
-        <button v-if="viewButtonVisible(roomState)" class="room__view-button">
+        </el-button>
+        <el-button
+          v-if="viewButtonVisible(roomState)"
+          class="room__view-button"
+        >
           <div class="button-label">観戦</div>
           <div class="button-badge">
             <img v-if="roomState.lockViewButton" src="@/assets/key.svg" />
           </div>
-        </button>
+        </el-button>
       </div>
     </div>
   </div>
@@ -59,7 +70,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "部屋００１",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "in-preparation",
@@ -67,7 +78,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "部屋００２",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "standby",
@@ -75,7 +86,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "部屋００３",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "standby",
@@ -83,7 +94,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "部屋００４",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "standby",
@@ -91,7 +102,7 @@ export default {
           lockEntryButton: true,
           lockViewButton: false,
           name: "部屋００５",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "standby",
@@ -99,7 +110,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: true,
           name: "部屋００６",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "standby",
@@ -107,7 +118,7 @@ export default {
           lockEntryButton: true,
           lockViewButton: false,
           name: "部屋００７",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "standby",
@@ -115,7 +126,7 @@ export default {
           lockEntryButton: true,
           lockViewButton: true,
           name: "部屋００８",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "in-game",
@@ -123,7 +134,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "部屋００８",
-          viewingAvailable: false
+          viewingAvailable: false,
         },
         {
           state: "in-game",
@@ -131,7 +142,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: false,
           name: "部屋００８",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
         {
           state: "in-game",
@@ -139,7 +150,7 @@ export default {
           lockEntryButton: false,
           lockViewButton: true,
           name: "部屋００８",
-          viewingAvailable: true
+          viewingAvailable: true,
         },
       ],
     };
@@ -219,8 +230,8 @@ export default {
   &__entry-button,
   &__view-button {
     position: relative;
-    width: 80px;
-    height: 32px;
+    // width: 80px;
+    // height: 32px;
 
     .button-badge {
       position: absolute;
