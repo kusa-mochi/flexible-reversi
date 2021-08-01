@@ -13,6 +13,7 @@
         <div v-if="roomTitleVisible(roomState.state)" class="room-title">
           {{ roomState.name }}
         </div>
+        <div v-if="roomOwnerVisible(roomState.state)" class="room-owner">開設者：{{roomState.hostname}}</div>
         <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
         <button v-if="entryButtonVisible(roomState)" class="room__entry-button">
           <div class="button-label">参加</div>
@@ -50,76 +51,92 @@ export default {
     return {
       roomStatus: [
         {
-          state: "standby",
-          hostname: "くさもち",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "",
-          viewingAvailable: true,
-        },
-        {
           state: "vacancy",
-          hostname: "",
+          hostname: "くさもちA",
           lockEntryButton: false,
           lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
-        },
-        {
-          state: "standby",
-          hostname: "てちゅてちゅ",
-          lockEntryButton: true,
-          lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
+          name: "部屋００１",
+          viewingAvailable: false
         },
         {
           state: "in-preparation",
-          hostname: "くさもち",
+          hostname: "くさもちB",
           lockEntryButton: false,
           lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
+          name: "部屋００２",
+          viewingAvailable: false
         },
         {
-          state: "in-game",
-          hostname: "れひゃ",
+          state: "standby",
+          hostname: "くさもちC",
           lockEntryButton: false,
           lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
+          name: "部屋００３",
+          viewingAvailable: false
         },
         {
-          state: "in-game",
-          hostname: "池ノ上氏",
+          state: "standby",
+          hostname: "くさもちD",
+          lockEntryButton: false,
+          lockViewButton: false,
+          name: "部屋００４",
+          viewingAvailable: true
+        },
+        {
+          state: "standby",
+          hostname: "くさもちE",
+          lockEntryButton: true,
+          lockViewButton: false,
+          name: "部屋００５",
+          viewingAvailable: false
+        },
+        {
+          state: "standby",
+          hostname: "くさもちF",
           lockEntryButton: false,
           lockViewButton: true,
-          name: "",
-          viewingAvailable: true,
+          name: "部屋００６",
+          viewingAvailable: true
         },
         {
-          state: "vacancy",
-          hostname: "",
-          lockEntryButton: false,
+          state: "standby",
+          hostname: "くさもちG",
+          lockEntryButton: true,
           lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
+          name: "部屋００７",
+          viewingAvailable: true
         },
         {
-          state: "vacancy",
-          hostname: "",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
+          state: "standby",
+          hostname: "くさもちH",
+          lockEntryButton: true,
+          lockViewButton: true,
+          name: "部屋００８",
+          viewingAvailable: true
         },
         {
-          state: "vacancy",
-          hostname: "",
+          state: "in-game",
+          hostname: "くさもちI",
           lockEntryButton: false,
           lockViewButton: false,
-          name: "",
-          viewingAvailable: false,
+          name: "部屋００８",
+          viewingAvailable: false
+        },
+        {
+          state: "in-game",
+          hostname: "くさもちJ",
+          lockEntryButton: false,
+          lockViewButton: false,
+          name: "部屋００８",
+          viewingAvailable: true
+        },
+        {
+          state: "in-game",
+          hostname: "くさもちK",
+          lockEntryButton: false,
+          lockViewButton: true,
+          name: "部屋００８",
+          viewingAvailable: true
         },
       ],
     };
@@ -153,6 +170,9 @@ export default {
     },
     roomTitleVisible(state) {
       return state === "standby" || state === "in-game";
+    },
+    roomOwnerVisible(state) {
+      return state !== "vacancy";
     },
     viewButtonVisible(roomState) {
       return (
