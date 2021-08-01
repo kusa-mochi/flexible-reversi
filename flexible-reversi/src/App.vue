@@ -25,7 +25,6 @@ export default {
 * {
   margin: 0;
   padding: 0;
-  color: black;
   box-sizing: border-box;
 }
 

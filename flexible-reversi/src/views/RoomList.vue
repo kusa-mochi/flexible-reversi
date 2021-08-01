@@ -20,6 +20,7 @@
         <el-button
           v-if="makeButtonVisible(roomState)"
           class="room__make-button"
+          type="primary"
         >
           <div class="button-label">部屋作成</div>
         </el-button>
@@ -230,8 +231,6 @@ export default {
   &__entry-button,
   &__view-button {
     position: relative;
-    // width: 80px;
-    // height: 32px;
 
     .button-badge {
       position: absolute;
