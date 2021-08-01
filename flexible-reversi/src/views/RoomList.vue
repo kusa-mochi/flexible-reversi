@@ -15,6 +15,9 @@
         </div>
         <div v-if="roomOwnerVisible(roomState.state)" class="room-owner">開設者：{{roomState.hostname}}</div>
         <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
+        <button v-if="makeButtonVisible(roomState)" class="room__make-button">
+          <div class="button-label">部屋作成</div>
+        </button>
         <button v-if="entryButtonVisible(roomState)" class="room__entry-button">
           <div class="button-label">参加</div>
           <div class="button-badge">
@@ -145,6 +148,9 @@ export default {
     entryButtonVisible(roomState) {
       return roomState.state === "standby";
     },
+    makeButtonVisible(roomState) {
+      return roomState.state === "vacancy";
+    },
     roomStateLabel(state) {
       let ret = "";
 
@@ -168,11 +174,11 @@ export default {
 
       return ret;
     },
-    roomTitleVisible(state) {
-      return state === "standby" || state === "in-game";
-    },
     roomOwnerVisible(state) {
       return state !== "vacancy";
+    },
+    roomTitleVisible(state) {
+      return state === "standby" || state === "in-game";
     },
     viewButtonVisible(roomState) {
       return (
@@ -209,6 +215,7 @@ export default {
   border-style: solid;
   border-radius: 40px;
 
+  &__make-button,
   &__entry-button,
   &__view-button {
     position: relative;
