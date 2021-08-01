@@ -13,7 +13,7 @@
         <div v-if="roomTitleVisible(roomState.state)" class="room-title">
           {{ roomState.name }}
         </div>
-        <div v-if="roomOwnerVisible(roomState.state)" class="room-owner">
+        <div v-if="roomHostnameVisible(roomState.state)" class="room-host">
           開設者：{{ roomState.hostname }}
         </div>
         <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
@@ -186,7 +186,7 @@ export default {
 
       return ret;
     },
-    roomOwnerVisible(state) {
+    roomHostnameVisible(state) {
       return state !== "vacancy";
     },
     roomTitleVisible(state) {
