@@ -45,6 +45,64 @@
       </div>
     </div>
   </div>
+    <!-- 各種ダイアログ -->
+    <!-- 部屋作成ダイアログ -->
+    <el-dialog :visible.sync="makeRoomDialogVisible" title="部屋作成">
+      <span slot="footer" class="make-room-dialog__footer">
+        <el-button type="secondary" @click="makeRoomDialogVisible = false"
+          >Cancel</el-button
+        >
+        <el-button type="primary" @click="makeRoomDialogVisible = false"
+          >OK</el-button
+        >
+      </span>
+    </el-dialog>
+    <!-- 対局前確認ダイアログ -->
+    <el-dialog :visible.sync="battleConfirmationDialogVisible" title="対局確認">
+      <span slot="footer" class="battle-confirmation-dialog__footer">
+        <el-button
+          type="secondary"
+          @click="battleConfirmationDialogVisible = false"
+          >Cancel</el-button
+        >
+        <el-button
+          type="primary"
+          @click="battleConfirmationDialogVisible = false"
+          >対局開始</el-button
+        >
+      </span>
+    </el-dialog>
+    <!-- 対局用パスワード入力ダイアログ -->
+    <el-dialog
+      :visible.sync="passwordToEntryDialogVisible"
+      title="対局用パスワード入力"
+    >
+      <span slot="footer" class="password-to-entry-dialog__footer">
+        <el-button
+          type="secondary"
+          @click="passwordToEntryDialogVisible = false"
+          >Cancel</el-button
+        >
+        <el-button type="primary" @click="passwordToEntryDialogVisible = false"
+          >OK</el-button
+        >
+      </span>
+    </el-dialog>
+    <!-- 観戦用パスワード入力ダイアログ -->
+    <el-dialog
+      :visible.sync="passwordToViewDialogVisible"
+      title="観戦用パスワード入力"
+    >
+      <span slot="footer" class="password-to-view-dialog__footer">
+        <el-button type="secondary" @click="passwordToViewDialogVisible = false"
+          >Cancel</el-button
+        >
+        <el-button type="primary" @click="passwordToViewDialogVisible = false"
+          >OK</el-button
+        >
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -64,6 +122,10 @@ export default {
   },
   data() {
     return {
+      battleConfirmationDialogVisible: false,
+      makeRoomDialogVisible: false,
+      passwordToEntryDialogVisible: false,
+      passwordToViewDialogVisible: false,
       roomStatus: [
         {
           state: "vacancy",
