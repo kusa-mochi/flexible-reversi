@@ -17,34 +17,37 @@
           開設者：{{ roomState.hostname }}
         </div>
         <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
-        <el-button
-          v-if="makeButtonVisible(roomState)"
-          class="room__make-button"
-          type="primary"
-        >
-          <div class="button-label">部屋作成</div>
-        </el-button>
-        <el-button
-          v-if="entryButtonVisible(roomState)"
-          class="room__entry-button"
-        >
-          <div class="button-label">参加</div>
-          <div class="button-badge">
-            <img v-if="roomState.lockEntryButton" src="@/assets/key.svg" />
-          </div>
-        </el-button>
-        <el-button
-          v-if="viewButtonVisible(roomState)"
-          class="room__view-button"
-        >
-          <div class="button-label">観戦</div>
-          <div class="button-badge">
-            <img v-if="roomState.lockViewButton" src="@/assets/key.svg" />
-          </div>
-        </el-button>
+        <div class="buttons-area">
+          <el-button
+            v-if="makeButtonVisible(roomState)"
+            @click="makeRoomDialogVisible = true"
+            class="room__make-button"
+            type="primary"
+          >
+            <div class="button-label">部屋作成</div>
+          </el-button>
+          <el-button
+            v-if="entryButtonVisible(roomState)"
+            class="room__entry-button"
+          >
+            <div class="button-label">参加</div>
+            <div class="button-badge">
+              <img v-if="roomState.lockEntryButton" src="@/assets/key.svg" />
+            </div>
+          </el-button>
+          <el-button
+            v-if="viewButtonVisible(roomState)"
+            class="room__view-button"
+          >
+            <div class="button-label">観戦</div>
+            <div class="button-badge">
+              <img v-if="roomState.lockViewButton" src="@/assets/key.svg" />
+            </div>
+          </el-button>
+        </div>
       </div>
     </div>
-  </div>
+
     <!-- 各種ダイアログ -->
     <!-- 部屋作成ダイアログ -->
     <el-dialog :visible.sync="makeRoomDialogVisible" title="部屋作成">
@@ -282,12 +285,20 @@ export default {
   align-content: flex-start;
 }
 .room {
+  $roomPadding: 8px;
+  position: relative;
   width: 350px;
   height: 200px;
-  margin: 8px;
-  border-width: 8px;
-  border-style: solid;
-  border-radius: 40px;
+  margin: $roomPadding;
+  padding: $roomPadding;
+  // border-width: 8px;
+  // border-style: solid;
+
+  .buttons-area {
+    position: absolute;
+    right: $roomPadding;
+    bottom: $roomPadding;
+  }
 
   &__make-button,
   &__entry-button,
@@ -310,22 +321,22 @@ export default {
   &.vacancy {
     $bg: #999999ff;
     background-color: rgba($bg, 0.3);
-    border-color: $bg;
+    // border-color: $bg;
   }
   &.in-preparation {
     $bg: #f1c232ff;
     background-color: rgba($bg, 0.3);
-    border-color: $bg;
+    // border-color: $bg;
   }
   &.standby {
     $bg: #e69138ff;
     background-color: rgba($bg, 0.3);
-    border-color: $bg;
+    // border-color: $bg;
   }
   &.in-game {
     $bg: #a64d79ff;
     background-color: rgba($bg, 0.3);
-    border-color: $bg;
+    // border-color: $bg;
   }
 }
 
