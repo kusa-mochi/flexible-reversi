@@ -50,7 +50,98 @@
 
     <!-- 各種ダイアログ -->
     <!-- 部屋作成ダイアログ -->
-    <el-dialog :visible.sync="makeRoomDialogVisible" title="部屋作成">
+    <el-dialog
+      :visible.sync="makeRoomDialogVisible"
+      id="make-room-dialog"
+      title="部屋作成"
+      width="442px"
+    >
+      <el-form :model="makeRoomDialogFormData">
+        <el-form-item>
+          <el-input
+            v-model="makeRoomDialogFormData.roomName"
+            class="room-name-input"
+            placeholder="部屋の名前(20文字以内)"
+            maxlength="20"
+            show-word-limit
+          />
+        </el-form-item>
+        <el-form-item>
+          あなたは
+          <el-radio v-model="makeRoomDialogFormData.firstOrSecond" label="first"
+            >先攻(黒)</el-radio
+          >
+          <el-radio
+            v-model="makeRoomDialogFormData.firstOrSecond"
+            label="second"
+            >後攻(白)</el-radio
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="makeRoomDialogFormData.lockEntry"
+            >対戦者の入室にパスワードを要求する。</el-checkbox
+          >
+        </el-form-item>
+        <el-form-item>
+          <div>
+            <el-input
+              v-model="makeRoomDialogFormData.entryPassword"
+              :disabled="!makeRoomDialogFormData.lockEntry"
+              class="entry-password-input"
+              placeholder="パスワードを入力してください(20文字以内)"
+              maxlength="20"
+              show-password
+              show-word-limit
+            ></el-input>
+          </div>
+          <div>
+            <el-input
+              v-model="makeRoomDialogFormData.entryPassword2"
+              :disabled="!makeRoomDialogFormData.lockEntry"
+              class="entry-password-input"
+              placeholder="もう一度同じパスワードを入力してください"
+              maxlength="20"
+              show-password
+              show-word-limit
+            ></el-input>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="makeRoomDialogFormData.viewAvailable"
+            >観戦を許可する。</el-checkbox
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox
+            v-model="makeRoomDialogFormData.lockView"
+            :disabled="!makeRoomDialogFormData.viewAvailable"
+            class="allow-view-checkbox"
+            >観戦者の入室にパスワードを要求する。</el-checkbox
+          >
+        </el-form-item>
+        <el-form-item>
+          <div>
+            <el-input
+              v-model="makeRoomDialogFormData.viewPassword"
+              :disabled="!makeRoomDialogFormData.lockView"
+              class="view-password-input"
+              placeholder="パスワードを入力してください(20文字以内)"
+              maxlength="20"
+              show-password
+            ></el-input>
+          </div>
+          <div>
+            <el-input
+              v-model="makeRoomDialogFormData.viewPassword2"
+              :disabled="!makeRoomDialogFormData.lockView"
+              class="view-password-input"
+              placeholder="もう一度同じパスワードを入力してください"
+              maxlength="20"
+              show-password
+            ></el-input>
+          </div>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="make-room-dialog__footer">
         <el-button type="secondary" @click="makeRoomDialogVisible = false"
           >Cancel</el-button
@@ -127,6 +218,18 @@ export default {
     return {
       battleConfirmationDialogVisible: false,
       makeRoomDialogVisible: false,
+      makeRoomDialogFormData: {
+        entryPassword: "",
+        entryPassword2: "",
+        firstOrSecond: "first",
+        lockEntry: false,
+        lockView: false,
+        roomName: "",
+        stageData: [],
+        viewAvailable: true,
+        viewPassword: "",
+        viewPassword2: "",
+      },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
       roomStatus: [
@@ -222,6 +325,11 @@ export default {
     };
   },
   methods: {
+    // beforeCloseMakeRoomDialog(done) {
+    //   this.$confirm("次の内容で部屋を作成します。よろしいですか？")
+    //     .then((_) => done())
+    //     .catch((_) => {});
+    // },
     entryButtonVisible(roomState) {
       return roomState.state === "standby";
     },
@@ -346,5 +454,28 @@ export default {
 
 .room-state {
   font-size: 56px;
+}
+
+.el-dialog {
+  min-width: 442px;
+}
+
+#make-room-dialog {
+  .room-name-input {
+    width: 400px;
+  }
+  .entry-password-input,
+  .view-password-input {
+    width: 330px;
+  }
+  .entry-password-input {
+    margin-left: 22px;
+  }
+  .view-password-input {
+    margin-left: 44px;
+  }
+  .allow-view-checkbox {
+    margin-left: 22px;
+  }
 }
 </style>
