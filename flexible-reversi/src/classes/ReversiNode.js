@@ -112,6 +112,7 @@ export default class ReversiNode {
     const searchResult =
       up || rightUp || right || rightDown || down || leftDown || left || leftUp;
 
+    // if a player can put its stone on any direction.
     if (searchResult) {
       console.log("enable.");
     } else {
@@ -125,6 +126,7 @@ export default class ReversiNode {
     return searchResult;
   }
 
+  // search if a player can put its stone on specified direction.
   // columnDirection: -1/0/+1
   // rowDirection: -1/0/+1
   // ifPut: boolean
