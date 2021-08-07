@@ -146,7 +146,7 @@
         <el-button type="secondary" @click="makeRoomDialogVisible = false"
           >Cancel</el-button
         >
-        <el-button type="primary" @click="makeRoomDialogVisible = false"
+        <el-button type="primary" @click="makeRoomDialogOnOk"
           >OK</el-button
         >
       </span>
@@ -335,6 +335,11 @@ export default {
     },
     makeButtonVisible(roomState) {
       return roomState.state === "vacancy";
+    },
+    // if ok button is pushed on make room dialog.
+    makeRoomDialogOnOk() {
+      this.makeRoomDialogVisible = false;
+      this.$router.push({path: "/game"});
     },
     roomStateLabel(state) {
       let ret = "";
