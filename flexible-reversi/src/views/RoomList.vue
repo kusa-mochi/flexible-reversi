@@ -212,6 +212,11 @@ export default {
     },
   },
   created() {
+    // if not accessed from "nickname" page.
+    if (this.currentPage !== "nickname") {
+      // redirect to top page.
+      this.$router.push("/");
+    }
     this.currentPage = "room-list";
   },
   data() {

@@ -48,8 +48,8 @@ export default {
     },
   },
   created() {
-    // if not accessed from "stage select" page.
-    if (this.currentPage !== "stage-select") {
+    // if not accessed from "room list" page.
+    if (this.currentPage !== "room-list") {
       // redirect to top page.
       this.$router.push("/");
     }

@@ -19,6 +19,11 @@ export default {
     },
   },
   created() {
+    // if not accessed from "top" page.
+    if (this.currentPage !== "top") {
+      // redirect to top page.
+      this.$router.push("/");
+    }
     this.currentPage = "settings";
   },
   name: "Settings",
