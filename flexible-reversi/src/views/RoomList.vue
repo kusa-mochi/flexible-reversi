@@ -56,102 +56,105 @@
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
       title="部屋作成"
-      width="442px"
     >
-      <el-form :model="makeRoomDialogFormData">
-        <el-form-item>
-          <el-input
-            v-model="makeRoomDialogFormData.roomName"
-            class="room-name-input"
-            placeholder="部屋の名前(20文字以内)"
-            maxlength="20"
-            show-word-limit
-          />
-        </el-form-item>
-        <el-form-item>
-          あなたは
-          <el-radio v-model="makeRoomDialogFormData.firstOrSecond" label="first"
-            >先攻(黒)</el-radio
-          >
-          <el-radio
-            v-model="makeRoomDialogFormData.firstOrSecond"
-            label="second"
-            >後攻(白)</el-radio
-          >
-        </el-form-item>
-        <el-form-item>
-          <el-checkbox v-model="makeRoomDialogFormData.lockEntry"
-            >対戦者の入室にパスワードを要求する。</el-checkbox
-          >
-        </el-form-item>
-        <el-form-item>
-          <div>
-            <el-input
-              v-model="makeRoomDialogFormData.entryPassword"
-              :disabled="!makeRoomDialogFormData.lockEntry"
-              class="entry-password-input"
-              placeholder="パスワードを入力してください(20文字以内)"
-              maxlength="20"
-              show-password
-              show-word-limit
-            ></el-input>
-          </div>
-          <div>
-            <el-input
-              v-model="makeRoomDialogFormData.entryPassword2"
-              :disabled="!makeRoomDialogFormData.lockEntry"
-              class="entry-password-input"
-              placeholder="もう一度同じパスワードを入力してください"
-              maxlength="20"
-              show-password
-              show-word-limit
-            ></el-input>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <el-checkbox v-model="makeRoomDialogFormData.viewAvailable"
-            >観戦を許可する。</el-checkbox
-          >
-        </el-form-item>
-        <el-form-item>
-          <el-checkbox
-            v-model="makeRoomDialogFormData.lockView"
-            :disabled="!makeRoomDialogFormData.viewAvailable"
-            class="allow-view-checkbox"
-            >観戦者の入室にパスワードを要求する。</el-checkbox
-          >
-        </el-form-item>
-        <el-form-item>
-          <div>
-            <el-input
-              v-model="makeRoomDialogFormData.viewPassword"
-              :disabled="!makeRoomDialogFormData.lockView"
-              class="view-password-input"
-              placeholder="パスワードを入力してください(20文字以内)"
-              maxlength="20"
-              show-password
-            ></el-input>
-          </div>
-          <div>
-            <el-input
-              v-model="makeRoomDialogFormData.viewPassword2"
-              :disabled="!makeRoomDialogFormData.lockView"
-              class="view-password-input"
-              placeholder="もう一度同じパスワードを入力してください"
-              maxlength="20"
-              show-password
-            ></el-input>
-          </div>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="make-room-dialog__footer">
-        <el-button type="secondary" @click="makeRoomDialogVisible = false"
-          >Cancel</el-button
-        >
-        <el-button type="primary" @click="makeRoomDialogOnOk"
-          >OK</el-button
-        >
-      </span>
+      <form-wizard
+        @on-complete="onMakeRoomWizardComplete"
+        color="#078080"
+        title=""
+        subtitle=""
+      >
+        <tab-content title="部屋のパスワードなどの設定">
+          <el-form :model="makeRoomDialogFormData">
+            <el-form-item>
+              <el-input
+                v-model="makeRoomDialogFormData.roomName"
+                class="room-name-input"
+                placeholder="部屋の名前(20文字以内)"
+                maxlength="20"
+                show-word-limit
+              />
+            </el-form-item>
+            <el-form-item>
+              あなたは
+              <el-radio
+                v-model="makeRoomDialogFormData.firstOrSecond"
+                label="first"
+                >先攻(黒)</el-radio
+              >
+              <el-radio
+                v-model="makeRoomDialogFormData.firstOrSecond"
+                label="second"
+                >後攻(白)</el-radio
+              >
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox v-model="makeRoomDialogFormData.lockEntry"
+                >対戦者の入室にパスワードを要求する。</el-checkbox
+              >
+            </el-form-item>
+            <el-form-item>
+              <div>
+                <el-input
+                  v-model="makeRoomDialogFormData.entryPassword"
+                  :disabled="!makeRoomDialogFormData.lockEntry"
+                  class="entry-password-input"
+                  placeholder="パスワードを入力してください(20文字以内)"
+                  maxlength="20"
+                  show-password
+                  show-word-limit
+                ></el-input>
+              </div>
+              <div>
+                <el-input
+                  v-model="makeRoomDialogFormData.entryPassword2"
+                  :disabled="!makeRoomDialogFormData.lockEntry"
+                  class="entry-password-input"
+                  placeholder="もう一度同じパスワードを入力してください"
+                  maxlength="20"
+                  show-password
+                  show-word-limit
+                ></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox v-model="makeRoomDialogFormData.viewAvailable"
+                >観戦を許可する。</el-checkbox
+              >
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox
+                v-model="makeRoomDialogFormData.lockView"
+                :disabled="!makeRoomDialogFormData.viewAvailable"
+                class="allow-view-checkbox"
+                >観戦者の入室にパスワードを要求する。</el-checkbox
+              >
+            </el-form-item>
+            <el-form-item>
+              <div>
+                <el-input
+                  v-model="makeRoomDialogFormData.viewPassword"
+                  :disabled="!makeRoomDialogFormData.lockView"
+                  class="view-password-input"
+                  placeholder="パスワードを入力してください(20文字以内)"
+                  maxlength="20"
+                  show-password
+                ></el-input>
+              </div>
+              <div>
+                <el-input
+                  v-model="makeRoomDialogFormData.viewPassword2"
+                  :disabled="!makeRoomDialogFormData.lockView"
+                  class="view-password-input"
+                  placeholder="もう一度同じパスワードを入力してください"
+                  maxlength="20"
+                  show-password
+                ></el-input>
+              </div>
+            </el-form-item>
+          </el-form>
+        </tab-content>
+        <tab-content title="ステージ設定"></tab-content>
+      </form-wizard>
     </el-dialog>
     <!-- 対局前確認ダイアログ -->
     <el-dialog :visible.sync="battleConfirmationDialogVisible" title="対局確認">
@@ -161,9 +164,7 @@
           @click="battleConfirmationDialogVisible = false"
           >Cancel</el-button
         >
-        <el-button
-          type="primary"
-          @click="battleConfirmationDialogOnStart"
+        <el-button type="primary" @click="battleConfirmationDialogOnStart"
           >対局開始</el-button
         >
       </span>
@@ -339,7 +340,7 @@ export default {
     // },
     battleConfirmationDialogOnStart() {
       this.battleConfirmationDialogVisible = false;
-      this.$router.push({path: "/game"});
+      this.$router.push({ path: "/game" });
     },
     entryButtonVisible(roomState) {
       return roomState.state === "standby";
@@ -350,20 +351,21 @@ export default {
     // if ok button is pushed on make room dialog.
     makeRoomDialogOnOk() {
       this.makeRoomDialogVisible = false;
-      this.$router.push({path: "/game"});
+      this.$router.push({ path: "/game" });
     },
     onEntryButtonClick(isPasswordRequired) {
-      if(isPasswordRequired) {
+      if (isPasswordRequired) {
         this.passwordToEntryDialogVisible = true;
       } else {
         this.battleConfirmationDialogVisible = true;
       }
     },
+    onMakeRoomWizardComplete() {},
     onViewButtonClick(isPasswordRequired) {
-      if(isPasswordRequired) {
+      if (isPasswordRequired) {
         this.passwordToViewDialogVisible = true;
       } else {
-        this.$router.push({path: "/game"});
+        this.$router.push({ path: "/game" });
       }
     },
     roomStateLabel(state) {

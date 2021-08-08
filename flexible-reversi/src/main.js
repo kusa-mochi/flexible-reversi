@@ -4,6 +4,7 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import "./plugins/element.js";
+import "./plugins/vue-form-wizard.js";
 
 Vue.config.productionTip = false;
 
