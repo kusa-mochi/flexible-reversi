@@ -31,7 +31,7 @@
             @click="onEntryButtonClick(roomState.lockEntryButton)"
             class="room__entry-button"
           >
-            <div class="button-label">参加</div>
+            <div class="button-label">対局</div>
             <div class="button-badge">
               <img v-if="roomState.lockEntryButton" src="@/assets/key.svg" />
             </div>
