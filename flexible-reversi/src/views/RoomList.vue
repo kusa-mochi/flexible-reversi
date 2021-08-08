@@ -56,6 +56,7 @@
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
       title="部屋作成"
+      width="484px"
     >
       <form-wizard
         @on-complete="onMakeRoomWizardComplete"
@@ -508,6 +509,15 @@ export default {
   }
   .allow-view-checkbox {
     margin-left: 22px;
+  }
+}
+</style>
+
+<style lang="scss">
+#make-room-dialog {
+  .el-dialog__body,
+  .vue-form-wizard .wizard-header {
+    padding-top: 0;
   }
 }
 </style>
