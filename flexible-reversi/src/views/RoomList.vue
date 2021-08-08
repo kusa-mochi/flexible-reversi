@@ -28,6 +28,7 @@
           </el-button>
           <el-button
             v-if="entryButtonVisible(roomState)"
+            @click="onEntryButtonClick(roomState.lockEntryButton)"
             class="room__entry-button"
           >
             <div class="button-label">参加</div>
@@ -37,6 +38,7 @@
           </el-button>
           <el-button
             v-if="viewButtonVisible(roomState)"
+            @click="onViewButtonClick(roomState.lockViewButton)"
             class="room__view-button"
           >
             <div class="button-label">観戦</div>
@@ -161,7 +163,7 @@
         >
         <el-button
           type="primary"
-          @click="battleConfirmationDialogVisible = false"
+          @click="battleConfirmationDialogOnStart"
           >対局開始</el-button
         >
       </span>
@@ -335,6 +337,10 @@ export default {
     //     .then((_) => done())
     //     .catch((_) => {});
     // },
+    battleConfirmationDialogOnStart() {
+      this.battleConfirmationDialogVisible = false;
+      this.$router.push({path: "/game"});
+    },
     entryButtonVisible(roomState) {
       return roomState.state === "standby";
     },
@@ -345,6 +351,20 @@ export default {
     makeRoomDialogOnOk() {
       this.makeRoomDialogVisible = false;
       this.$router.push({path: "/game"});
+    },
+    onEntryButtonClick(isPasswordRequired) {
+      if(isPasswordRequired) {
+        this.passwordToEntryDialogVisible = true;
+      } else {
+        this.battleConfirmationDialogVisible = true;
+      }
+    },
+    onViewButtonClick(isPasswordRequired) {
+      if(isPasswordRequired) {
+        this.passwordToViewDialogVisible = true;
+      } else {
+        this.$router.push({path: "/game"});
+      }
     },
     roomStateLabel(state) {
       let ret = "";
