@@ -6,6 +6,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentPage: "none",
+    serverUrl:
+      "wss://rkyu0ms32g.execute-api.ap-northeast-1.amazonaws.com/production",
+    socket: null,
     stageSettings: {
       // 0:blank, 1:black, 2:white
       initialStatus: [

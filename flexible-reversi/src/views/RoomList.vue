@@ -214,6 +214,19 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
+    serverUrl: {
+      get() {
+        return this.$store.state.serverUrl;
+      },
+    },
+    socket: {
+      get() {
+        return this.$store.state.socket;
+      },
+      set(newValue) {
+        this.$store.state.socket = newValue;
+      }
+    },
   },
   created() {
     // if not accessed from "nickname" page.
@@ -221,6 +234,37 @@ export default {
       // redirect to top page.
       this.$router.push("/");
     }
+
+    // create a WebSocket instance.
+    if (this.socket === null) {
+      this.socket = new WebSocket(this.serverUrl);
+      this.socket.onopen = (e) => {
+        console.log("onopen - begin");
+        console.log(e);
+        this.socket.send(JSON.stringify({
+          "action": "getRooms"
+        }));
+        console.log("onopen - fin");
+      };
+      this.socket.onmessage = (e) => {
+        console.log("onmessage");
+        console.log(e);
+      };
+      this.socket.onclose = (e) => {
+        console.log("onclose");
+        console.log(e);
+      };
+      this.socket.onerror = (e) => {
+        console.log("onerror");
+        console.log(e);
+      };
+    } else {
+      console.log("else")
+      this.socket.send(JSON.stringify({
+          "action": "getRooms"
+        }));
+    }
+
     this.currentPage = "room-list";
   },
   data() {
