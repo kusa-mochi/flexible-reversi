@@ -214,6 +214,15 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
+    roomStatus: {
+      cache: false,
+      get() {
+        return this.roomStatusData;
+      },
+      set(newValue) {
+        this.roomStatusData = newValue;
+      }
+    },
     serverUrl: {
       get() {
         return this.$store.state.serverUrl;
@@ -248,7 +257,26 @@ export default {
       };
       this.socket.onmessage = (e) => {
         console.log("onmessage");
-        console.log(e);
+        console.log(e.data);
+        const parsedData = JSON.parse(e.data);
+        console.log(parsedData);
+        // console.log(parsedData.rooms[0].room_state);
+        this.roomStatus = [];
+        parsedData.rooms.forEach((room) => {
+          const roomData = {
+            state: room.room_state,
+            hostname: room.room_author,
+            lockEntryButton: room.require_entry_password,
+            lockViewButton: room.require_view_password,
+            name: `#${room.id}} ${room.room_name}`,
+            viewingAvailable: room.can_view
+          };
+          console.log(roomData);
+          this.roomStatus.push(roomData);
+          // Vue.set(this, "roomStatus", roomData);
+          // this.$set(this, "roomStatus", roomData);
+          // this.roomStatus = this.roomStatus.concat(roomData);
+        });
       };
       this.socket.onclose = (e) => {
         console.log("onclose");
@@ -285,97 +313,103 @@ export default {
       },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
-      roomStatus: [
-        {
-          state: "vacancy",
-          hostname: "くさもちA",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "部屋００１",
-          viewingAvailable: false,
-        },
-        {
-          state: "in-preparation",
-          hostname: "くさもちB",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "部屋００２",
-          viewingAvailable: false,
-        },
-        {
-          state: "standby",
-          hostname: "くさもちC",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "部屋００３",
-          viewingAvailable: false,
-        },
-        {
-          state: "standby",
-          hostname: "くさもちD",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "部屋００４",
-          viewingAvailable: true,
-        },
-        {
-          state: "standby",
-          hostname: "くさもちE",
-          lockEntryButton: true,
-          lockViewButton: false,
-          name: "部屋００５",
-          viewingAvailable: false,
-        },
-        {
-          state: "standby",
-          hostname: "くさもちF",
-          lockEntryButton: false,
-          lockViewButton: true,
-          name: "部屋００６",
-          viewingAvailable: true,
-        },
-        {
-          state: "standby",
-          hostname: "くさもちG",
-          lockEntryButton: true,
-          lockViewButton: false,
-          name: "部屋００７",
-          viewingAvailable: true,
-        },
-        {
-          state: "standby",
-          hostname: "くさもちH",
-          lockEntryButton: true,
-          lockViewButton: true,
-          name: "部屋００８",
-          viewingAvailable: true,
-        },
-        {
-          state: "in-game",
-          hostname: "くさもちI",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "部屋００８",
-          viewingAvailable: false,
-        },
-        {
-          state: "in-game",
-          hostname: "くさもちJ",
-          lockEntryButton: false,
-          lockViewButton: false,
-          name: "部屋００８",
-          viewingAvailable: true,
-        },
-        {
-          state: "in-game",
-          hostname: "くさもちK",
-          lockEntryButton: false,
-          lockViewButton: true,
-          name: "部屋００８",
-          viewingAvailable: true,
-        },
-      ],
+      // roomStatus: [
+      //   {
+      //     state: "vacancy",
+      //     hostname: "くさもちA",
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００１",
+      //     viewingAvailable: false,
+      //   },
+      //   {
+      //     state: "in-preparation",
+      //     hostname: "くさもちB",
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００２",
+      //     viewingAvailable: false,
+      //   },
+      //   {
+      //     state: "standby",
+      //     hostname: "くさもちC",
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００３",
+      //     viewingAvailable: false,
+      //   },
+      //   {
+      //     state: "standby",
+      //     hostname: "くさもちD",
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００４",
+      //     viewingAvailable: true,
+      //   },
+      //   {
+      //     state: "standby",
+      //     hostname: "くさもちE",
+      //     lockEntryButton: true,
+      //     lockViewButton: false,
+      //     name: "部屋００５",
+      //     viewingAvailable: false,
+      //   },
+      //   {
+      //     state: "standby",
+      //     hostname: "くさもちF",
+      //     lockEntryButton: false,
+      //     lockViewButton: true,
+      //     name: "部屋００６",
+      //     viewingAvailable: true,
+      //   },
+      //   {
+      //     state: "standby",
+      //     hostname: "くさもちG",
+      //     lockEntryButton: true,
+      //     lockViewButton: false,
+      //     name: "部屋００７",
+      //     viewingAvailable: true,
+      //   },
+      //   {
+      //     state: "standby",
+      //     hostname: "くさもちH",
+      //     lockEntryButton: true,
+      //     lockViewButton: true,
+      //     name: "部屋００８",
+      //     viewingAvailable: true,
+      //   },
+      //   {
+      //     state: "in-game",
+      //     hostname: "くさもちI",
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００８",
+      //     viewingAvailable: false,
+      //   },
+      //   {
+      //     state: "in-game",
+      //     hostname: "くさもちJ",
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００８",
+      //     viewingAvailable: true,
+      //   },
+      //   {
+      //     state: "in-game",
+      //     hostname: "くさもちK",
+      //     lockEntryButton: false,
+      //     lockViewButton: true,
+      //     name: "部屋００８",
+      //     viewingAvailable: true,
+      //   },
+      // ],
+      roomStatusData: []
     };
+  },
+  destroyed() {
+    if (this.socket) {
+      // TODO: request to remove connection id of websocket.
+    }
   },
   methods: {
     // beforeCloseMakeRoomDialog(done) {
@@ -420,13 +454,13 @@ export default {
         case "vacancy":
           ret = "空室";
           break;
-        case "in-preparation":
+        case "in_preparation":
           ret = "準備中";
           break;
         case "standby":
           ret = "待機中";
           break;
-        case "in-game":
+        case "in_game":
           ret = "使用中";
           break;
         default:
