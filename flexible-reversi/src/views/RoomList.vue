@@ -221,7 +221,7 @@ export default {
       },
       set(newValue) {
         this.roomStatusData = newValue;
-      }
+      },
     },
     serverUrl: {
       get() {
@@ -234,7 +234,7 @@ export default {
       },
       set(newValue) {
         this.$store.state.socket = newValue;
-      }
+      },
     },
   },
   created() {
@@ -250,9 +250,11 @@ export default {
       this.socket.onopen = (e) => {
         console.log("onopen - begin");
         console.log(e);
-        this.socket.send(JSON.stringify({
-          "action": "getRooms"
-        }));
+        this.socket.send(
+          JSON.stringify({
+            action: "getRooms",
+          })
+        );
         console.log("onopen - fin");
       };
       this.socket.onmessage = (e) => {
@@ -269,7 +271,7 @@ export default {
             lockEntryButton: room.require_entry_password,
             lockViewButton: room.require_view_password,
             name: `#${room.id}} ${room.room_name}`,
-            viewingAvailable: room.can_view
+            viewingAvailable: room.can_view,
           };
           console.log(roomData);
           this.roomStatus.push(roomData);
@@ -287,10 +289,12 @@ export default {
         console.log(e);
       };
     } else {
-      console.log("else")
-      this.socket.send(JSON.stringify({
-          "action": "getRooms"
-        }));
+      console.log("else");
+      this.socket.send(
+        JSON.stringify({
+          action: "getRooms",
+        })
+      );
     }
 
     this.currentPage = "room-list";
@@ -403,7 +407,7 @@ export default {
       //     viewingAvailable: true,
       //   },
       // ],
-      roomStatusData: []
+      roomStatusData: [],
     };
   },
   destroyed() {
