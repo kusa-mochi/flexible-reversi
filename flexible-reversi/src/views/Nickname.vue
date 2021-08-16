@@ -1,11 +1,14 @@
 <template>
   <div class="nickname">
-    <form @submit="$router.push('/room-list')">
+    <el-form>
       <div>
         あなたのニックネームを決めてね
-        <input v-model="user.name" type="text" required /><button>OK</button>
+        <el-input v-model="user.name" type="text" required /><el-button
+          @click="onSubmit"
+          >OK</el-button
+        >
       </div>
-    </form>
+    </el-form>
   </div>
 </template>
 
@@ -28,6 +31,14 @@ export default {
       this.$router.push("/");
     }
     this.currentPage = "nickname";
+  },
+  methods: {
+    onSubmit(e) {
+      console.log(e);
+      // TODO: check if a name is not already used by another player.
+
+      this.$router.push("/room-list");
+    },
   },
   name: "Nickname",
   props: {

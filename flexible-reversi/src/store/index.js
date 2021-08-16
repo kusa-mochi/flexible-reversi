@@ -6,6 +6,17 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentPage: "none",
+    rooms: [
+      //   {
+      //     state: "vacancy",
+      //     hostname: "くさもちA",
+      //     id: 1,
+      //     lockEntryButton: false,
+      //     lockViewButton: false,
+      //     name: "部屋００１",
+      //     viewingAvailable: false,
+      //   },
+    ],
     serverUrl:
       "wss://rkyu0ms32g.execute-api.ap-northeast-1.amazonaws.com/production",
     socket: null,
