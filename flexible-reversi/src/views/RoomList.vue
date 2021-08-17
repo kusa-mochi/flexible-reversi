@@ -78,13 +78,13 @@
             <el-form-item>
               あなたは
               <el-radio
-                v-model="makeRoomDialogFormData.firstOrSecond"
-                label="first"
+                v-model="makeRoomDialogFormData.firstPlayer"
+                :label="true"
                 >先攻(黒)</el-radio
               >
               <el-radio
-                v-model="makeRoomDialogFormData.firstOrSecond"
-                label="second"
+                v-model="makeRoomDialogFormData.firstPlayer"
+                :label="false"
                 >後攻(白)</el-radio
               >
             </el-form-item>
@@ -342,8 +342,10 @@ export default {
         entryPassword2: "",
         canView: true,
         currentPlayer: true,
+        firstPlayer: true,
         requireEntryPassword: false,
         requireViewPassword: false,
+        roomId: -1,
         roomName: "",
         stageData: {
           stage1: [
