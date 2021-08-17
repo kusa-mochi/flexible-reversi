@@ -15,14 +15,14 @@ def lambda_handler(event, context):
     # get rooms data from dynamodb
     rooms = appData.scan().get('Items')
     ret = '{"rooms":['
-    #print(json.dumps(rooms[0]['current_board'], default=decimal_default_proc))
+    #print(json.dumps(rooms[0]['currentBoard'], default=decimal_default_proc))
     
     for room in rooms:
         ret += '{'
         
         # board logs ->
-        ret += '"board_logs":['
-        for board in room['board_logs']:
+        ret += '"boardLogs":['
+        for board in room['boardLogs']:
             ret += '['
             for row in board:
                 ret += '['
@@ -34,12 +34,12 @@ def lambda_handler(event, context):
         # <- board logs
         
         # can view ->
-        ret += '"can_view":' + str(room['can_view']).lower() + ','
+        ret += '"canView":' + str(room['canView']).lower() + ','
         # <- can view
         
         # current board ->
-        ret += '"current_board":['
-        for row in room['current_board']:
+        ret += '"currentBoard":['
+        for row in room['currentBoard']:
             ret += '['
             for val in row:
                 ret += str(val) + ','
@@ -48,15 +48,15 @@ def lambda_handler(event, context):
         # <- current board
         
         # current player ->
-        ret += '"current_player":' + str(room['current_player']).lower() + ','
+        ret += '"currentPlayer":' + str(room['currentPlayer']).lower() + ','
         # <- current player
         
         # entry password ->
-        ret += '"entry_password":"' + room['entry_password'] + '",'
+        ret += '"entryPassword":"' + room['entryPassword'] + '",'
         # <- entry password
         
         # first player id ->
-        ret += '"first_player_id":"' + room['first_player_id'] + '",'
+        ret += '"firstPlayerId":"' + room['firstPlayerId'] + '",'
         # <- first player id
         
         # id ->
@@ -64,39 +64,39 @@ def lambda_handler(event, context):
         # <- id
         
         # opponent id ->
-        ret += '"opponent_id":"' + room['opponent_id'] + '",'
+        ret += '"opponentId":"' + room['opponentId'] + '",'
         # <- opponent id
         
         # opponent name ->
-        ret += '"opponent_name":"' + room['opponent_name'] + '",'
+        ret += '"opponentName":"' + room['opponentName'] + '",'
         # <- opponent name
         
         # require entry password ->
-        ret += '"require_entry_password":' + str(room['require_entry_password']).lower() + ','
+        ret += '"requireEntryPassword":' + str(room['requireEntryPassword']).lower() + ','
         # <- require entry password
         
         # require view password ->
-        ret += '"require_view_password":' + str(room['require_view_password']).lower() + ','
+        ret += '"requireViewPassword":' + str(room['requireViewPassword']).lower() + ','
         # <- require view password
         
         # room author ->
-        ret += '"room_author":"' + room['room_author'] + '",'
+        ret += '"roomAuthor":"' + room['roomAuthor'] + '",'
         # <- room author
         
         # room name ->
-        ret += '"room_name":"' + room['room_name'] + '",'
+        ret += '"roomName":"' + room['roomName'] + '",'
         # <- room name
         
         # room state ->
-        ret += '"room_state":"' + room['room_state'] + '",'
+        ret += '"roomState":"' + room['roomState'] + '",'
         # <- room state
         
         # thinking counter ->
-        ret += '"thinking_counter":' + str(room['thinking_counter']) + ","
+        ret += '"thinkingCounter":' + str(room['thinkingCounter']) + ","
         # <- thinking counter
         
         # view password ->
-        ret += '"view_password":"' + room['view_password'] + '",'
+        ret += '"viewPassword":"' + room['viewPassword'] + '",'
         # <- view password
         
         ret = ret[:-1] + '},'

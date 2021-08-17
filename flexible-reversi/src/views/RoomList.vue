@@ -5,21 +5,21 @@
     <div>ようこそ{{ user.name }}さん</div>
     <div class="rooms">
       <div
-        v-for="(roomState, index) in roomStatus"
+        v-for="(room, index) in rooms"
         :key="index"
-        :class="`room ${roomState.state}`"
+        :class="`room ${room.roomState}`"
       >
-        <div class="room-number">#{{ roomState.id }}</div>
-        <div v-if="roomTitleVisible(roomState.state)" class="room-title">
-          {{ roomState.name }}
+        <div class="room-number">#{{ room.id }}</div>
+        <div v-if="roomTitleVisible(room.roomState)" class="room-title">
+          {{ room.roomName }}
         </div>
-        <div v-if="roomHostnameVisible(roomState.state)" class="room-host">
-          開設者：{{ roomState.hostname }}
+        <div v-if="roomAuthorVisible(room.roomState)" class="room-host">
+          開設者：{{ room.roomAuthor }}
         </div>
-        <div class="room-state">{{ roomStateLabel(roomState.state) }}</div>
+        <div class="room-state">{{ roomStateLabel(room.roomState) }}</div>
         <div class="buttons-area">
           <el-button
-            v-if="makeButtonVisible(roomState)"
+            v-if="makeButtonVisible(room)"
             @click="makeRoomDialogVisible = true"
             class="room__make-button"
             type="primary"
@@ -27,23 +27,29 @@
             <div class="button-label">部屋作成</div>
           </el-button>
           <el-button
-            v-if="entryButtonVisible(roomState)"
-            @click="onEntryButtonClick(roomState.lockEntryButton)"
+            v-if="entryButtonVisible(room)"
+            @click="onEntryButtonClick(room.requireEntryPassword)"
             class="room__entry-button"
           >
             <div class="button-label">対局</div>
             <div class="button-badge">
-              <img v-if="roomState.lockEntryButton" src="@/assets/key.svg" />
+              <img
+                v-if="room.requireEntryPassword"
+                src="@/assets/key.svg"
+              />
             </div>
           </el-button>
           <el-button
-            v-if="viewButtonVisible(roomState)"
-            @click="onViewButtonClick(roomState.lockViewButton)"
+            v-if="viewButtonVisible(room)"
+            @click="onViewButtonClick(room.requireViewPassword)"
             class="room__view-button"
           >
             <div class="button-label">観戦</div>
             <div class="button-badge">
-              <img v-if="roomState.lockViewButton" src="@/assets/key.svg" />
+              <img
+                v-if="room.requireViewPassword"
+                src="@/assets/key.svg"
+              />
             </div>
           </el-button>
         </div>
@@ -89,7 +95,7 @@
               >
             </el-form-item>
             <el-form-item>
-              <el-checkbox v-model="makeRoomDialogFormData.lockEntry"
+              <el-checkbox v-model="makeRoomDialogFormData.requireEntryPassword"
                 >対戦者の入室にパスワードを要求する。</el-checkbox
               >
             </el-form-item>
@@ -97,7 +103,7 @@
               <div>
                 <el-input
                   v-model="makeRoomDialogFormData.entryPassword"
-                  :disabled="!makeRoomDialogFormData.lockEntry"
+                  :disabled="!makeRoomDialogFormData.requireEntryPassword"
                   class="entry-password-input"
                   placeholder="パスワードを入力してください(20文字以内)"
                   maxlength="20"
@@ -108,7 +114,7 @@
               <div>
                 <el-input
                   v-model="makeRoomDialogFormData.entryPassword2"
-                  :disabled="!makeRoomDialogFormData.lockEntry"
+                  :disabled="!makeRoomDialogFormData.requireEntryPassword"
                   class="entry-password-input"
                   placeholder="もう一度同じパスワードを入力してください"
                   maxlength="20"
@@ -118,14 +124,14 @@
               </div>
             </el-form-item>
             <el-form-item>
-              <el-checkbox v-model="makeRoomDialogFormData.viewAvailable"
+              <el-checkbox v-model="makeRoomDialogFormData.canView"
                 >観戦を許可する。</el-checkbox
               >
             </el-form-item>
             <el-form-item>
               <el-checkbox
-                v-model="makeRoomDialogFormData.lockView"
-                :disabled="!makeRoomDialogFormData.viewAvailable"
+                v-model="makeRoomDialogFormData.requireViewPassword"
+                :disabled="!makeRoomDialogFormData.canView"
                 class="allow-view-checkbox"
                 >観戦者の入室にパスワードを要求する。</el-checkbox
               >
@@ -134,7 +140,7 @@
               <div>
                 <el-input
                   v-model="makeRoomDialogFormData.viewPassword"
-                  :disabled="!makeRoomDialogFormData.lockView"
+                  :disabled="!makeRoomDialogFormData.requireViewPassword"
                   class="view-password-input"
                   placeholder="パスワードを入力してください(20文字以内)"
                   maxlength="20"
@@ -144,7 +150,7 @@
               <div>
                 <el-input
                   v-model="makeRoomDialogFormData.viewPassword2"
-                  :disabled="!makeRoomDialogFormData.lockView"
+                  :disabled="!makeRoomDialogFormData.requireViewPassword"
                   class="view-password-input"
                   placeholder="もう一度同じパスワードを入力してください"
                   maxlength="20"
@@ -214,15 +220,15 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
-    roomStatus: {
+    rooms: {
       cache: false,
       get() {
         return this.$store.state.rooms;
       },
       set(newValue) {
-        this.roomStatus.splice(0, this.roomStatus.length);
+        this.rooms.splice(0, this.rooms.length);
         newValue.forEach((item) => {
-          this.roomStatus.push(item);
+          this.rooms.push(item);
         });
       },
     },
@@ -265,7 +271,7 @@ export default {
         // console.log(e.data);
         const parsedData = JSON.parse(e.data);
         // console.log(parsedData);
-        // console.log(parsedData.rooms[0].room_state);
+        // console.log(parsedData.rooms[0].roomState);
 
         // sort parsedData by id
         parsedData.rooms.sort((roomA, roomB) => {
@@ -277,21 +283,21 @@ export default {
         // console.log(parsedData);
 
         // reset client rooms data.
-        this.roomStatus.splice(0, this.roomStatus.length);
+        this.rooms.splice(0, this.rooms.length);
         parsedData.rooms.forEach((room) => {
           const roomData = {
-            state: room.room_state,
-            hostname: room.room_author,
+            roomState: room.roomState,
+            roomAuthor: room.roomAuthor,
             id: room.id,
-            lockEntryButton: room.require_entry_password,
-            lockViewButton: room.require_view_password,
-            name: room.room_name,
-            viewingAvailable: room.can_view,
+            requireEntryPassword: room.requireEntryPassword,
+            requireViewPassword: room.requireViewPassword,
+            roomName: room.roomName,
+            canView: room.canView,
           };
           console.log(roomData);
-          this.roomStatus.push(roomData);
+          this.rooms.push(roomData);
         });
-        this.roomStatus.splice();
+        this.rooms.splice();
       };
       this.socket.onclose = (e) => {
         console.log("onclose");
@@ -319,12 +325,12 @@ export default {
       makeRoomDialogFormData: {
         entryPassword: "",
         entryPassword2: "",
-        firstOrSecond: "first",
-        lockEntry: false,
-        lockView: false,
+        currentPlayer: true,
+        requireEntryPassword: false,
+        requireViewPassword: false,
         roomName: "",
         stageData: [],
-        viewAvailable: true,
+        canView: true,
         viewPassword: "",
         viewPassword2: "",
       },
@@ -347,11 +353,11 @@ export default {
       this.battleConfirmationDialogVisible = false;
       this.$router.push({ path: "/game" });
     },
-    entryButtonVisible(roomState) {
-      return roomState.state === "standby";
+    entryButtonVisible(room) {
+      return room.roomState === "standby";
     },
-    makeButtonVisible(roomState) {
-      return roomState.state === "vacancy";
+    makeButtonVisible(room) {
+      return room.roomState === "vacancy";
     },
     // if ok button is pushed on make room dialog.
     makeRoomDialogOnOk() {
@@ -373,20 +379,20 @@ export default {
         this.$router.push({ path: "/game" });
       }
     },
-    roomStateLabel(state) {
+    roomStateLabel(roomState) {
       let ret = "";
 
-      switch (state) {
+      switch (roomState) {
         case "vacancy":
           ret = "空室";
           break;
-        case "in_preparation":
+        case "inPreparation":
           ret = "準備中";
           break;
         case "standby":
           ret = "待機中";
           break;
-        case "in_game":
+        case "inGame":
           ret = "使用中";
           break;
         default:
@@ -396,16 +402,16 @@ export default {
 
       return ret;
     },
-    roomHostnameVisible(state) {
-      return state !== "vacancy";
+    roomAuthorVisible(roomState) {
+      return roomState !== "vacancy";
     },
-    roomTitleVisible(state) {
-      return state === "standby" || state === "in-game";
+    roomTitleVisible(roomState) {
+      return roomState === "standby" || roomState === "inGame";
     },
-    viewButtonVisible(roomState) {
+    viewButtonVisible(room) {
       return (
-        roomState.viewingAvailable &&
-        (roomState.state === "standby" || roomState.state === "in-game")
+        room.canView &&
+        (room.roomState === "standby" || room.roomState === "inGame")
       );
     },
   },
