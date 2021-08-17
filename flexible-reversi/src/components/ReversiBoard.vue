@@ -22,6 +22,11 @@ export default {
     ReversiCell,
   },
   computed: {
+    boardHeight: {
+      get() {
+        return (this.boardWidth * this.numRows) / this.numColumns;
+      },
+    },
     boardSizeStyle: {
       get() {
         return {
@@ -35,6 +40,16 @@ export default {
     currentBoardStatus: {
       get() {
         return this.boardStatus._status;
+      },
+    },
+    numColumns: {
+      get() {
+        return this.initialBoardStatus[0].length;
+      },
+    },
+    numRows: {
+      get() {
+        return this.initialBoardStatus.length;
       },
     },
   },
@@ -59,6 +74,8 @@ export default {
       return this.boardStatus._status[iRow][iColumn];
     },
     onClickCell(iColumn, iRow) {
+      if (this.isReadOnly) return;
+
       const putSound = new Audio(require("@/assets/put-stone.mp3"));
       console.log("on click cell: " + iColumn + ", " + iRow);
       const result = this.boardStatus.putStone(iColumn, iRow);
@@ -103,26 +120,35 @@ export default {
       required: false,
       default: 800,
     },
-    boardHeight: {
-      type: Number,
-      required: false,
-      default: 800,
-    },
     initialBoardStatus: {
       type: Array,
       required: true,
-      default: null,
+      default: () => [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 1, 0, 0, 0],
+        [0, 0, 0, 1, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+      ],
     },
-    numColumns: {
-      type: Number,
+    isReadOnly: {
+      type: Boolean,
       required: false,
-      default: 8,
+      default: false,
     },
-    numRows: {
-      type: Number,
-      required: false,
-      default: 8,
-    },
+    // numColumns: {
+    //   type: Number,
+    //   required: false,
+    //   default: 8,
+    // },
+    // numRows: {
+    //   type: Number,
+    //   required: false,
+    //   default: 8,
+    // },
   },
 };
 </script>

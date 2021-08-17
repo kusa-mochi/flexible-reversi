@@ -62,7 +62,7 @@
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
       title="部屋作成"
-      width="484px"
+      width="584px"
     >
       <form-wizard
         @on-complete="onMakeRoomWizardComplete"
@@ -160,7 +160,26 @@
             </el-form-item>
           </el-form>
         </tab-content>
-        <tab-content title="ステージ設定"></tab-content>
+        <tab-content title="ステージ設定">
+          <div class="stage-select">
+            <el-radio
+              v-for="stageNumber in [1, 2]"
+              v-model="makeRoomDialogFormData.stageName"
+              :key="stageNumber"
+              :label="`stage${stageNumber}`"
+              border
+              class="stage-select-radio"
+            >
+              <reversi-board
+                :board-width="200"
+                :initial-board-status="
+                  makeRoomDialogFormData.stageData[`stage${stageNumber}`]
+                "
+                :is-read-only="true"
+              ></reversi-board>
+            </el-radio>
+          </div>
+        </tab-content>
       </form-wizard>
     </el-dialog>
     <!-- 対局前確認ダイアログ -->
@@ -210,7 +229,9 @@
 </template>
 
 <script>
+import ReversiBoard from "@/components/ReversiBoard.vue";
 export default {
+  components: { ReversiBoard },
   computed: {
     currentPage: {
       get() {
@@ -325,12 +346,34 @@ export default {
       makeRoomDialogFormData: {
         entryPassword: "",
         entryPassword2: "",
+        canView: true,
         currentPlayer: true,
         requireEntryPassword: false,
         requireViewPassword: false,
         roomName: "",
-        stageData: [],
-        canView: true,
+        stageData: {
+          stage1: [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+          ],
+          stage2: [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
+            [0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          ],
+        },
+        stageName: "stage1",
         viewPassword: "",
         viewPassword2: "",
       },
@@ -519,6 +562,12 @@ export default {
   }
   .allow-view-checkbox {
     margin-left: 22px;
+  }
+
+  .stage-select {
+    .stage-select-radio {
+      height: 240px;
+    }
   }
 }
 </style>
