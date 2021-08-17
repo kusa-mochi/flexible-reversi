@@ -8,13 +8,13 @@ export default new Vuex.Store({
     currentPage: "none",
     rooms: [
       //   {
-      //     state: "vacancy",
-      //     hostname: "くさもちA",
+      //     roomState: "vacancy",
+      //     roomAuthor: "くさもちA",
       //     id: 1,
-      //     lockEntryButton: false,
-      //     lockViewButton: false,
-      //     name: "部屋００１",
-      //     viewingAvailable: false,
+      //     requireEntryPassword: false,
+      //     requireViewPassword: false,
+      //     roomName: "部屋００１",
+      //     canView: false,
       //   },
     ],
     serverUrl:
