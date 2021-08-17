@@ -33,10 +33,7 @@
           >
             <div class="button-label">対局</div>
             <div class="button-badge">
-              <img
-                v-if="room.requireEntryPassword"
-                src="@/assets/key.svg"
-              />
+              <img v-if="room.requireEntryPassword" src="@/assets/key.svg" />
             </div>
           </el-button>
           <el-button
@@ -46,10 +43,7 @@
           >
             <div class="button-label">観戦</div>
             <div class="button-badge">
-              <img
-                v-if="room.requireViewPassword"
-                src="@/assets/key.svg"
-              />
+              <img v-if="room.requireViewPassword" src="@/assets/key.svg" />
             </div>
           </el-button>
         </div>
