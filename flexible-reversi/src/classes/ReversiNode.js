@@ -31,7 +31,7 @@ export default class ReversiNode {
       this._status.push(newRow);
     }
 
-    console.log("ReversNode initialized.");
+    console.log("ReversiNode initialized.");
     console.log("  _numRow: " + this._numRow);
     console.log("  _numColumn: " + this._numColumn);
     console.log("  _player: " + this._player);
