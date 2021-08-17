@@ -56,7 +56,7 @@ def lambda_handler(event, context):
         # <- entry password
         
         # first player id ->
-        ret += '"firstPlayerId":"' + room['firstPlayerId'] + '",'
+        ret += '"firstPlayerId":' + str(room['firstPlayer']).lower() + ','
         # <- first player id
         
         # id ->
@@ -82,6 +82,10 @@ def lambda_handler(event, context):
         # room author ->
         ret += '"roomAuthor":"' + room['roomAuthor'] + '",'
         # <- room author
+        
+        # room author id ->
+        ret += '"roomAuthorId":"' + room['roomAuthorId'] + '",'
+        # <- room author id
         
         # room name ->
         ret += '"roomName":"' + room['roomName'] + '",'
