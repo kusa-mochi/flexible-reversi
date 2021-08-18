@@ -22,15 +22,18 @@ def lambda_handler(event, context):
         
         # board logs ->
         ret += '"boardLogs":['
-        for board in room['boardLogs']:
-            ret += '['
-            for row in board:
+        if len(room['boardLogs']) > 0:
+            for board in room['boardLogs']:
                 ret += '['
-                for val in row:
-                    ret += str(val) + ','
+                for row in board:
+                    ret += '['
+                    for val in row:
+                        ret += str(val) + ','
+                    ret = ret[:-1] + '],'
                 ret = ret[:-1] + '],'
             ret = ret[:-1] + '],'
-        ret = ret[:-1] + '],'
+        else:
+            ret += '],'
         # <- board logs
         
         # can view ->
@@ -39,12 +42,15 @@ def lambda_handler(event, context):
         
         # current board ->
         ret += '"currentBoard":['
-        for row in room['currentBoard']:
-            ret += '['
-            for val in row:
-                ret += str(val) + ','
+        if len(room['currentBoard']) > 0:
+            for row in room['currentBoard']:
+                ret += '['
+                for val in row:
+                    ret += str(val) + ','
+                ret = ret[:-1] + '],'
             ret = ret[:-1] + '],'
-        ret = ret[:-1] + '],'
+        else:
+            ret += '],'
         # <- current board
         
         # current player ->

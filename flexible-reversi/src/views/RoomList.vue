@@ -20,7 +20,7 @@
         <div class="buttons-area">
           <el-button
             v-if="makeButtonVisible(room)"
-            @click="makeRoomDialogVisible = true"
+            @click="onMakeRoomDialogOpen(room.id)"
             class="room__make-button"
             type="primary"
           >
@@ -345,7 +345,7 @@ export default {
         firstPlayer: true,
         requireEntryPassword: false,
         requireViewPassword: false,
-        roomId: -1,
+        id: -1,
         roomName: "",
         stageData: {
           stage1: [
@@ -410,10 +410,86 @@ export default {
         this.battleConfirmationDialogVisible = true;
       }
     },
-    onMakeRoomWizardComplete() {},
+    onMakeRoomDialogOpen(roomId) {
+      this.makeRoomDialogVisible = true;
+      this.makeRoomDialogFormData.id = roomId;
+      console.log("room id : " + this.makeRoomDialogFormData.id);
+      this.socket.send(
+        JSON.stringify({
+          action: "updateRoom",
+          data: {
+            boardLogs: [],
+            canView: this.makeRoomDialogFormData.canView,
+            currentBoard: [],
+            currentPlayer: this.makeRoomDialogFormData.currentPlayer,
+            entryPassword: this.makeRoomDialogFormData.entryPassword,
+            firstPlayer: true,
+            id: this.makeRoomDialogFormData.id,
+            opponentId: "",
+            opponentName: "",
+            requireEntryPassword:
+              this.makeRoomDialogFormData.requireEntryPassword,
+            requireViewPassword:
+              this.makeRoomDialogFormData.requireViewPassword,
+            roomAuthor: this.user.name,
+            roomAuthorId: this.user.name,
+            roomName: this.makeRoomDialogFormData.roomName,
+            roomState: "inPreparation",
+            thinkingCounter: 0,
+            viewPassword: this.makeRoomDialogFormData.viewPassword,
+          },
+        })
+      );
+    },
+    onMakeRoomWizardComplete() {
+      let board = [];
+      this.makeRoomDialogFormData.stageData[
+        this.makeRoomDialogFormData.stageName
+      ].forEach((row) => {
+        board.push(row.slice());
+      });
+      const dataToSend = {
+        // ルートキー（request.body.actionの場合）
+        action: "updateRoom",
+        // サーバに伝えるデータの中身の例
+        data: {
+          boardLogs: [],
+          canView: this.makeRoomDialogFormData.canView,
+          currentBoard: board,
+          currentPlayer: this.makeRoomDialogFormData.currentPlayer,
+          entryPassword: this.makeRoomDialogFormData.entryPassword,
+          firstPlayer: true,
+          id: this.makeRoomDialogFormData.id,
+          opponentId: "",
+          opponentName: "",
+          requireEntryPassword:
+            this.makeRoomDialogFormData.requireEntryPassword,
+          requireViewPassword: this.makeRoomDialogFormData.requireViewPassword,
+          roomAuthor: this.user.name,
+          roomAuthorId: this.user.name,
+          roomName: this.makeRoomDialogFormData.roomName,
+          roomState: "standby",
+          thinkingCounter: 0,
+          viewPassword: this.makeRoomDialogFormData.viewPassword,
+        },
+      };
+      console.log(dataToSend);
+      // this.socket.send(JSON.stringify(dataToSend));
+      this.makeRoomDialogVisible = false;
+      // this.$router.push({ path: "/game" });
+
+      // for debugging ->
+      this.socket.send(
+        JSON.stringify({
+          action: "getRooms",
+        })
+      );
+      // <- for debugging
+    },
     onViewButtonClick(isPasswordRequired) {
       if (isPasswordRequired) {
-        this.passwordToViewDialogVisible = true;
+            roomAuthor: this.user.name,
+            thinkingCounter: 0,
       } else {
         this.$router.push({ path: "/game" });
       }
