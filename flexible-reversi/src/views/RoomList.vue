@@ -350,36 +350,14 @@ export default {
       };
       this.socket.onmessage = (e) => {
         console.log("onmessage");
-        console.log(e.data);
         const parsedData = JSON.parse(e.data);
-        // console.log(parsedData);
-        // console.log(parsedData.rooms[0].roomState);
 
-        // sort parsedData by id
-        parsedData.rooms.sort((roomA, roomB) => {
-          if (roomA.id === roomB.id) {
-            throw "invalid room id.";
-          }
-          return roomA.id > roomB.id ? 1 : -1;
-        });
-        // console.log(parsedData);
-
-        // reset client rooms data.
-        this.rooms.splice(0, this.rooms.length);
-        parsedData.rooms.forEach((room) => {
-          const roomData = {
-            roomState: room.roomState,
-            roomAuthor: room.roomAuthor,
-            id: room.id,
-            requireEntryPassword: room.requireEntryPassword,
-            requireViewPassword: room.requireViewPassword,
-            roomName: room.roomName,
-            canView: room.canView,
-          };
-          // console.log(roomData);
-          this.rooms.push(roomData);
-        });
-        this.rooms.splice();
+        // check data type
+        if (parsedData.dataType === "getRooms") {
+          console.log("get rooms data.");
+          const getRoomsData = parsedData.data;
+          this.onGetRoomStatus(getRoomsData);
+        }
       };
       this.socket.onclose = (e) => {
         console.log("onclose");
@@ -399,6 +377,36 @@ export default {
       } else {
         this.battleConfirmationDialogVisible = true;
       }
+    },
+    onGetRoomStatus(getRoomsData) {
+      // console.log(getRoomsData);
+      // console.log(getRoomsData.rooms[0].roomState);
+
+      // sort getRoomsData by id
+      getRoomsData.rooms.sort((roomA, roomB) => {
+        if (roomA.id === roomB.id) {
+          throw "invalid room id.";
+        }
+        return roomA.id > roomB.id ? 1 : -1;
+      });
+      // console.log(getRoomsData);
+
+      // reset client rooms data.
+      this.rooms.splice(0, this.rooms.length);
+      getRoomsData.rooms.forEach((room) => {
+        const roomData = {
+          roomState: room.roomState,
+          roomAuthor: room.roomAuthor,
+          id: room.id,
+          requireEntryPassword: room.requireEntryPassword,
+          requireViewPassword: room.requireViewPassword,
+          roomName: room.roomName,
+          canView: room.canView,
+        };
+        // console.log(roomData);
+        this.rooms.push(roomData);
+      });
+      this.rooms.splice();
     },
     onMakeRoomDialogOpen(roomId) {
       this.makeRoomDialogVisible = true;
