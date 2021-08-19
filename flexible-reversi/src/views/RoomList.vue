@@ -483,8 +483,7 @@ export default {
     },
     onViewButtonClick(isPasswordRequired) {
       if (isPasswordRequired) {
-            roomAuthor: this.user.name,
-            thinkingCounter: 0,
+        this.passwordToViewDialogVisible = true;
       } else {
         this.$router.push({ path: "/game" });
       }
