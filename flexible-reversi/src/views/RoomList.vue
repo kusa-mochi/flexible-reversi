@@ -349,6 +349,7 @@ export default {
         this.reloadRooms();
         console.log("onopen - fin");
       };
+      // if receive some data from API Gateway (Lambda)
       this.socket.onmessage = (e) => {
         console.log("onmessage");
         const parsedData = JSON.parse(e.data);
