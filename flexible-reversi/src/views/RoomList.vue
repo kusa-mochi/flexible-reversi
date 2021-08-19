@@ -270,65 +270,10 @@ export default {
 
     // create a WebSocket instance.
     if (this.socket === null) {
-      this.socket = new WebSocket(this.serverUrl);
-      this.socket.onopen = (e) => {
-        console.log("onopen - begin");
-        console.log(e);
-        this.socket.send(
-          JSON.stringify({
-            action: "getRooms",
-          })
-        );
-        console.log("onopen - fin");
-      };
-      this.socket.onmessage = (e) => {
-        console.log("onmessage");
-        // console.log(e.data);
-        const parsedData = JSON.parse(e.data);
-        // console.log(parsedData);
-        // console.log(parsedData.rooms[0].roomState);
-
-        // sort parsedData by id
-        parsedData.rooms.sort((roomA, roomB) => {
-          if (roomA.id === roomB.id) {
-            throw "invalid room id.";
-          }
-          return roomA.id > roomB.id ? 1 : -1;
-        });
-        // console.log(parsedData);
-
-        // reset client rooms data.
-        this.rooms.splice(0, this.rooms.length);
-        parsedData.rooms.forEach((room) => {
-          const roomData = {
-            roomState: room.roomState,
-            roomAuthor: room.roomAuthor,
-            id: room.id,
-            requireEntryPassword: room.requireEntryPassword,
-            requireViewPassword: room.requireViewPassword,
-            roomName: room.roomName,
-            canView: room.canView,
-          };
-          console.log(roomData);
-          this.rooms.push(roomData);
-        });
-        this.rooms.splice();
-      };
-      this.socket.onclose = (e) => {
-        console.log("onclose");
-        console.log(e);
-      };
-      this.socket.onerror = (e) => {
-        console.log("onerror");
-        console.log(e);
-      };
+      this.initializeWebSocket();
     } else {
       console.log("else");
-      this.socket.send(
-        JSON.stringify({
-          action: "getRooms",
-        })
-      );
+      this.reloadRooms();
     }
 
     this.currentPage = "room-list";
@@ -394,6 +339,56 @@ export default {
     },
     entryButtonVisible(room) {
       return room.roomState === "standby";
+    },
+    initializeWebSocket() {
+      this.socket = new WebSocket(this.serverUrl);
+      this.socket.onopen = (e) => {
+        console.log("onopen - begin");
+        console.log(e);
+        this.reloadRooms();
+        console.log("onopen - fin");
+      };
+      this.socket.onmessage = (e) => {
+        console.log("onmessage");
+        console.log(e.data);
+        const parsedData = JSON.parse(e.data);
+        // console.log(parsedData);
+        // console.log(parsedData.rooms[0].roomState);
+
+        // sort parsedData by id
+        parsedData.rooms.sort((roomA, roomB) => {
+          if (roomA.id === roomB.id) {
+            throw "invalid room id.";
+          }
+          return roomA.id > roomB.id ? 1 : -1;
+        });
+        // console.log(parsedData);
+
+        // reset client rooms data.
+        this.rooms.splice(0, this.rooms.length);
+        parsedData.rooms.forEach((room) => {
+          const roomData = {
+            roomState: room.roomState,
+            roomAuthor: room.roomAuthor,
+            id: room.id,
+            requireEntryPassword: room.requireEntryPassword,
+            requireViewPassword: room.requireViewPassword,
+            roomName: room.roomName,
+            canView: room.canView,
+          };
+          // console.log(roomData);
+          this.rooms.push(roomData);
+        });
+        this.rooms.splice();
+      };
+      this.socket.onclose = (e) => {
+        console.log("onclose");
+        console.log(e);
+      };
+      this.socket.onerror = (e) => {
+        console.log("onerror");
+        console.log(e);
+      };
     },
     makeButtonVisible(room) {
       return room.roomState === "vacancy";
@@ -474,11 +469,7 @@ export default {
       // this.$router.push({ path: "/game" });
 
       // for debugging ->
-      this.socket.send(
-        JSON.stringify({
-          action: "getRooms",
-        })
-      );
+      this.reloadRooms();
       // <- for debugging
     },
     onViewButtonClick(isPasswordRequired) {
@@ -487,6 +478,13 @@ export default {
       } else {
         this.$router.push({ path: "/game" });
       }
+    },
+    reloadRooms() {
+      this.socket.send(
+        JSON.stringify({
+          action: "getRooms",
+        })
+      );
     },
     roomStateLabel(roomState) {
       let ret = "";
