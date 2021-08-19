@@ -5,8 +5,8 @@
     <div>ようこそ{{ user.name }}さん</div>
     <div class="rooms">
       <div
-        v-for="(room, index) in rooms"
-        :key="index"
+        v-for="room in rooms"
+        :key="room.roomCounter"
         :class="`room ${room.roomState}`"
       >
         <div class="room-number">#{{ room.id }}</div>
@@ -320,6 +320,7 @@ export default {
       },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
+      roomCounter: 1
     };
   },
   destroyed() {
@@ -400,6 +401,7 @@ export default {
           id: room.id,
           requireEntryPassword: room.requireEntryPassword,
           requireViewPassword: room.requireViewPassword,
+          roomCounter: this.roomCounter++,
           roomName: room.roomName,
           canView: room.canView,
         };
