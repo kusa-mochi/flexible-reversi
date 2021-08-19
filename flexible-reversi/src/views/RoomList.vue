@@ -398,11 +398,6 @@ export default {
     makeButtonVisible(room) {
       return room.roomState === "vacancy";
     },
-    // if ok button is pushed on make room dialog.
-    makeRoomDialogOnOk() {
-      this.makeRoomDialogVisible = false;
-      this.$router.push({ path: "/game" });
-    },
     onEntryButtonClick(isPasswordRequired) {
       if (isPasswordRequired) {
         this.passwordToEntryDialogVisible = true;
