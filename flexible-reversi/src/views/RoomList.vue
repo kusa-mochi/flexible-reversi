@@ -105,17 +105,6 @@
                   show-word-limit
                 ></el-input>
               </div>
-              <div>
-                <el-input
-                  v-model="makeRoomDialogFormData.entryPassword2"
-                  :disabled="!makeRoomDialogFormData.requireEntryPassword"
-                  class="entry-password-input"
-                  placeholder="もう一度同じパスワードを入力してください"
-                  maxlength="20"
-                  show-password
-                  show-word-limit
-                ></el-input>
-              </div>
             </el-form-item>
             <el-form-item>
               <el-checkbox v-model="makeRoomDialogFormData.canView"
@@ -137,16 +126,6 @@
                   :disabled="!makeRoomDialogFormData.requireViewPassword"
                   class="view-password-input"
                   placeholder="パスワードを入力してください(20文字以内)"
-                  maxlength="20"
-                  show-password
-                ></el-input>
-              </div>
-              <div>
-                <el-input
-                  v-model="makeRoomDialogFormData.viewPassword2"
-                  :disabled="!makeRoomDialogFormData.requireViewPassword"
-                  class="view-password-input"
-                  placeholder="もう一度同じパスワードを入力してください"
                   maxlength="20"
                   show-password
                 ></el-input>
@@ -284,7 +263,6 @@ export default {
       makeRoomDialogVisible: false,
       makeRoomDialogFormData: {
         entryPassword: "",
-        entryPassword2: "",
         canView: true,
         currentPlayer: true,
         firstPlayer: true,
@@ -316,7 +294,6 @@ export default {
         },
         stageName: "stage1",
         viewPassword: "",
-        viewPassword2: "",
       },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
