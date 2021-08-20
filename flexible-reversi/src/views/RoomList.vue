@@ -452,13 +452,9 @@ export default {
         },
       };
       console.log(dataToSend);
-      // this.socket.send(JSON.stringify(dataToSend));
+      this.socket.send(JSON.stringify(dataToSend));
       this.makeRoomDialogVisible = false;
-      // this.$router.push({ path: "/game" });
-
-      // for debugging ->
-      this.reloadRooms();
-      // <- for debugging
+      this.$router.push({ path: "/game" });
     },
     onViewButtonClick(isPasswordRequired) {
       if (isPasswordRequired) {
