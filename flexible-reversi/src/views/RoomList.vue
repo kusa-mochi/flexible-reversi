@@ -28,7 +28,7 @@
           </el-button>
           <el-button
             v-if="entryButtonVisible(room)"
-            @click="onEntryButtonClick(room.requireEntryPassword)"
+            @click="onEntryButtonClick(room.id, room.requireEntryPassword)"
             class="room__entry-button"
           >
             <div class="button-label">対局</div>
@@ -173,13 +173,18 @@
       :visible.sync="passwordToEntryDialogVisible"
       title="対局用パスワード入力"
     >
+      <el-form>
+        <el-form-item>
+          <el-input v-model="passwordToEntryDialogFormData.password" type="password" autocomplete="off" maxlength="20" show-password></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="password-to-entry-dialog__footer">
         <el-button
           type="secondary"
           @click="passwordToEntryDialogVisible = false"
           >Cancel</el-button
         >
-        <el-button type="primary" @click="passwordToEntryDialogVisible = false"
+        <el-button type="primary" @click="onPasswordToEntryDialogOk"
           >OK</el-button
         >
       </span>
@@ -295,6 +300,10 @@ export default {
         stageName: "stage1",
         viewPassword: "",
       },
+      passwordToEntryDialogFormData: {
+        password: "",
+        id: -1  // room id
+      },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
       roomCounter: 1
@@ -336,6 +345,12 @@ export default {
           console.log("get rooms data.");
           const getRoomsData = parsedData.data;
           this.onGetRoomStatus(getRoomsData);
+        } else if (parsedData.dataType === "checkedEntryPassword") {
+          console.log("checked entry password.");
+          const checkResult = parsedData.data.result;
+          console.log(checkResult);
+        } else if (parsedData.dataType === "checkedViewPassword") {
+          console.log("checked view password.");
         }
       };
       this.socket.onclose = (e) => {
@@ -350,9 +365,9 @@ export default {
     makeButtonVisible(room) {
       return room.roomState === "vacancy";
     },
-    onEntryButtonClick(isPasswordRequired) {
+    onEntryButtonClick(roomId, isPasswordRequired) {
       if (isPasswordRequired) {
-        this.passwordToEntryDialogVisible = true;
+        this.onPasswordToEntryDialogOpen(roomId);
       } else {
         this.battleConfirmationDialogVisible = true;
       }
@@ -455,6 +470,23 @@ export default {
       this.socket.send(JSON.stringify(dataToSend));
       this.makeRoomDialogVisible = false;
       this.$router.push({ path: "/game" });
+    },
+    onPasswordToEntryDialogOk() {
+      this.socket.send(JSON.stringify({
+        action: "checkEntryPassword",
+        data: {
+          id: this.passwordToEntryDialogFormData.id,
+          password: this.passwordToEntryDialogFormData.password
+        }
+      }));
+      console.log("password: " + this.passwordToEntryDialogFormData.password);
+      this.passwordToEntryDialogVisible = false;
+    },
+    onPasswordToEntryDialogOpen(roomId) {
+      console.log("onPasswordToEntryDialogOpen start.");
+      this.passwordToEntryDialogVisible = true;
+      this.passwordToEntryDialogFormData.id = roomId;
+      console.log("room id : " + this.passwordToEntryDialogFormData.id);
     },
     onViewButtonClick(isPasswordRequired) {
       if (isPasswordRequired) {

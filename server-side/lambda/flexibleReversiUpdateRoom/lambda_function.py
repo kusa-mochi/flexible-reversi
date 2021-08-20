@@ -1,4 +1,5 @@
 import boto3
+import hashlib
 import json
 
 dynamodb = boto3.resource('dynamodb')
@@ -66,6 +67,16 @@ def lambda_handler(event, context):
     exp += 'viewPassword=:viewPassword'
     print('done.')
     
+    print('calculating password hash...')
+    entryPasswordHash = ''
+    viewPasswordHash = ''
+    if len(postData['entryPassword']) != 0:
+        entryPasswordHash = hashlib.sha256(postData['entryPassword'].encode('utf-8')).hexdigest()
+    if len(postData['viewPassword']) != 0:
+        viewPasswordHash = hashlib.sha256(postData['viewPassword'].encode('utf-8')).hexdigest()
+    
+    print('done.')
+    
     print('updating room status...')
     result = appData.update_item(
         Key={
@@ -77,7 +88,7 @@ def lambda_handler(event, context):
             ':canView': postData['canView'],
             ':currentBoard': postData['currentBoard'],
             ':currentPlayer': postData['currentPlayer'],
-            ':entryPassword': postData['entryPassword'],
+            ':entryPassword': entryPasswordHash,
             ':firstPlayer': postData['firstPlayer'],
             ':opponentId': postData['opponentId'],
             ':opponentName': postData['opponentName'],
@@ -87,7 +98,7 @@ def lambda_handler(event, context):
             ':roomName': postData['roomName'],
             ':roomState': roomStateTo,
             ':thinkingCounter': postData['thinkingCounter'],
-            ':viewPassword': postData['viewPassword']
+            ':viewPassword': viewPasswordHash
         },
         ReturnValues='UPDATED_NEW'
         )
