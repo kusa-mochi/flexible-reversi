@@ -161,7 +161,7 @@
         <el-button
           type="secondary"
           @click="battleConfirmationDialogVisible = false"
-          >Cancel</el-button
+          >キャンセル</el-button
         >
         <el-button type="primary" @click="battleConfirmationDialogOnStart"
           >対局開始</el-button
@@ -182,7 +182,7 @@
         <el-button
           type="secondary"
           @click="passwordToEntryDialogVisible = false"
-          >Cancel</el-button
+          >キャンセル</el-button
         >
         <el-button type="primary" @click="onPasswordToEntryDialogOk"
           >OK</el-button
@@ -196,7 +196,7 @@
     >
       <span slot="footer" class="password-to-view-dialog__footer">
         <el-button type="secondary" @click="passwordToViewDialogVisible = false"
-          >Cancel</el-button
+          >キャンセル</el-button
         >
         <el-button type="primary" @click="passwordToViewDialogVisible = false"
           >OK</el-button
