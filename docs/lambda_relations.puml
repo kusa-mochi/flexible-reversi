@@ -1,0 +1,13 @@
+@startuml lambda_relations
+
+frame flexibleReversi {
+    agent Connect
+    agent Disconnect
+    agent Default
+    agent GetRooms
+    agent UpdateRoom
+
+    UpdateRoom --> GetRooms
+}
+
+@enduml

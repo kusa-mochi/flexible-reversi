@@ -1,0 +1,54 @@
+@startuml sequence_game
+
+actor Player1
+participant Client1
+participant Server
+database DB
+participant Client2
+actor Player2
+
+' Player1による部屋作成
+
+Player1 -> Client1 : 開始　部屋の作成
+Client1 -> Client1 : 表示　部屋作成画面
+Player1 -> Client1 : 入力　部屋の名前
+Player1 -> Client1 : 入力　パスワード指定など
+Player1 -> Client1 : 入力　ステージ設定
+Player1 -> Client1 : OK
+Client1 -> Server : 部屋作成
+Server -> DB : リセット\n該当No.の部屋情報
+activate DB
+DB --> Server : リセット完了
+deactivate DB
+Server -> DB : 書込　部屋の初期情報
+activate DB
+DB --> Server : 書込完了
+deactivate DB
+Server --> Client1 : 部屋作成完了
+Server --> Client2 : 通知　部屋作成
+Client1 -> Client1 : 対局画面に遷移
+Client2 -> Client2 : 部屋一覧画面を更新
+
+' Player2参戦
+
+Player2 -> Client2 : 押下　「対局」ボタン
+Client2 -> Client2 : 表示　対局前確認画面
+Player2 -> Client2 : OK
+Client2 -> Server : 対局開始
+Server -> DB : 対戦者ID、対戦者ニックネーム
+Server -> Client1 : 通知　対局開始
+Client1 -> Client1 : 表示　対局開始メッセージ
+Client2 -> Client2 : 表示　対局開始メッセージ
+Player1 -> Client1 : 石を置く
+Client1 -> Server : 石を置く
+Server -> Server : 石を置けるかチェック
+Server -> Server : 石を置く
+Server -> Server : 次のターンにPlayer2が\n石を置けるかチェック
+Server -> DB : 更新\n盤面状態、次のプレイヤー
+activate DB
+DB --> Server : 更新完了
+deactivate DB
+Server -> Client1 : 通知　更新後盤面状態
+Server -> Client2 : 通知　更新後盤面状態
+
+@enduml
