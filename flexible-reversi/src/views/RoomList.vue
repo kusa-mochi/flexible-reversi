@@ -279,7 +279,7 @@ export default {
         firstPlayer: true,
         requireEntryPassword: false,
         requireViewPassword: false,
-        id: -1,
+        id: -1, // room id
         roomName: "",
         stageData: {
           stage1: [
@@ -308,7 +308,7 @@ export default {
       },
       passwordToEntryDialogFormData: {
         password: "",
-        id: -1  // room id
+        id: -1, // room id
       },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
