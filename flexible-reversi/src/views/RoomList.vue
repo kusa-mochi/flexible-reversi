@@ -482,13 +482,15 @@ export default {
       this.$router.push({ path: "/game" });
     },
     onPasswordToEntryDialogOk() {
-      this.socket.send(JSON.stringify({
-        action: "checkEntryPassword",
-        data: {
-          id: this.passwordToEntryDialogFormData.id,
-          password: this.passwordToEntryDialogFormData.password
-        }
-      }));
+      this.socket.send(
+        JSON.stringify({
+          action: "checkEntryPassword",
+          data: {
+            id: this.passwordToEntryDialogFormData.id,
+            password: this.passwordToEntryDialogFormData.password,
+          },
+        })
+      );
       console.log("password: " + this.passwordToEntryDialogFormData.password);
       this.passwordToEntryDialogVisible = false;
     },
