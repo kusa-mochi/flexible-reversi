@@ -1,3 +1,7 @@
+# summary:
+# 1. read reversi rooms data from dynamodb.
+# 2. send data to all WebSocket clients.
+
 import boto3
 from decimal import Decimal
 import json
