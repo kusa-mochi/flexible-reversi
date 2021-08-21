@@ -31,12 +31,12 @@ export default class ReversiNode {
       this._status.push(newRow);
     }
 
-    console.log("ReversiNode initialized.");
-    console.log("  _numRow: " + this._numRow);
-    console.log("  _numColumn: " + this._numColumn);
-    console.log("  _player: " + this._player);
-    console.log("  _status:");
-    console.log(this._status);
+    // console.log("ReversiNode initialized.");
+    // console.log("  _numRow: " + this._numRow);
+    // console.log("  _numColumn: " + this._numColumn);
+    // console.log("  _player: " + this._player);
+    // console.log("  _status:");
+    // console.log(this._status);
   }
 
   putStone(iColumn, iRow) {
@@ -82,7 +82,7 @@ export default class ReversiNode {
 
   // ifPut: true:put stone, false:just check if it is able to put stone (no put)
   putStoneCore(iColumn, iRow, ifPut) {
-    console.log("putStoneCore begin.");
+    // console.log("putStoneCore begin.");
     if (!this.between(iColumn, 0, this._numColumn - 1)) {
       throw "invalid range 'iColumn'.";
     }
@@ -95,7 +95,7 @@ export default class ReversiNode {
 
     // if not an empty cell.
     if (this._status[iRow][iColumn] !== 0) {
-      console.log("it is not an empty cell.");
+      // console.log("it is not an empty cell.");
       // it cannot put a stone.
       return false;
     }
@@ -112,12 +112,12 @@ export default class ReversiNode {
     const searchResult =
       up || rightUp || right || rightDown || down || leftDown || left || leftUp;
 
-    // if a player can put its stone on any direction.
-    if (searchResult) {
-      console.log("enable.");
-    } else {
-      console.log("disable.");
-    }
+    // // if a player can put its stone on some direction.
+    // if (searchResult) {
+    //   console.log("enable.");
+    // } else {
+    //   console.log("disable.");
+    // }
 
     if (ifPut && searchResult) {
       this.switchPlayer();
@@ -146,8 +146,8 @@ export default class ReversiNode {
     let y = yNeighbor;
 
     // if a neighbor is opponent
-    console.log(`(${x},${y}):`);
-    console.log(this._status[y][x]);
+    // console.log(`(${x},${y}):`);
+    // console.log(this._status[y][x]);
     if (this._status[y][x] === opponent) {
       let ifBreak = false;
       for (
@@ -156,7 +156,7 @@ export default class ReversiNode {
         this.between(y, 0, this._numRow - 1);
         x += columnDirection, y += rowDirection
       ) {
-        console.log(`(${x},${y}): ${this._status[y][x]}`);
+        // console.log(`(${x},${y}): ${this._status[y][x]}`);
         const currentCell = this._status[y][x];
         switch (currentCell) {
           case 0: // empty cell
