@@ -266,6 +266,8 @@ export default {
       this.reloadRooms();
     }
 
+    window.addEventListener("beforeunload", this.closeSocket);
+
     this.currentPage = "room-list";
   },
   data() {
@@ -316,9 +318,7 @@ export default {
     };
   },
   destroyed() {
-    if (this.socket) {
-      // TODO: request to remove connection id of websocket.
-    }
+    window.removeEventListener("beforeunload", this.closeSocket);
   },
   methods: {
     // beforeCloseMakeRoomDialog(done) {
@@ -329,6 +329,11 @@ export default {
     battleConfirmationDialogOnStart() {
       this.battleConfirmationDialogVisible = false;
       this.$router.push({ path: "/game" });
+    },
+    closeSocket() {
+      if (this.socket) {
+        this.socket.close();
+      }
     },
     entryButtonVisible(room) {
       return room.roomState === "standby";
