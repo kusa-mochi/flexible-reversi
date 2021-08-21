@@ -1,3 +1,8 @@
+# summary:
+# 1. get room data from the API Gateway (mostly from clients).
+# 2. update room data at DynamoDB.
+# 3. call the lambda "flexibleReversiGetRooms."
+
 import boto3
 import hashlib
 import json
