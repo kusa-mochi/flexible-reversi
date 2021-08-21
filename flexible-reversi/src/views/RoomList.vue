@@ -312,7 +312,7 @@ export default {
       },
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
-      roomCounter: 1
+      roomCounter: 1,
     };
   },
   destroyed() {
