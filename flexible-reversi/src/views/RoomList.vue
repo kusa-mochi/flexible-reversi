@@ -344,7 +344,9 @@ export default {
       // if receive some data from API Gateway (Lambda)
       this.socket.onmessage = (e) => {
         console.log("onmessage");
+        console.log(e);
         const parsedData = JSON.parse(e.data);
+        console.log(parsedData);
 
         // check data type
         if (parsedData.dataType === "getRooms") {
@@ -410,6 +412,7 @@ export default {
       this.rooms.splice();
     },
     onMakeRoomDialogOpen(roomId) {
+      console.log("onMakeRoomDialogOpen start.");
       this.makeRoomDialogVisible = true;
       this.makeRoomDialogFormData.id = roomId;
       console.log("room id : " + this.makeRoomDialogFormData.id);
@@ -441,6 +444,7 @@ export default {
       );
     },
     onMakeRoomWizardComplete() {
+      console.log("make room wizard completed.");
       let board = [];
       this.makeRoomDialogFormData.stageData[
         this.makeRoomDialogFormData.stageName
