@@ -175,7 +175,13 @@
     >
       <el-form>
         <el-form-item>
-          <el-input v-model="passwordToEntryDialogFormData.password" type="password" autocomplete="off" maxlength="20" show-password></el-input>
+          <el-input
+            v-model="passwordToEntryDialogFormData.password"
+            type="password"
+            autocomplete="off"
+            maxlength="20"
+            show-password
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="password-to-entry-dialog__footer">
