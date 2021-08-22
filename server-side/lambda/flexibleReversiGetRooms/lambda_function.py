@@ -19,6 +19,15 @@ def lambda_handler(event, context):
     print("handler start.")
     # get rooms data from dynamodb
     rooms = appData.scan().get('Items')
+    for room in rooms:
+        del room['boardLogs']
+        del room['currentBoard']
+        del room['currentPlayer']
+        del room['entryPassword']
+        del room['opponentId']
+        del room['roomAuthorId']
+        del room['thinkingCounter']
+        del room['viewPassword']
     ret = json.dumps({"dataType":"getRooms", "data":{"rooms":rooms}}, default=rooms_default_dumps)
     
     print('transaction settings start.')
