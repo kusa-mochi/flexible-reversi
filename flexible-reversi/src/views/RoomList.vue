@@ -189,6 +189,7 @@
     <!-- 対局用パスワード入力ダイアログ -->
     <el-dialog
       :visible.sync="passwordToEntryDialogVisible"
+      id="pass-to-entry-dialog"
       title="対局用パスワード入力"
     >
       <el-form>
@@ -216,6 +217,7 @@
     <!-- 観戦用パスワード入力ダイアログ -->
     <el-dialog
       :visible.sync="passwordToViewDialogVisible"
+      id="password-to-view-dialog"
       title="観戦用パスワード入力"
     >
       <span slot="footer" class="password-to-view-dialog__footer">
