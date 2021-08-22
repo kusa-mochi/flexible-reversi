@@ -242,14 +242,6 @@ export default {
         return this.$store.state.serverUrl;
       },
     },
-    socket: {
-      get() {
-        return this.$store.state.socket;
-      },
-      set(newValue) {
-        this.$store.state.socket = newValue;
-      },
-    },
   },
   created() {
     // if not accessed from "nickname" page.
@@ -315,6 +307,7 @@ export default {
       passwordToEntryDialogVisible: false,
       passwordToViewDialogVisible: false,
       roomCounter: 1,
+      socket: null,
     };
   },
   destroyed() {

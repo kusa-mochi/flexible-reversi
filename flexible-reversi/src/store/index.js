@@ -19,7 +19,7 @@ export default new Vuex.Store({
     ],
     serverUrl:
       "wss://rkyu0ms32g.execute-api.ap-northeast-1.amazonaws.com/production",
-    socket: null,
+    // socket: null,
     stageSettings: {
       // 0:blank, 1:black, 2:white
       initialStatus: [
