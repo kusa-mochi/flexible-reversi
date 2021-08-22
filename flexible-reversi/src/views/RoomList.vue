@@ -156,7 +156,25 @@
       </form-wizard>
     </el-dialog>
     <!-- 対局前確認ダイアログ -->
-    <el-dialog :visible.sync="battleConfirmationDialogVisible" title="対局確認">
+    <el-dialog
+      :visible.sync="battleConfirmationDialogVisible"
+      id="battle-confirmation-dialog"
+      title="対局前確認"
+    >
+      <div class="main-message">
+        <span class="room-author">{{
+          battleConfirmationDialogData.roomAuthor
+        }}</span
+        >さんとの対局を開始します。
+      </div>
+      <div class="stage-image">
+        <reversi-board
+          :initial-board-status="
+            battleConfirmationDialogData.initialBoardStatus
+          "
+          :board-width="400"
+        ></reversi-board>
+      </div>
       <span slot="footer" class="battle-confirmation-dialog__footer">
         <el-button
           type="secondary"
@@ -265,6 +283,10 @@ export default {
   data() {
     return {
       battleConfirmationDialogVisible: false,
+      battleConfirmationDialogData: {
+        initialBoardStatus: [],
+        roomAuthor: "",
+      },
       makeRoomDialogVisible: false,
       makeRoomDialogFormData: {
         entryPassword: "",
@@ -355,6 +377,21 @@ export default {
           console.log("checked entry password.");
           const checkResult = parsedData.data.result;
           console.log(checkResult);
+          switch (checkResult) {
+            case "OK":
+              // show battleConfirmationDialog.
+              this.battleConfirmationDialogData.initialBoardStatus =
+                parsedData.data.currentBoard;
+              this.battleConfirmationDialogData.roomAuthor =
+                parsedData.data.roomAuthor;
+              this.battleConfirmationDialogVisible = true;
+              break;
+            case "NG":
+              // TODO: show NG password messagebox.
+              break;
+            default:
+              throw "invalid value @ checkResult";
+          }
         } else if (parsedData.dataType === "checkedViewPassword") {
           console.log("checked view password.");
         }
@@ -658,6 +695,12 @@ export default {
     .stage-select-radio {
       height: 240px;
     }
+  }
+}
+
+#battle-confirmation-dialog {
+  .room-author {
+    font-weight: bold;
   }
 }
 </style>

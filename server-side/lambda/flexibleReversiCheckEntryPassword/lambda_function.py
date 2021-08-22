@@ -1,9 +1,15 @@
 import boto3
+from decimal import Decimal
 import hashlib
 import json
 
 dynamodb = boto3.resource('dynamodb')
 appData = dynamodb.Table('flexible-reversi')
+
+def rooms_default_dumps(obj):
+    if isinstance(obj, Decimal):
+        return int(obj)
+    raise TypeError
 
 def lambda_handler(event, context):
     # 返信先情報
@@ -34,7 +40,6 @@ def lambda_handler(event, context):
     # ハッシュ値同士を比較し、パスワードが正しいかチェックする。
     ret = ''
     if postPasswordHash == dbPasswordHash:
-        ret = json.dumps({"dataType":"checkedEntryPassword", "data":{"result":"OK"}})
         # WebSocketの接続IDを、部屋情報に記載する。
         # この情報と照合することで、パスワードを入力したユーザは部屋への入室が可能となる
         exp = 'set '
@@ -47,6 +52,16 @@ def lambda_handler(event, context):
             },
             ReturnValues='UPDATED_NEW'
             )
+        response = appData.get_item(Key={'id': roomId})
+        # クライアントに、パスワードが正しいことと、盤面情報、部屋の開設者のニックネームを送る。
+        ret = json.dumps({
+            "dataType":"checkedEntryPassword",
+            "data":{
+                "currentBoard":response['Item']['currentBoard'],
+                "result":"OK",
+                "roomAuthor":response['Item']['roomAuthor']
+            }
+        }, default=rooms_default_dumps)
     else:
         ret = json.dumps({"dataType":"checkedEntryPassword", "data":{"result":"NG"}})
     
