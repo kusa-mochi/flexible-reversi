@@ -44,6 +44,9 @@ export default {
     initialBoardStatus: {
       get() {
         return this.$store.state.stageSettings.initialStatus;
+    serverUrl: {
+      get() {
+        return this.$store.state.serverUrl;
       },
     },
   },
@@ -53,6 +56,12 @@ export default {
       // redirect to top page.
       this.$router.push("/");
     }
+
+    // create a WebSocket instance.
+    if (this.socket === null) {
+      this.initializeWebSocket();
+    }
+
     this.currentPage = "game";
   },
   data() {
@@ -63,9 +72,29 @@ export default {
       numEmpty: 0,
       numBlack: 0,
       numWhite: 0,
+      socket: null,
     };
   },
   methods: {
+    initializeWebSocket() {
+      this.socket = new WebSocket(this.serverUrl);
+      this.socket.onopen = (e) => {
+        console.log("onopen");
+        console.log(e);
+      };
+      this.socket.onmessage = (e) => {
+        console.log("onmessage");
+        console.log(e);
+      };
+      this.socket.onclose = (e) => {
+        console.log("onclose");
+        console.log(e);
+      };
+      this.socket.onerror = (e) => {
+        console.log("onerror");
+        console.log(e);
+      };
+    },
     onInitialized(evt) {
       console.log("Game -onInitialied begin.");
       console.log(evt);
