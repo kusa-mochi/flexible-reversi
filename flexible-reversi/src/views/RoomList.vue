@@ -42,9 +42,9 @@
             class="room__view-button"
           >
             <div class="button-label">観戦</div>
-            <div class="button-badge">
+            <!-- <div class="button-badge">
               <img v-if="room.requireViewPassword" src="@/assets/key.svg" />
-            </div>
+            </div> -->
           </el-button>
         </div>
       </div>
@@ -111,15 +111,15 @@
                 >観戦を許可する。</el-checkbox
               >
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-checkbox
                 v-model="makeRoomDialogFormData.requireViewPassword"
                 :disabled="!makeRoomDialogFormData.canView"
                 class="allow-view-checkbox"
                 >観戦者の入室にパスワードを要求する。</el-checkbox
               >
-            </el-form-item>
-            <el-form-item>
+            </el-form-item> -->
+            <!-- <el-form-item>
               <div>
                 <el-input
                   v-model="makeRoomDialogFormData.viewPassword"
@@ -130,7 +130,7 @@
                   show-password
                 ></el-input>
               </div>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </tab-content>
         <tab-content title="ステージ設定">
@@ -224,7 +224,7 @@
       </span>
     </el-dialog>
     <!-- 観戦用パスワード入力ダイアログ -->
-    <el-dialog
+    <!-- <el-dialog
       :visible.sync="passwordToViewDialogVisible"
       id="password-to-view-dialog"
       title="観戦用パスワード入力"
@@ -237,7 +237,7 @@
           >OK</el-button
         >
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -353,7 +353,7 @@ export default {
         id: -1, // room id
       },
       passwordToEntryDialogVisible: false,
-      passwordToViewDialogVisible: false,
+      // passwordToViewDialogVisible: false,
       roomCounter: 1,
       socket: null,
     };
@@ -565,12 +565,13 @@ export default {
       this.passwordToEntryDialogFormData.id = roomId;
       console.log("room id : " + this.passwordToEntryDialogFormData.id);
     },
-    onViewButtonClick(isPasswordRequired) {
-      if (isPasswordRequired) {
-        this.passwordToViewDialogVisible = true;
-      } else {
-        this.$router.push({ path: "/game" });
-      }
+    // onViewButtonClick(isPasswordRequired) {
+    onViewButtonClick() {
+      // if (isPasswordRequired) {
+      //   this.passwordToViewDialogVisible = true;
+      // } else {
+      this.$router.push({ path: "/game" });
+      // }
     },
     reloadRooms() {
       this.socket.send(
