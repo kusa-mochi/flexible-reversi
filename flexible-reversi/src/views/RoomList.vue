@@ -160,6 +160,7 @@
       :visible.sync="battleConfirmationDialogVisible"
       id="battle-confirmation-dialog"
       title="対局前確認"
+      width="440px"
     >
       <div class="main-message">
         <span class="room-author">{{
@@ -167,12 +168,20 @@
         }}</span
         >さんとの対局を開始します。
       </div>
+      <div class="who-is-first">
+        あなたは<span class="who-is-first-span">{{
+          battleConfirmationDialogData.firstPlayer ? "後攻" : "先攻"
+        }}</span
+        >です。
+      </div>
+      <div class="stage-image-label">使用ステージ</div>
       <div class="stage-image">
         <reversi-board
+          :board-width="400"
           :initial-board-status="
             battleConfirmationDialogData.initialBoardStatus
           "
-          :board-width="400"
+          :is-read-only="true"
         ></reversi-board>
       </div>
       <span slot="footer" class="battle-confirmation-dialog__footer">
@@ -288,6 +297,7 @@ export default {
       battleConfirmationDialogData: {
         initialBoardStatus: [],
         roomAuthor: "",
+        firstPlayer: true,
       },
       makeRoomDialogVisible: false,
       makeRoomDialogFormData: {
@@ -382,6 +392,10 @@ export default {
           switch (checkResult) {
             case "OK":
               // show battleConfirmationDialog.
+              this.battleConfirmationDialogData.firstPlayer =
+                parsedData.data.firstPlayer;
+              console.log("firstPlayer:");
+              console.log(parsedData.data.firstPlayer);
               this.battleConfirmationDialogData.initialBoardStatus =
                 parsedData.data.currentBoard;
               this.battleConfirmationDialogData.roomAuthor =
@@ -498,7 +512,7 @@ export default {
           currentBoard: board,
           currentPlayer: this.makeRoomDialogFormData.currentPlayer,
           entryPassword: this.makeRoomDialogFormData.entryPassword,
-          firstPlayer: true,
+          firstPlayer: this.makeRoomDialogFormData.firstPlayer,
           id: this.makeRoomDialogFormData.id,
           opponentId: "",
           opponentName: "",
@@ -701,8 +715,10 @@ export default {
 }
 
 #battle-confirmation-dialog {
-  .room-author {
+  .room-author,
+  .who-is-first-span {
     font-weight: bold;
+    font-size: 24px;
   }
 }
 </style>
