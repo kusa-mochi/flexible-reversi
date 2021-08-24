@@ -2,7 +2,7 @@
   <div class="room-list">
     <router-link to="/">Top</router-link>
     <router-link to="/game">Game</router-link>
-    <div>ようこそ{{ user.name }}さん</div>
+    <div>ようこそ{{ myNickname }}さん</div>
     <div class="rooms">
       <div
         v-for="room in rooms"
@@ -254,6 +254,11 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
+    myNickname: {
+      get() {
+        return this.$store.state.myNickname;
+      },
+    },
     rooms: {
       cache: false,
       get() {
@@ -362,11 +367,6 @@ export default {
     window.removeEventListener("beforeunload", this.closeSocket);
   },
   methods: {
-    // beforeCloseMakeRoomDialog(done) {
-    //   this.$confirm("次の内容で部屋を作成します。よろしいですか？")
-    //     .then((_) => done())
-    //     .catch((_) => {});
-    // },
     battleConfirmationDialogOnStart() {
       this.battleConfirmationDialogVisible = false;
       this.$router.push({ path: "/game" });
@@ -533,7 +533,7 @@ export default {
           requireEntryPassword:
             this.makeRoomDialogFormData.requireEntryPassword,
           requireViewPassword: this.makeRoomDialogFormData.requireViewPassword,
-          roomAuthor: this.user.name,
+          roomAuthor: this.myNickname,
           roomAuthorId: this.user.name,
           roomName: this.makeRoomDialogFormData.roomName,
           roomState: "standby",
@@ -617,13 +617,6 @@ export default {
     },
   },
   name: "RoomList",
-  props: {
-    user: {
-      type: Object,
-      required: true,
-      default: null,
-    },
-  },
 };
 </script>
 

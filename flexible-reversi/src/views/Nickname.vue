@@ -3,7 +3,7 @@
     <el-form>
       <div>
         あなたのニックネームを決めてね
-        <el-input v-model="user.name" type="text" required /><el-button
+        <el-input v-model="tmpNickname" type="text" required /><el-button
           @click="onSubmit"
           >OK</el-button
         >
@@ -23,7 +23,14 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
-  },
+    myNickname: {
+      get() {
+        return this.$store.state.myNickname;
+      },
+      set(newValue) {
+        this.$store.state.myNickname = newValue;
+      },
+    },
   created() {
     // if not accessed from "top" page.
     if (this.currentPage !== "top") {
@@ -32,22 +39,23 @@ export default {
     }
     this.currentPage = "nickname";
   },
+  data() {
+    return {
+      tmpNickname: "",
+    };
+  },
   methods: {
     onSubmit(e) {
       console.log(e);
       // TODO: check if a name is not already used by another player.
 
+      // save the nickname to a Vuex store.
+      this.myNickname = this.tmpNickname;
+
       this.$router.push("/room-list");
     },
   },
   name: "Nickname",
-  props: {
-    user: {
-      type: Object,
-      required: true,
-      default: null,
-    },
-  },
 };
 </script>
 

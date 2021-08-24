@@ -1,20 +1,13 @@
 <template>
   <div id="app">
     <div class="app-container">
-      <router-view :user.sync="user" />
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      user: {
-        name: "",
-      },
-    };
-  },
   name: "App",
 };
 </script>
