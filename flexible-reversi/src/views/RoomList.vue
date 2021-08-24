@@ -56,7 +56,7 @@
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
       title="部屋作成"
-      width="584px"
+      width="784px"
     >
       <form-wizard
         @on-complete="onMakeRoomWizardComplete"
