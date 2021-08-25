@@ -7,6 +7,21 @@ database DB
 participant Client2
 actor Player2
 
+' Player1の参加
+
+Player1 -[#Green]> Client1 : 「スタート」
+Client1 -[#Green]> Client1 : 表示　ニックネーム設定画面
+Player1 -[#Green]> Client1 : 入力　ニックネーム
+Player1 -[#Green]> Client1 : 押下　OKボタン
+Client1 -[#Green]> Server : WebSocket 新規接続
+Client1 -[#Green]> Server : 新規トークン発行
+Server -[#Green]> Server : 新規トークン発行
+note left : トークンは以後の処理で\nクライアントの識別に使う。
+Server -[#Green]> DB : 保存　トークン
+DB -[#Green]-> Server : 保存完了
+Server -> Client1 : トークン
+Client1 -> Client1 : Vuexストアにトークン保存
+
 ' Player1による部屋作成
 
 Player1 -[#Green]> Client1 : 開始　部屋の作成
@@ -15,7 +30,10 @@ Player1 -[#Green]> Client1 : 入力　部屋の名前
 Player1 -[#Green]> Client1 : 入力　パスワード指定など
 Player1 -[#Green]> Client1 : 入力　ステージ設定
 Player1 -[#Green]> Client1 : OK
-Client1 -[#Green]> Server : 部屋作成
+Client1 -> Server : 部屋作成\n部屋情報、トークン
+Server -> DB : 検索　トークン
+DB --> Server : トークン
+Server -> Server : 検証　トークン
 Server -[#Green]> DB : リセット\n該当No.の部屋情報
 activate DB
 DB -[#Green]-> Server : リセット完了
@@ -27,6 +45,20 @@ deactivate DB
 Server -[#Green]-> Client1 : 通知　部屋一覧更新
 Server -[#Green]-> Client2 : 通知　部屋一覧更新
 Client1 -[#Green]> Client1 : 対局画面に遷移
+Client1 -> Server : WebSocket新規接続
+Server -> DB : 保存　Client1のWebSocket 接続ID
+activate DB
+DB --> Server : 保存完了
+deactivate DB
+
+loop 1分間隔
+    Client1 -> Server : 接続確認\nPlayer1のニックネーム、部屋番号
+    Server -> DB : 取得　Player1の接続ID、ニックネーム
+    activate DB
+    DB --> Server : Player1の接続ID、ニックネーム
+    deactivate DB
+    Server -> Server : 接続ID、ニックネーム検証
+end
 
 ' Player2参戦
 
@@ -52,21 +84,22 @@ alt パスワードハッシュが一致した場合
     Server -[#Green]> Client2 : パスワードOK、Player1ニックネーム、盤面情報
     Client2 -[#Green]> Client2 : 表示　対局前確認画面
     Player2 -[#Green]> Client2 : OK
-    Client2 -> Client2 : 対局画面表示
-    Client2 -> Server : 対局開始、Player2ニックネーム
-    Server -> DB : 取得　WebSocket 接続ID
+    Client2 -[#Green]> Client2 : 対局画面表示
+    Client2 -> Server : WebSocket新規接続\nPlayer2のニックネーム、接続用トークン
+    Server -> DB : 保存　Client2のWebSocket 接続ID
     activate DB
-    DB --> Server : WebSocket 接続ID
+    DB --> Server : 保存完了
     deactivate DB
-    Server -> Server : WebSocket 接続ID比較
-    alt WebSocket接続IDが一致した場合
-        Server -> DB : 保存　Player2ニックネーム
-        activate DB
-        DB --> Server : 保存完了
-        deactivate DB
-        Server -> Client1 : Player2ニックネーム
+    Client2 -> Server : 接続確認\nPlayer2ニックネーム、部屋番号
+    Server -> DB : 保存　Player2ニックネーム
+    activate DB
+    DB --> Server : 保存完了
+    deactivate DB
+
+    alt Player1とPlayer2のニックネームが揃った場合
+        Server -> Client1 : 対局開始合図\nPlayer1,2ニックネーム
+        Server -> Client2 : 対局開始合図\nPlayer1,2ニックネーム
         Client1 -> Client1 : 表示　対局開始メッセージ
-        Server -> Client2 : 対局開始合図
         Client2 -> Client2 : 表示　対局開始メッセージ
         Player1 -> Client1 : 石を置く
         Client1 -> Server : 石を置く
