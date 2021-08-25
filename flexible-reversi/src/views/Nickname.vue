@@ -5,6 +5,7 @@
         あなたのニックネームを決めてね
         <el-input v-model="tmpNickname" type="text" required /><el-button
           @click="onSubmit"
+          :disabled="!gotToken"
           >OK</el-button
         >
       </div>
@@ -31,20 +32,77 @@ export default {
         this.$store.state.myNickname = newValue;
       },
     },
+    serverUrl: {
+      get() {
+        return this.$store.state.serverUrl;
+      },
+    },
+    token: {
+      get() {
+        return this.$store.state.token;
+      },
+      set(newValue) {
+        if (newValue === undefined || newValue === null || newValue === "") {
+          throw "invalid token value.";
+        }
+        this.$store.state.token = newValue;
+      },
+    },
+  },
   created() {
     // if not accessed from "top" page.
     if (this.currentPage !== "top") {
       // redirect to top page.
       this.$router.push("/");
     }
+
+    // create a WebSocket instance.
+    if (this.socket === null) {
+      this.initializeWebSocket();
+    }
+
     this.currentPage = "nickname";
   },
   data() {
     return {
       tmpNickname: "",
+      socket: null,
+      gotToken: false,
     };
   },
   methods: {
+    initializeWebSocket() {
+      this.socket = new WebSocket(this.serverUrl);
+      this.socket.onopen = (e) => {
+        console.log("onopen");
+        console.log(e);
+
+        // request a token to keep communicating with the server even after a page transition.
+        this.socket.send(JSON.stringify({ action: "newToken" }));
+      };
+      this.socket.onmessage = (e) => {
+        console.log("onmessage");
+        // console.log(e);
+        const parsedData = JSON.parse(e.data);
+
+        // check data type
+        if (parsedData.dataType === "newToken") {
+          console.log("newToken got.");
+          const token = parsedData.data.token;
+          console.log(token);
+          this.token = token;
+          this.gotToken = true;
+        }
+      };
+      this.socket.onclose = (e) => {
+        console.log("onclose");
+        console.log(e);
+      };
+      this.socket.onerror = (e) => {
+        console.log("onerror");
+        console.log(e);
+      };
+    },
     onSubmit(e) {
       console.log(e);
       // TODO: check if a name is not already used by another player.

@@ -38,13 +38,10 @@
           </el-button>
           <el-button
             v-if="viewButtonVisible(room)"
-            @click="onViewButtonClick(room.requireViewPassword)"
+            @click="onViewButtonClick()"
             class="room__view-button"
           >
             <div class="button-label">観戦</div>
-            <!-- <div class="button-badge">
-              <img v-if="room.requireViewPassword" src="@/assets/key.svg" />
-            </div> -->
           </el-button>
         </div>
       </div>
@@ -111,26 +108,6 @@
                 >観戦を許可する。</el-checkbox
               >
             </el-form-item>
-            <!-- <el-form-item>
-              <el-checkbox
-                v-model="makeRoomDialogFormData.requireViewPassword"
-                :disabled="!makeRoomDialogFormData.canView"
-                class="allow-view-checkbox"
-                >観戦者の入室にパスワードを要求する。</el-checkbox
-              >
-            </el-form-item> -->
-            <!-- <el-form-item>
-              <div>
-                <el-input
-                  v-model="makeRoomDialogFormData.viewPassword"
-                  :disabled="!makeRoomDialogFormData.requireViewPassword"
-                  class="view-password-input"
-                  placeholder="パスワードを入力してください(20文字以内)"
-                  maxlength="20"
-                  show-password
-                ></el-input>
-              </div>
-            </el-form-item> -->
           </el-form>
         </tab-content>
         <tab-content title="ステージ設定">
@@ -276,6 +253,19 @@ export default {
         return this.$store.state.serverUrl;
       },
     },
+    token: {
+      get() {
+        return this.$store.state.token;
+      },
+    },
+    gameData: {
+      get() {
+        return this.$store.state.gameData;
+      },
+      set(newValue) {
+        this.$store.state.gameData = newValue;
+      },
+    },
   },
   created() {
     // if not accessed from "nickname" page.
@@ -311,7 +301,6 @@ export default {
         currentPlayer: true,
         firstPlayer: true,
         requireEntryPassword: false,
-        requireViewPassword: false,
         id: -1, // room id
         roomName: "",
         stageData: {
@@ -351,7 +340,6 @@ export default {
           ],
         },
         stageName: "stage1",
-        viewPassword: "",
       },
       passwordToEntryDialogFormData: {
         password: "",
@@ -369,6 +357,23 @@ export default {
   methods: {
     battleConfirmationDialogOnStart() {
       this.battleConfirmationDialogVisible = false;
+      let boardStatus = [];
+      this.battleConfirmationDialogData.initialBoardStatus.forEach(
+        (boardRow) => {
+          boardStatus.push(boardRow.slice());
+        }
+      );
+      const gameData = {
+        initialBoardStatus: boardStatus,
+        boardSize: {
+          width: this.battleConfirmationDialogData.initialBoardStatus[0].length,
+          height: this.battleConfirmationDialogData.initialBoardStatus.length,
+        },
+        isJustViewing: false,
+        myNickname: "",
+        opponntNickname: this.battleConfirmationDialogData.roomAuthor,
+      };
+      this.gameData = gameData;
       this.$router.push({ path: "/game" });
     },
     closeSocket() {
@@ -422,8 +427,6 @@ export default {
             default:
               throw "invalid value @ checkResult";
           }
-        } else if (parsedData.dataType === "checkedViewPassword") {
-          console.log("checked view password.");
         }
       };
       this.socket.onclose = (e) => {
@@ -466,7 +469,6 @@ export default {
           roomAuthor: room.roomAuthor,
           id: room.id,
           requireEntryPassword: room.requireEntryPassword,
-          requireViewPassword: room.requireViewPassword,
           roomCounter: this.roomCounter++,
           roomName: room.roomName,
           canView: room.canView,
@@ -496,14 +498,12 @@ export default {
             opponentName: "",
             requireEntryPassword:
               this.makeRoomDialogFormData.requireEntryPassword,
-            requireViewPassword:
-              this.makeRoomDialogFormData.requireViewPassword,
-            roomAuthor: this.user.name,
-            roomAuthorId: this.user.name,
+            roomAuthor: this.myNickname,
+            roomAuthorId: this.token,
             roomName: this.makeRoomDialogFormData.roomName,
             roomState: "inPreparation",
             thinkingCounter: 0,
-            viewPassword: this.makeRoomDialogFormData.viewPassword,
+            token: this.token,
           },
         })
       );
@@ -532,13 +532,12 @@ export default {
           opponentName: "",
           requireEntryPassword:
             this.makeRoomDialogFormData.requireEntryPassword,
-          requireViewPassword: this.makeRoomDialogFormData.requireViewPassword,
           roomAuthor: this.myNickname,
-          roomAuthorId: this.user.name,
+          roomAuthorId: this.token,
           roomName: this.makeRoomDialogFormData.roomName,
           roomState: "standby",
           thinkingCounter: 0,
-          viewPassword: this.makeRoomDialogFormData.viewPassword,
+          token: this.token,
         },
       };
       console.log(dataToSend);
@@ -553,6 +552,7 @@ export default {
           data: {
             id: this.passwordToEntryDialogFormData.id,
             password: this.passwordToEntryDialogFormData.password,
+            token: this.token,
           },
         })
       );
@@ -577,6 +577,9 @@ export default {
       this.socket.send(
         JSON.stringify({
           action: "getRooms",
+          data: {
+            token: this.token,
+          },
         })
       );
     },

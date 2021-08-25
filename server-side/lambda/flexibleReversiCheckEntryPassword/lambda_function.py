@@ -4,6 +4,7 @@ import hashlib
 import json
 
 dynamodb = boto3.resource('dynamodb')
+connections = dynamodb.Table('flexible-reversi-tokens')
 appData = dynamodb.Table('flexible-reversi')
 
 def rooms_default_dumps(obj):
@@ -12,16 +13,26 @@ def rooms_default_dumps(obj):
     raise TypeError
 
 def lambda_handler(event, context):
+    
+    # check a token from a client.
+    postData = json.loads(event.get('body', '{}')).get('data')
+    token = postData['token']
+    print(postData)
+    connection = connections.get_item(Key={'token': token})
+    print(connection)
+    # if a token is not exist on DB
+    if token != connection['Item']['token']:
+        return {
+            'statusCode': 404,
+            'body': json.dumps('access denied.')
+        }
+        
     # 返信先情報
     connectionId = event.get('requestContext', {}).get('connectionId')
     domainName = event.get('requestContext',{}).get('domainName')
     stage       = event.get('requestContext',{}).get('stage')
     endpointUrl = F"https://{domainName}/{stage}"
     
-    # 送られてきたパスワードの取得
-    postData = json.loads(event.get('body', '{}')).get('data')
-    print(postData)
-
     # 部屋番号
     roomId = postData['id']
     print('room id : ' + str(roomId))
@@ -40,7 +51,7 @@ def lambda_handler(event, context):
     # ハッシュ値同士を比較し、パスワードが正しいかチェックする。
     ret = ''
     if postPasswordHash == dbPasswordHash:
-        # WebSocketの接続IDを、部屋情報に記載する。
+        # トークンを部屋情報に記載する。
         # この情報と照合することで、パスワードを入力したユーザは部屋への入室が可能となる
         exp = 'set '
         exp += 'opponentId=:opponentId'
@@ -48,16 +59,17 @@ def lambda_handler(event, context):
             Key={'id': roomId},
             UpdateExpression=exp,
             ExpressionAttributeValues={
-                ':opponentId': connectionId
+                ':opponentId': token
             },
             ReturnValues='UPDATED_NEW'
             )
         response = appData.get_item(Key={'id': roomId})
-        # クライアントに、パスワードが正しいことと、盤面情報、部屋の開設者のニックネームを送る。
+        # クライアントに、パスワードが正しいことと、先攻後攻情報、盤面情報、部屋の開設者のニックネームを送る。
         ret = json.dumps({
             "dataType":"checkedEntryPassword",
             "data":{
                 "currentBoard":response['Item']['currentBoard'],
+                "firstPlayer":response['Item']['firstPlayer'],
                 "result":"OK",
                 "roomAuthor":response['Item']['roomAuthor']
             }

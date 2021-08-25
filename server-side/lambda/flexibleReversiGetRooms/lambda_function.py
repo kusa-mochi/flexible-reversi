@@ -7,7 +7,7 @@ from decimal import Decimal
 import json
 
 dynamodb = boto3.resource('dynamodb')
-connections = dynamodb.Table('flexible-reversi-connections')
+connections = dynamodb.Table('flexible-reversi-tokens')
 appData = dynamodb.Table('flexible-reversi')
 
 def rooms_default_dumps(obj):
@@ -16,7 +16,35 @@ def rooms_default_dumps(obj):
     raise TypeError
 
 def lambda_handler(event, context):
-    print("handler start.")
+    print("getRooms start.")
+    
+    # check a token from a client.
+    postData = json.loads(event.get('body', '{}')).get('data')
+    token = postData['token']
+    print(postData)
+    connection = connections.get_item(Key={'token': token})
+    print(connection)
+    # if a token is not exist on DB
+    if token != connection['Item']['token']:
+        return {
+            'statusCode': 404,
+            'body': json.dumps('access denied.')
+        }
+    
+    # WebSocket ID
+    connectionId = event.get('requestContext', {}).get('connectionId')
+    
+    # update WebSocket ID on DB.
+    exp = "set connectionId=:connectionId"
+    result = connections.update_item(
+        Key={'token': token},
+        UpdateExpression=exp,
+        ExpressionAttributeValues={
+            ':connectionId': connectionId
+        },
+        ReturnValues='UPDATED_NEW'
+    )
+
     # get rooms data from dynamodb
     rooms = appData.scan().get('Items')
     for room in rooms:
@@ -27,7 +55,6 @@ def lambda_handler(event, context):
         del room['opponentId']
         del room['roomAuthorId']
         del room['thinkingCounter']
-        del room['viewPassword']
     ret = json.dumps({"dataType":"getRooms", "data":{"rooms":rooms}}, default=rooms_default_dumps)
     
     print('transaction settings start.')
@@ -40,7 +67,7 @@ def lambda_handler(event, context):
         try:
             print(item)
             am = boto3.client('apigatewaymanagementapi', endpoint_url=item['endpointUrl'])
-            _ = am.post_to_connection(ConnectionId=item['id'], Data=ret)
+            _ = am.post_to_connection(ConnectionId=connectionId, Data=ret)
         except:
             pass
     return {

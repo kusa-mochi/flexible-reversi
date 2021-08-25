@@ -8,15 +8,31 @@ import hashlib
 import json
 
 dynamodb = boto3.resource('dynamodb')
+connections = dynamodb.Table('flexible-reversi-tokens')
 appData = dynamodb.Table('flexible-reversi')
 
 def lambda_handler(event, context):
-    print(event)
-    print(json.dumps(event))
-    print(json.loads(json.dumps(event)))
+    print("updateRoom start.")
+    
+    # check a token from a client.
+    postData = json.loads(event.get('body', '{}')).get('data')
+    token = postData['token']
+    print(postData)
+    connection = connections.get_item(Key={'token': token})
+    print(connection)
+    # if a token is not exist on DB
+    if token != connection['Item']['token']:
+        return {
+            'statusCode': 404,
+            'body': json.dumps('access denied.')
+        }
+    
+    #print(event)
+    #print(json.dumps(event))
+    #print(json.loads(json.dumps(event)))
     #print(json.loads(json.dumps(event))['data']['id'])
     #postData = json.loads(json.dumps(event))['data']
-    postData = json.loads(event.get('body', '{}')).get('data')
+    #postData = json.loads(event.get('body', '{}')).get('data')
 
     # get room id
     roomId = postData['id']
@@ -52,6 +68,13 @@ def lambda_handler(event, context):
     
     print("done.")
     
+    print('calculating password hash...')
+    entryPasswordHash = ''
+    if len(postData['entryPassword']) != 0:
+        entryPasswordHash = hashlib.sha256(postData['entryPassword'].encode('utf-8')).hexdigest()
+    
+    print('done.')
+    
     # update room properties
     print('making dynamodb query...')
     exp = 'set '
@@ -64,56 +87,43 @@ def lambda_handler(event, context):
     exp += 'opponentId=:opponentId,'
     exp += 'opponentName=:opponentName,'
     exp += 'requireEntryPassword=:requireEntryPassword,'
-    exp += 'requireViewPassword=:requireViewPassword,'
     exp += 'roomAuthor=:roomAuthor,'
     exp += 'roomName=:roomName,'
     exp += 'roomState=:roomState,'
-    exp += 'thinkingCounter=:thinkingCounter,'
-    exp += 'viewPassword=:viewPassword'
-    print('done.')
+    exp += 'thinkingCounter=:thinkingCounter'
     
-    print('calculating password hash...')
-    entryPasswordHash = ''
-    viewPasswordHash = ''
-    if len(postData['entryPassword']) != 0:
-        entryPasswordHash = hashlib.sha256(postData['entryPassword'].encode('utf-8')).hexdigest()
-    if len(postData['viewPassword']) != 0:
-        viewPasswordHash = hashlib.sha256(postData['viewPassword'].encode('utf-8')).hexdigest()
-    
+    eav = {
+        ':boardLogs': postData['boardLogs'],
+        ':canView': postData['canView'],
+        ':currentBoard': postData['currentBoard'],
+        ':currentPlayer': postData['currentPlayer'],
+        ':entryPassword': entryPasswordHash,
+        ':firstPlayer': postData['firstPlayer'],
+        ':opponentId': postData['opponentId'],
+        ':opponentName': postData['opponentName'],
+        ':requireEntryPassword': postData['requireEntryPassword'],
+        ':roomAuthor': postData['roomAuthor'],
+        ':roomName': postData['roomName'],
+        ':roomState': roomStateTo,
+        ':thinkingCounter': postData['thinkingCounter']
+    }
     print('done.')
     
     print('updating room status...')
     result = appData.update_item(
-        Key={
-            'id': roomId
-        },
+        Key={'id': roomId},
         UpdateExpression=exp,
-        ExpressionAttributeValues={
-            ':boardLogs': postData['boardLogs'],
-            ':canView': postData['canView'],
-            ':currentBoard': postData['currentBoard'],
-            ':currentPlayer': postData['currentPlayer'],
-            ':entryPassword': entryPasswordHash,
-            ':firstPlayer': postData['firstPlayer'],
-            ':opponentId': postData['opponentId'],
-            ':opponentName': postData['opponentName'],
-            ':requireEntryPassword': postData['requireEntryPassword'],
-            ':requireViewPassword': postData['requireViewPassword'],
-            ':roomAuthor': postData['roomAuthor'],
-            ':roomName': postData['roomName'],
-            ':roomState': roomStateTo,
-            ':thinkingCounter': postData['thinkingCounter'],
-            ':viewPassword': viewPasswordHash
-        },
+        ExpressionAttributeValues=eav,
         ReturnValues='UPDATED_NEW'
-        )
+    )
     print('done.')
+    print(postData['firstPlayer'])
     
     # 各クライアントに変更後の各部屋のを通知する。
     response = boto3.client('lambda').invoke(
         FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiGetRooms',
         InvocationType='Event',
-        Payload=""
+        Payload=json.dumps({'body':"{\"data\":{\"token\":" + token + "}}"})
     )
     
     return {

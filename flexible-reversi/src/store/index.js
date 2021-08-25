@@ -13,13 +13,13 @@ export default new Vuex.Store({
       //     roomAuthor: "くさもちA",
       //     id: 1,
       //     requireEntryPassword: false,
-      //     requireViewPassword: false,
       //     roomName: "部屋００１",
       //     canView: false,
       //   },
     ],
     serverUrl:
       "wss://rkyu0ms32g.execute-api.ap-northeast-1.amazonaws.com/production",
+    token: null,
     // socket: null,
     stageSettings: {
       // 0:blank, 1:black, 2:white
