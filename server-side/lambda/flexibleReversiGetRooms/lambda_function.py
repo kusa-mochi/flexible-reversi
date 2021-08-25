@@ -17,6 +17,7 @@ def rooms_default_dumps(obj):
 
 def lambda_handler(event, context):
     print("getRooms start.")
+    print(event)
     
     # check a token from a client.
     postData = json.loads(event.get('body', '{}')).get('data')
@@ -33,6 +34,8 @@ def lambda_handler(event, context):
     
     # WebSocket ID
     connectionId = event.get('requestContext', {}).get('connectionId')
+    print('websocket id:')
+    print(connectionId)
     
     # update WebSocket ID on DB.
     exp = "set connectionId=:connectionId"
@@ -67,7 +70,7 @@ def lambda_handler(event, context):
         try:
             print(item)
             am = boto3.client('apigatewaymanagementapi', endpoint_url=item['endpointUrl'])
-            _ = am.post_to_connection(ConnectionId=connectionId, Data=ret)
+            _ = am.post_to_connection(ConnectionId=item['connectionId'], Data=ret)
         except:
             pass
     return {

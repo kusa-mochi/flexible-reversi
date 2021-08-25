@@ -119,11 +119,14 @@ def lambda_handler(event, context):
     print('done.')
     print(postData['firstPlayer'])
     
+    # WebSocket 接続ID
+    connectionId = event.get('requestContext', {}).get('connectionId')
+    
     # 各クライアントに変更後の各部屋のを通知する。
     response = boto3.client('lambda').invoke(
         FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiGetRooms',
         InvocationType='Event',
-        Payload=json.dumps({'body':"{\"data\":{\"token\":" + token + "}}"})
+        Payload=json.dumps({'body':"{\"data\":{\"token\":\"" + token + "\"}}", 'requestContext':{'connectionId':connectionId}})
     )
     
     return {
