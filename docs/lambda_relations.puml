@@ -1,11 +1,14 @@
 @startuml lambda_relations
 
-frame flexibleReversi {
+frame flexibleReversi_Lambdas {
     agent Connect
     agent Disconnect
     agent Default
+    agent NewToken
     agent GetRooms
     agent UpdateRoom
+    agent CheckEntryPassword
+    agent flexibleReversiGameStandby
 
     UpdateRoom --> GetRooms
 }
