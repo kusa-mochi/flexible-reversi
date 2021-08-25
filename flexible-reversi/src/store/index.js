@@ -21,9 +21,13 @@ export default new Vuex.Store({
       "wss://rkyu0ms32g.execute-api.ap-northeast-1.amazonaws.com/production",
     token: null,
     // socket: null,
-    stageSettings: {
+    gameData: {
+      boardSize: {
+        height: 8,
+        width: 16,
+      },
       // 0:blank, 1:black, 2:white
-      initialStatus: [
+      initialBoardStatus: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
         [0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -33,10 +37,8 @@ export default new Vuex.Store({
         [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ],
-      boardSize: {
-        height: 8,
-        width: 16,
-      },
+      isJustViewing: true,
+      opponentNickname: "",
     },
   },
   mutations: {},

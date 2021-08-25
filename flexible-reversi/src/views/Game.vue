@@ -14,8 +14,7 @@
       :board-width="800"
       :board-height="400"
       :initial-board-status="initialBoardStatus"
-      :num-columns="boardSize.width"
-      :num-rows="boardSize.height"
+      :is-read-only="isJustViewing"
     ></reversi-board>
   </div>
 </template>
@@ -30,7 +29,7 @@ export default {
   computed: {
     boardSize: {
       get() {
-        return this.$store.state.stageSettings.boardSize;
+        return this.$store.state.gameData.boardSize;
       },
     },
     currentPage: {
@@ -41,9 +40,24 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
+    gameData: {
+      get() {
+        return this.$store.state.gameData;
+      },
+      set(newValue) {
+        this.$store.state.gameData = newValue;
+      },
+    },
     initialBoardStatus: {
       get() {
-        return this.$store.state.stageSettings.initialStatus;
+        return this.$store.state.gameData.initialBoardStatus;
+      },
+    },
+    isJustViewing: {
+      get() {
+        return this.$store.state.gameData.isJustViewing;
+      },
+    },
     serverUrl: {
       get() {
         return this.$store.state.serverUrl;
