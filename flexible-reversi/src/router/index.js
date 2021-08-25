@@ -15,36 +15,43 @@ const routes = [
   {
     path: "/",
     component: Top,
+    name: "Top",
   },
   // ニックネーム設定ページ
   {
     path: "/nickname",
     component: Nickname,
+    name: "Nickname",
   },
   // 部屋一覧ページ
   {
     path: "/room-list",
     component: RoomList,
+    name: "RoomList",
   },
   // 対局ページ
   {
     path: "/game",
     component: Game,
+    name: "Game",
   },
   // 設定ページ
   {
     path: "/settings",
     component: Settings,
+    name: "Settings",
   },
   // ステージ作成ページ
   {
     path: "/stage-editor",
     component: StageEditor,
+    name: "StageEditor",
   },
   // このゲームについて
   {
     path: "/about",
     component: About,
+    name: "About",
   },
 ];
 
