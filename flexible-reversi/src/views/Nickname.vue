@@ -87,11 +87,28 @@ export default {
 
         // check data type
         if (parsedData.dataType === "newToken") {
-          console.log("newToken got.");
+          console.log("newToken");
           const token = parsedData.data.token;
           console.log(token);
           this.token = token;
           this.gotToken = true;
+        } else if (parsedData.dataType === "checkNicknameAvailability") {
+          console.log("checkNicknameAvailability");
+          const availability = parsedData.data.nicknameAvailability;
+          switch (availability) {
+            case "inUse":
+              console.log("nickname is in use.");
+              break;
+            case "isAvailable":
+              console.log("isAvailable");
+              // save the nickname to a Vuex store.
+              this.myNickname = this.tmpNickname;
+              // go to the room list page.
+              this.$router.push("/room-list");
+              break;
+            default:
+              break;
+          }
         }
       };
       this.socket.onclose = (e) => {
@@ -105,12 +122,16 @@ export default {
     },
     onSubmit(e) {
       console.log(e);
-      // TODO: check if a name is not already used by another player.
-
-      // save the nickname to a Vuex store.
-      this.myNickname = this.tmpNickname;
-
-      this.$router.push("/room-list");
+      // check if a name is not already used by another player.
+      this.socket.send(
+        JSON.stringify({
+          action: "checkNicknameAvailability",
+          data: {
+            nickname: this.tmpNickname,
+            token: this.token
+          },
+        })
+      );
     },
   },
   name: "Nickname",
