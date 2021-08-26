@@ -14,14 +14,14 @@ Client1 -[#Green]> Client1 : 表示　ニックネーム設定画面
 Player1 -[#Green]> Client1 : 入力　ニックネーム
 Player1 -[#Green]> Client1 : 押下　OKボタン
 Client1 -[#Green]> Server : WebSocket 新規接続
-Client1 -> Server : 新規トークン発行\nニックネーム
-Server -> DB : 検索　ニックネーム
+Client1 -[#Green]> Server : 新規トークン発行\nニックネーム
+Server -[#Green]> DB : 検索　ニックネーム
 activate DB
-DB --> Server : ニックネームの有無
+DB -[#Green]-> Server : ニックネームの有無
 deactivate DB
 Server -[#Green]> Server : 新規トークン発行
 note left : トークンは以後の処理で\nクライアントの識別に使う。
-Server -> DB : 保存　トークン、ニックネーム
+Server -[#Green]> DB : 保存　トークン、ニックネーム
 DB -[#Green]-> Server : 保存完了
 Server -[#Green]> Client1 : トークン
 Client1 -[#Green]> Client1 : Vuexストアにトークン保存
@@ -48,7 +48,7 @@ DB -[#Green]-> Server : 書込完了
 deactivate DB
 Server -[#Green]-> Client1 : 通知　部屋一覧更新
 Server -[#Green]-> Client2 : 通知　部屋一覧更新
-Client1 -[#Green]> Client1 : 対局画面に遷移
+Client1 -> Client1 : 対局画面に遷移
 Client1 -> Server : WebSocket新規接続
 
 loop 1分間隔

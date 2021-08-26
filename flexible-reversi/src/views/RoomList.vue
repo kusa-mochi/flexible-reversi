@@ -542,6 +542,17 @@ export default {
       };
       console.log(dataToSend);
       this.socket.send(JSON.stringify(dataToSend));
+      const gameData = {
+        initialBoardStatus: board,
+        boardSize: {
+          width: board[0].length,
+          height: board.length,
+        },
+        isJustViewing: false,
+        myNickname: this.myNickname,
+        opponntNickname: "",
+      };
+      this.gameData = gameData;
       this.makeRoomDialogVisible = false;
       this.$router.push({ path: "/game" });
     },
