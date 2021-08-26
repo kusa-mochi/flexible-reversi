@@ -28,12 +28,14 @@ def lambda_handler(event, context):
     print(token)
     
     # トークン、API Gateway URL、トークン有効期限、WebSocket 接続ID、をDBに保存する。
-    connections.put_item(Item={
+    response = connections.put_item(Item={
         'token': token,
         'endpointUrl': endpointUrl,
         'expirationDatetime': int(expirationDatetime.timestamp()),
         'connectionId': connectionId,
+        'nickname': ''
     })
+    print(response)
     
     # クライアントにトークンを送る。
     am = boto3.client('apigatewaymanagementapi', endpoint_url=endpointUrl)
