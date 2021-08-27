@@ -39,6 +39,7 @@ export default new Vuex.Store({
       ],
       isJustViewing: true,
       opponentNickname: "",
+      roomId: -1,
     },
   },
   mutations: {},

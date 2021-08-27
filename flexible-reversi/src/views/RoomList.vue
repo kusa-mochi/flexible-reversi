@@ -370,8 +370,9 @@ export default {
           height: this.battleConfirmationDialogData.initialBoardStatus.length,
         },
         isJustViewing: false,
-        myNickname: "",
+        myNickname: this.myNickname,
         opponntNickname: this.battleConfirmationDialogData.roomAuthor,
+        roomId: this.gameData.roomId,
       };
       this.gameData = gameData;
       this.$router.push({ path: "/game" });
@@ -445,6 +446,7 @@ export default {
       if (isPasswordRequired) {
         this.onPasswordToEntryDialogOpen(roomId);
       } else {
+        this.gameData.roomId = roomId;
         this.battleConfirmationDialogVisible = true;
       }
     },
@@ -482,6 +484,7 @@ export default {
       console.log("onMakeRoomDialogOpen start.");
       this.makeRoomDialogVisible = true;
       this.makeRoomDialogFormData.id = roomId;
+      this.gameData.roomId = roomId;
       console.log("room id : " + this.makeRoomDialogFormData.id);
       this.socket.send(
         JSON.stringify({
@@ -551,6 +554,7 @@ export default {
         isJustViewing: false,
         myNickname: this.myNickname,
         opponntNickname: "",
+        roomId: this.gameData.roomId,
       };
       this.gameData = gameData;
       this.makeRoomDialogVisible = false;
@@ -574,6 +578,7 @@ export default {
       console.log("onPasswordToEntryDialogOpen start.");
       this.passwordToEntryDialogVisible = true;
       this.passwordToEntryDialogFormData.id = roomId;
+      this.gameData.roomId = roomId;
       console.log("room id : " + this.passwordToEntryDialogFormData.id);
     },
     // onViewButtonClick(isPasswordRequired) {

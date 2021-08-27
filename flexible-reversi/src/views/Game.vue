@@ -63,6 +63,11 @@ export default {
         return this.$store.state.serverUrl;
       },
     },
+    token: {
+      get() {
+        return this.$store.state.token;
+      },
+    },
   },
   created() {
     // if not accessed from "room list" page.
@@ -95,10 +100,30 @@ export default {
       this.socket.onopen = (e) => {
         console.log("onopen");
         console.log(e);
+        console.log("room id");
+        console.log(this.gameData.roomId);
+        // make a connection to the server side (lambda).
+        this.socket.send(
+          JSON.stringify({
+            action: "gameStandby",
+            data: {
+              token: this.token,
+              roomId: this.gameData.roomId,
+            },
+          })
+        );
       };
       this.socket.onmessage = (e) => {
         console.log("onmessage");
         console.log(e);
+        const parsedData = JSON.parse(e.data);
+        console.log(parsedData);
+
+        // check data type
+        if (parsedData.dataType === "gameStandby") {
+          console.log("gameStandby");
+          console.log("opponent name: " + parsedData.data.opponentName);
+        }
       };
       this.socket.onclose = (e) => {
         console.log("onclose");
