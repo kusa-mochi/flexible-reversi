@@ -48,21 +48,22 @@ DB -[#Green]-> Server : 書込完了
 deactivate DB
 Server -[#Green]-> Client1 : 通知　部屋一覧更新
 Server -[#Green]-> Client2 : 通知　部屋一覧更新
-Client1 -> Client1 : 対局画面に遷移
-Client1 -> Server : WebSocket新規接続
+Client1 -[#Green]> Client1 : 対局画面に遷移
+Client1 -[#Green]> Server : WebSocket新規接続
 
 loop 1分間隔
-    Client1 -> Server : 接続確認\n部屋番号、接続ID、トークン
-    Server -> DB : 検索　トークン
+    Client1 -[#Green]> Server : 接続確認\n部屋番号、接続ID、トークン
+    Server -[#Green]> DB : 検索　トークン
     activate DB
-    DB --> Server : トークン
+    DB -[#Green]-> Server : トークン
     deactivate DB
-    Server -> Server : 検証　トークン
-    Server -> DB : 保存　接続ID
+    Server -[#Green]> Server : 検証　トークン
+    Server -[#Green]> DB : 保存　接続ID
     activate DB
-    DB --> Server : 保存完了
+    DB -[#Green]-> Server : 保存完了
     deactivate DB
 end
+note left : 1分間隔で繰り返し処理する仕組みは未実装
 
 ' Player2参戦
 
@@ -89,21 +90,21 @@ alt パスワードハッシュが一致した場合
     Client2 -[#Green]> Client2 : 表示　対局前確認画面
     Player2 -[#Green]> Client2 : OK
     Client2 -[#Green]> Client2 : 対局画面表示
-    Client2 -> Server : WebSocket新規接続
-    Client2 -> Server : 部屋番号、接続ID、トークン
-    Server -> DB : 検索　トークン
+    Client2 -[#Green]> Server : WebSocket新規接続
+    Client2 -[#Green]> Server : 部屋番号、接続ID、トークン
+    Server -[#Green]> DB : 検索　トークン
     activate DB
-    DB --> Server : トークン
+    DB -[#Green]-> Server : トークン
     deactivate DB
-    Server -> Server : 検証　トークン
-    Server -> DB : 保存　部屋番号、接続ID
+    Server -[#Green]> Server : 検証　トークン
+    Server -[#Green]> DB : 保存　部屋番号、接続ID
     activate DB
-    DB --> Server : 保存完了
+    DB -[#Green]-> Server : 保存完了
     deactivate DB
 
     alt Player1とPlayer2のトークンが揃った場合
-        Server -> Client1 : 対局開始合図\nPlayer1,2ニックネーム
-        Server -> Client2 : 対局開始合図\nPlayer1,2ニックネーム
+        Server -[#Green]> Client1 : 対局開始合図\nPlayer1,2ニックネーム
+        Server -[#Green]> Client2 : 対局開始合図\nPlayer1,2ニックネーム
         Client1 -> Client1 : 表示　対局開始メッセージ
         Client2 -> Client2 : 表示　対局開始メッセージ
         Player1 -> Client1 : 石を置く
