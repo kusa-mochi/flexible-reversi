@@ -1,0 +1,38 @@
+@startuml dynamodbs
+
+entity "flexible-reversi" as appData {
+    * id [PK] : number
+    --
+    requireEntryPassword : boolean
+    currentPlayer : boolean
+    opponentId : string
+    roomAuthor : string
+    roomAuthorId : string
+    roomName : string
+    opponentName : string
+    canView : boolean
+    roomState : string
+    firstPlayer : boolean
+    thinkingCounter : number
+    entryPassword : string
+    currentBoard : array<array<number>>
+    boardLogs : array<array<array<number>>>
+}
+entity "flexible-reversi-tokens" as tokens {
+    * token [PK] : string
+    --
+    connectionId : string
+    endpointUrl : string
+    expirationDatetime [TTL] : number
+    nickname [FK] : string
+}
+entity "flexible-reversi-nicknames" as nicknames {
+    * nickname [PK] : string
+    --
+    expirationDatetime [TTL] : number
+}
+
+appData ||--|{ tokens
+tokens ||--|| nicknames
+
+@enduml
