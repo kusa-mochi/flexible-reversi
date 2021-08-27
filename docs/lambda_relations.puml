@@ -4,13 +4,18 @@ frame flexibleReversi_Lambdas {
     agent Connect
     agent Disconnect
     agent Default
-    agent NewToken
-    agent GetRooms
-    agent UpdateRoom
-    agent CheckEntryPassword
-    agent flexibleReversiGameStandby
+    agent newToken
+    agent getRooms
+    agent updateRoom
+    agent checkEntryPassword
+    agent gameStandby
+    agent CheckNicknameAvailability
 
-    UpdateRoom --> GetRooms
+    updateRoom --> getRooms
+}
+
+frame flexibleReversi_DevUtil {
+    agent devToolFlexibleReversiResetDBs
 }
 
 @enduml
