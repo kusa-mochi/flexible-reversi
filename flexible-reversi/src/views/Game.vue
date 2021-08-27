@@ -58,6 +58,19 @@ export default {
         return this.$store.state.gameData.isJustViewing;
       },
     },
+    myNickname: {
+      get() {
+        return this.$store.state.myNickname;
+      },
+    },
+    rooms: {
+      get() {
+        return this.$store.state.rooms;
+      },
+      set(newValue) {
+        this.$store.state.rooms = newValue;
+      },
+    },
     serverUrl: {
       get() {
         return this.$store.state.serverUrl;
@@ -88,6 +101,7 @@ export default {
       // currentBoardStatus: null,
       // 1:black, 2:white
       currentPlayer: 1,
+      isGameReady: false,
       numEmpty: 0,
       numBlack: 0,
       numWhite: 0,
@@ -100,15 +114,11 @@ export default {
       this.socket.onopen = (e) => {
         console.log("onopen");
         console.log(e);
-        console.log("room id");
-        console.log(this.gameData.roomId);
-        // make a connection to the server side (lambda).
         this.socket.send(
           JSON.stringify({
-            action: "gameStandby",
+            action: "getRooms",
             data: {
               token: this.token,
-              roomId: this.gameData.roomId,
             },
           })
         );
@@ -120,9 +130,45 @@ export default {
         console.log(parsedData);
 
         // check data type
-        if (parsedData.dataType === "gameStandby") {
+        if (parsedData.dataType === "getRooms") {
+          console.log("get rooms data.");
+          const getRoomsData = parsedData.data;
+          console.log(getRoomsData);
+          this.onGetRoomStatus(getRoomsData);
+
+          console.log("room id");
+          console.log(this.gameData.roomId);
+          // make a connection to the server side (lambda).
+          this.socket.send(
+            JSON.stringify({
+              action: "gameStandby",
+              data: {
+                token: this.token,
+                roomId: this.gameData.roomId,
+              },
+            })
+          );
+        } else if (
+          parsedData.dataType === "gameStandby" &&
+          this.isGameReady === false
+        ) {
           console.log("gameStandby");
           console.log("opponent name: " + parsedData.data.opponentName);
+          console.log("room author:");
+          const author = this.rooms[this.gameData.roomId - 1].roomAuthor;
+          console.log(author);
+          console.log("my nickname:");
+          console.log(this.myNickname);
+          // if you are a room author
+          if (author === this.myNickname) {
+            this.$notify({
+              title: "Info",
+              message: parsedData.data.opponentName + "さんが入室しました。",
+              type: "success",
+            });
+          }
+
+          this.isGameReady = true;
         }
       };
       this.socket.onclose = (e) => {
@@ -133,6 +179,35 @@ export default {
         console.log("onerror");
         console.log(e);
       };
+    },
+    // TODO: move to Vuex mutation/action.
+    onGetRoomStatus(getRoomsData) {
+      // sort getRoomsData by id
+      getRoomsData.rooms.sort((roomA, roomB) => {
+        if (roomA.id === roomB.id) {
+          throw "invalid room id.";
+        }
+        return roomA.id > roomB.id ? 1 : -1;
+      });
+
+      // reset client rooms data.
+      this.rooms.splice(0, this.rooms.length);
+      getRoomsData.rooms.forEach((room) => {
+        const roomData = {
+          roomState: room.roomState,
+          roomAuthor: room.roomAuthor,
+          id: room.id,
+          requireEntryPassword: room.requireEntryPassword,
+          roomCounter: this.roomCounter++,
+          roomName: room.roomName,
+          canView: room.canView,
+        };
+        // console.log(roomData);
+        this.rooms.push(roomData);
+      });
+      console.log("updated rooms.");
+      console.log(this.rooms);
+      this.rooms.splice();
     },
     onInitialized(evt) {
       console.log("Game -onInitialied begin.");
