@@ -128,7 +128,7 @@ export default {
           action: "checkNicknameAvailability",
           data: {
             nickname: this.tmpNickname,
-            token: this.token
+            token: this.token,
           },
         })
       );
