@@ -1,2 +1,5 @@
 # flexible-reversi
 A special kind of reversi that can be played online.
+
+# design overview
+![](https://github.com/kusa-mochi/flexible-reversi/raw/main/docs/flexible-reversi-system-design.png)
