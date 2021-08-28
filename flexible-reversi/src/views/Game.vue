@@ -17,9 +17,24 @@
         :is-read-only="isJustViewing"
       ></reversi-board>
       <div class="hajime-label-container">
-        <transition name="hajime-animation">
-          <div v-if="hajimeLabelVisilibity" class="hajime-label">はじめ</div>
-        </transition>
+        <!-- <transition name="hajime-animation"> -->
+        <div
+          v-if="hajimeLabelVisilibity"
+          class="hajime-label hajime-label--showing"
+        >
+          はじめ
+        </div>
+        <!-- </transition> -->
+      </div>
+      <div class="sokomade-label-container">
+        <!-- <transition name="sokomade-animation"> -->
+        <div
+          v-if="sokomadeLabelVisibility"
+          class="sokomade-label sokomade-label--showing"
+        >
+          そこまで
+        </div>
+        <!-- </transition> -->
       </div>
     </div>
   </div>
@@ -120,6 +135,7 @@ export default {
       numBlack: 0,
       numWhite: 0,
       socket: null,
+      sokomadeLabelVisibility: false,
     };
   },
   methods: {
@@ -178,7 +194,7 @@ export default {
           this.hajimeLabelVisilibity = true;
           window.setTimeout(() => {
             this.hajimeLabelVisilibity = false;
-          }, 1500);
+          }, 3000);
           new Audio(require("@/assets/sounds/don.mp3")).play();
 
           this.isGameReady = true;
@@ -229,6 +245,11 @@ export default {
       } else if (evt.numBlack === evt.numWhite) {
         console.log("Draw");
       }
+      this.sokomadeLabelVisibility = true;
+      window.setTimeout(() => {
+        this.sokomadeLabelVisibility = false;
+      }, 3000);
+      new Audio(require("@/assets/sounds/dodon.mp3")).play();
     },
   },
   name: "Game",
@@ -245,12 +266,14 @@ export default {
   width: 800px;
 }
 
-.hajime-label-container {
+.hajime-label-container,
+.sokomade-label-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 
   display: flex;
   flex-direction: row;
@@ -258,32 +281,29 @@ export default {
   justify-content: center;
   align-items: center;
 
-  .hajime-label {
+  .hajime-label,
+  .sokomade-label {
     font-family: "ShokakiUtage";
-    font-size: 200px;
+    animation: hajimeKeyFrames 3s;
   }
 }
 
-$hajimeAnimationDuration: 0.4s;
-.hajime-animation-enter {
-  opacity: 0;
-  font-size: 250px;
-}
-.hajime-animation-enter-active {
-  transition: opacity ease-in $hajimeAnimationDuration;
-  transition: font-size ease-out $hajimeAnimationDuration;
-}
-.hajime-animation-enter-to {
-  opacity: 1;
-  font-size: 200px;
-}
-.hajime-animation-leave {
-  opacity: 1;
-}
-.hajime-animation-leave-active {
-  transition: opacity linear $hajimeAnimationDuration;
-}
-.hajime-animation-leave-to {
-  opacity: 0;
+@keyframes hajimeKeyFrames {
+  0% {
+    opacity: 0;
+    font-size: 250px;
+  }
+  12% {
+    opacity: 1;
+    font-size: 200px;
+  }
+  75% {
+    opacity: 1;
+    font-size: 200px;
+  }
+  100% {
+    opacity: 0;
+    font-size: 200px;
+  }
 }
 </style>

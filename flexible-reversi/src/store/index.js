@@ -38,7 +38,7 @@ export default new Vuex.Store({
         [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ],
-      isJustViewing: true,
+      isJustViewing: false,
       opponentNickname: "",
       roomId: -1,
     },
