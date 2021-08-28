@@ -1,5 +1,5 @@
 import Vue from "vue";
-import './assets/sass/style.scss'
+import "./assets/sass/style.scss";
 import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";

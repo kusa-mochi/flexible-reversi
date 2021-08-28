@@ -6,16 +6,22 @@
     <p>Empty: {{ this.numEmpty }}</p>
     <p>Black: {{ this.numBlack }}</p>
     <p>White: {{ this.numWhite }}</p>
-    <reversi-board
-      @initialized="onInitialized"
-      @click-cell="onClickCell"
-      @pass-turn="onPassTurn"
-      @game-set="onGameSet"
-      :board-width="800"
-      :board-height="400"
-      :initial-board-status="initialBoardStatus"
-      :is-read-only="isJustViewing"
-    ></reversi-board>
+    <div class="board-container">
+      <reversi-board
+        @initialized="onInitialized"
+        @click-cell="onClickCell"
+        @pass-turn="onPassTurn"
+        @game-set="onGameSet"
+        :board-width="800"
+        :initial-board-status="initialBoardStatus"
+        :is-read-only="isJustViewing"
+      ></reversi-board>
+      <div class="hajime-label-container">
+        <transition name="hajime-animation">
+          <div v-if="hajimeLabelVisilibity" class="hajime-label">はじめ</div>
+        </transition>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -101,6 +107,7 @@ export default {
       // currentBoardStatus: null,
       // 1:black, 2:white
       currentPlayer: 1,
+      hajimeLabelVisilibity: false,
       isGameReady: false,
       numEmpty: 0,
       numBlack: 0,
@@ -168,7 +175,11 @@ export default {
             });
           }
 
-          new Audio(require("@/assets/sounds/dodon.mp3")).play();
+          this.hajimeLabelVisilibity = true;
+          window.setTimeout(() => {
+            this.hajimeLabelVisilibity = false;
+          }, 1500);
+          new Audio(require("@/assets/sounds/don.mp3")).play();
 
           this.isGameReady = true;
         }
@@ -253,4 +264,55 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.game {
+  position: relative;
+}
+
+.board-container {
+  position: relative;
+  width: 800px;
+}
+
+.hajime-label-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+
+  .hajime-label {
+    font-family: "ShokakiUtage";
+    font-size: 200px;
+  }
+}
+
+$hajimeAnimationDuration: 0.4s;
+.hajime-animation-enter {
+  opacity: 0;
+  font-size: 250px;
+}
+.hajime-animation-enter-active {
+  transition: opacity ease-in $hajimeAnimationDuration;
+  transition: font-size ease-out $hajimeAnimationDuration;
+}
+.hajime-animation-enter-to {
+  opacity: 1;
+  font-size: 200px;
+}
+.hajime-animation-leave {
+  opacity: 1;
+}
+.hajime-animation-leave-active {
+  transition: opacity linear $hajimeAnimationDuration;
+}
+.hajime-animation-leave-to {
+  opacity: 0;
+}
+</style>
