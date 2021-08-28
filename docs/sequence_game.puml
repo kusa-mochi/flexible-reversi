@@ -103,21 +103,57 @@ alt パスワードハッシュが一致した場合
     deactivate DB
 
     alt Player1とPlayer2のトークンが揃った場合
-        Server -[#Green]> Client1 : 対局開始合図\nPlayer1,2ニックネーム
-        Server -[#Green]> Client2 : 対局開始合図\nPlayer1,2ニックネーム
-        Client1 -> Client1 : 表示　対局開始メッセージ
-        Client2 -> Client2 : 表示　対局開始メッセージ
-        Player1 -> Client1 : 石を置く
+        Server -[#Green]> Client1 : 対局開始合図\nPlayer2ニックネーム、現在のプレイヤー
+        Server -[#Green]> Client2 : 対局開始合図\nPlayer1ニックネーム、現在のプレイヤー
+        Client1 -[#Green]> Client1 : 表示　対局開始メッセージ
+        Client1 -> Client1 : 盤面を操作できるようにする。
+        Client2 -[#Green]> Client2 : 表示　対局開始メッセージ
+        Client2 -> Client2 : 盤面を操作できないようにする。
+        Player1 -[#Green]> Client1 : 石を置く
+        Client1 -[#Green]> Client1 : チェック　石を置けるか
+        Client1 -[#Green]> Client1 : 石を置く
         Client1 -> Server : 石を置く
-        Server -> Server : 石を置けるかチェック
+        Server -> DB : 取得　現在の盤面情報
+        Server -> Server : チェック　石を置けるか
         Server -> Server : 石を置く
-        Server -> Server : 次のターンにPlayer2が\n石を置けるかチェック
+        Server -> Server : チェック　石を置けるスペースが残っているか
+        alt 石を置けるスペースが残っていない
+            group ゲームの終了処理
+                Server -> DB : 更新　部屋の状態を「空室」にする
+                activate DB
+                DB --> Server : 更新完了
+                deactivate DB
+                Server -> Client1 : 通知　ゲーム終了
+                Client1 -> Client1 : ゲーム終了演出
+                Client1 -> Client1 : 表示　ゲーム結果ダイアログ
+                Player1 -> Client1 : 押下　OKボタン
+                Client1 -> Client1 : 表示　部屋一覧画面
+                Server -> Client2 : 通知　ゲーム終了
+                Client2 -> Client2 : ゲーム終了演出
+                Client2 -> Client2 : 表示　ゲーム結果ダイアログ
+                Player2 -> Client2 : 押下　OKボタン
+                Client2 -> Client2 : 表示　部屋一覧画面
+            end
+        end
+        Server -> Server : チェック　次のターンにPlayer2が石を置けるか
+        alt Player2が石を置けない場合
+            Server -> DB : 次のプレイヤーをPlayer1にする
+            activate DB
+            DB --> Server : 更新完了
+            deactivate DB
+            Server -> Server : チェック　次のターンにPlayer1が石を置けるか
+            alt Player1が石を置けない場合
+                ref over Client1, Client2
+                    ゲームの終了処理
+                end ref
+            end
+        end
         Server -> DB : 更新\n盤面状態、次のプレイヤー
         activate DB
         DB --> Server : 更新完了
         deactivate DB
-        Server -> Client1 : 通知　更新後盤面状態
-        Server -> Client2 : 通知　更新後盤面状態
+        Server -> Client1 : 通知　更新後盤面状態、次のプレイヤー
+        Server -> Client2 : 通知　更新後盤面状態、次のプレイヤー
     end
 end
 
