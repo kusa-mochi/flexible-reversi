@@ -148,7 +148,7 @@ export default {
           console.log("get rooms data.");
           const getRoomsData = parsedData.data;
           console.log(getRoomsData);
-          this.onGetRoomStatus(getRoomsData);
+          this.$store.commit("updateLocalRoomsData", getRoomsData);
 
           console.log("room id");
           console.log(this.gameData.roomId);
@@ -192,35 +192,6 @@ export default {
         console.log("onerror");
         console.log(e);
       };
-    },
-    // TODO: move to Vuex mutation/action.
-    onGetRoomStatus(getRoomsData) {
-      // sort getRoomsData by id
-      getRoomsData.rooms.sort((roomA, roomB) => {
-        if (roomA.id === roomB.id) {
-          throw "invalid room id.";
-        }
-        return roomA.id > roomB.id ? 1 : -1;
-      });
-
-      // reset client rooms data.
-      this.rooms.splice(0, this.rooms.length);
-      getRoomsData.rooms.forEach((room) => {
-        const roomData = {
-          roomState: room.roomState,
-          roomAuthor: room.roomAuthor,
-          id: room.id,
-          requireEntryPassword: room.requireEntryPassword,
-          roomCounter: this.roomCounter++,
-          roomName: room.roomName,
-          canView: room.canView,
-        };
-        // console.log(roomData);
-        this.rooms.push(roomData);
-      });
-      console.log("updated rooms.");
-      console.log(this.rooms);
-      this.rooms.splice();
     },
     onInitialized(evt) {
       console.log("Game -onInitialied begin.");

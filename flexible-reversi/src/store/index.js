@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     currentPage: "none",
     myNickname: "",
+    roomCounter: 1,
     rooms: [
       //   {
       //     roomState: "vacancy",
@@ -42,7 +43,36 @@ export default new Vuex.Store({
       roomId: -1,
     },
   },
-  mutations: {},
+  mutations: {
+    updateLocalRoomsData(state, newData) {
+      // sort newData by id
+      newData.rooms.sort((roomA, roomB) => {
+        if (roomA.id === roomB.id) {
+          throw "invalid room id.";
+        }
+        return roomA.id > roomB.id ? 1 : -1;
+      });
+
+      // reset client rooms data.
+      state.rooms.splice(0, state.rooms.length);
+      newData.rooms.forEach((room) => {
+        const roomData = {
+          roomState: room.roomState,
+          roomAuthor: room.roomAuthor,
+          id: room.id,
+          requireEntryPassword: room.requireEntryPassword,
+          roomCounter: state.roomCounter++,
+          roomName: room.roomName,
+          canView: room.canView,
+        };
+        // console.log(roomData);
+        state.rooms.push(roomData);
+      });
+      console.log("updated rooms.");
+      console.log(state.rooms);
+      state.rooms.splice();
+    }
+  },
   actions: {},
   modules: {},
 });

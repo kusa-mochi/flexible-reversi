@@ -347,7 +347,6 @@ export default {
       },
       passwordToEntryDialogVisible: false,
       // passwordToViewDialogVisible: false,
-      roomCounter: 1,
       socket: null,
     };
   },
@@ -404,7 +403,7 @@ export default {
         if (parsedData.dataType === "getRooms") {
           console.log("get rooms data.");
           const getRoomsData = parsedData.data;
-          this.onGetRoomStatus(getRoomsData);
+          this.$store.commit("updateLocalRoomsData", getRoomsData);
         } else if (parsedData.dataType === "checkedEntryPassword") {
           console.log("checked entry password.");
           const checkResult = parsedData.data.result;
@@ -449,36 +448,6 @@ export default {
         this.gameData.roomId = roomId;
         this.battleConfirmationDialogVisible = true;
       }
-    },
-    onGetRoomStatus(getRoomsData) {
-      // console.log(getRoomsData);
-      // console.log(getRoomsData.rooms[0].roomState);
-
-      // sort getRoomsData by id
-      getRoomsData.rooms.sort((roomA, roomB) => {
-        if (roomA.id === roomB.id) {
-          throw "invalid room id.";
-        }
-        return roomA.id > roomB.id ? 1 : -1;
-      });
-      // console.log(getRoomsData);
-
-      // reset client rooms data.
-      this.rooms.splice(0, this.rooms.length);
-      getRoomsData.rooms.forEach((room) => {
-        const roomData = {
-          roomState: room.roomState,
-          roomAuthor: room.roomAuthor,
-          id: room.id,
-          requireEntryPassword: room.requireEntryPassword,
-          roomCounter: this.roomCounter++,
-          roomName: room.roomName,
-          canView: room.canView,
-        };
-        // console.log(roomData);
-        this.rooms.push(roomData);
-      });
-      this.rooms.splice();
     },
     onMakeRoomDialogOpen(roomId) {
       console.log("onMakeRoomDialogOpen start.");
