@@ -301,6 +301,10 @@ export default {
     opacity: 0;
     font-size: 250px;
   }
+  6% {
+    opacity: 0.7;
+    font-size: 215px;
+  }
   12% {
     opacity: 1;
     font-size: 200px;
