@@ -113,7 +113,9 @@
         <tab-content title="ステージ設定">
           <div class="stage-select">
             <el-radio
-              v-for="stageNumber in [1, 2, 3]"
+              v-for="stageNumber in Object.keys(
+                makeRoomDialogFormData.stageData
+              ).length"
               v-model="makeRoomDialogFormData.stageName"
               :key="stageNumber"
               :label="`stage${stageNumber}`"
