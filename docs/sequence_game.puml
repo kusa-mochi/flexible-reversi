@@ -103,8 +103,8 @@ alt パスワードハッシュが一致した場合
     deactivate DB
 
     alt Player1とPlayer2のトークンが揃った場合
-        Server -[#Green]> Client1 : 対局開始合図\nPlayer2ニックネーム、現在のプレイヤー
-        Server -[#Green]> Client2 : 対局開始合図\nPlayer1ニックネーム、現在のプレイヤー
+        Server -> Client1 : 対局開始合図\nPlayer2ニックネーム、現在のプレイヤー
+        Server -> Client2 : 対局開始合図\nPlayer1ニックネーム、現在のプレイヤー
         Client1 -[#Green]> Client1 : 表示　対局開始メッセージ
         Client1 -> Client1 : 盤面を操作できるようにする。
         Client2 -[#Green]> Client2 : 表示　対局開始メッセージ
