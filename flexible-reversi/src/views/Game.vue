@@ -168,6 +168,8 @@ export default {
             });
           }
 
+          new Audio(require("@/assets/sounds/dodon.mp3")).play();
+
           this.isGameReady = true;
         }
       };
