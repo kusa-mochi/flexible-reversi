@@ -93,6 +93,9 @@ export default {
       get() {
         return this.$store.state.gameData.isJustViewing;
       },
+      set(newValue) {
+        this.$store.state.gameData.isJustViewing = newValue;
+      }
     },
     myNickname: {
       get() {
