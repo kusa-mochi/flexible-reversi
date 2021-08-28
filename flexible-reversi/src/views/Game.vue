@@ -208,6 +208,8 @@ export default {
           }, 3000);
           new Audio(require("@/assets/sounds/don.mp3")).play();
 
+          this.isJustViewing = parsedData.data.currentPlayer === "opponent";
+
           this.isGameReady = true;
         }
       };

@@ -49,6 +49,9 @@ def lambda_handler(event, context):
     # room data
     roomData = appData.get_item(Key={'id': roomId})['Item']
     
+    # first player
+    firstPlayer = roomData['firstPlayer']
+    
     # room author's token
     authorToken = roomData['roomAuthorId']
     
@@ -76,9 +79,21 @@ def lambda_handler(event, context):
         opponentNickname = opponentConnection['nickname']
         
         # return data to room author
-        retToAuthor = json.dumps({'dataType':'gameStandby', 'data': {'opponentName': opponentNickname}}, default=rooms_default_dumps)
+        retToAuthor = json.dumps({
+            'dataType':'gameStandby',
+            'data': {
+                'opponentName': opponentNickname,
+                'currentPlayer': 'you' if firstPlayer else 'opponent'
+            }
+        }, default=rooms_default_dumps)
         # return data to opponent
-        retToOpponent = json.dumps({'dataType':'gameStandby', 'data': {'opponentName': roomAuthorNickname}}, default=rooms_default_dumps)
+        retToOpponent = json.dumps({
+            'dataType':'gameStandby',
+            'data': {
+                'opponentName': roomAuthorNickname,
+                'currentPlayer': 'opponent' if firstPlayer else 'you'
+            }
+        }, default=rooms_default_dumps)
         
         # "start game" signal to players.
         am = boto3.client('apigatewaymanagementapi', endpoint_url=roomAuthorUrl)
