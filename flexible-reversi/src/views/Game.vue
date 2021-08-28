@@ -68,6 +68,14 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
+    room: {
+      get() {
+        return this.rooms[this.gameData.roomId];
+      },
+      set(newValue) {
+        this.rooms[this.gameData.roomId] = newValue;
+      },
+    },
     gameData: {
       get() {
         return this.$store.state.gameData;
