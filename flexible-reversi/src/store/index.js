@@ -71,7 +71,7 @@ export default new Vuex.Store({
       console.log("updated rooms.");
       console.log(state.rooms);
       state.rooms.splice();
-    }
+    },
   },
   actions: {},
   modules: {},

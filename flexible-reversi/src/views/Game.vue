@@ -38,7 +38,7 @@ export default {
         const roomId = this.gameData.roomId;
         const roomAuthor = this.rooms[roomId - 1].roomAuthor;
         return this.myNickname === roomAuthor;
-      }
+      },
     },
     boardSize: {
       get() {
