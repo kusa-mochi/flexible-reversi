@@ -33,6 +33,13 @@ export default {
     ReversiBoard,
   },
   computed: {
+    amIRoomAuthor: {
+      get() {
+        const roomId = this.gameData.roomId;
+        const roomAuthor = this.rooms[roomId - 1].roomAuthor;
+        return this.myNickname === roomAuthor;
+      }
+    },
     boardSize: {
       get() {
         return this.$store.state.gameData.boardSize;
@@ -159,15 +166,8 @@ export default {
           parsedData.dataType === "gameStandby" &&
           this.isGameReady === false
         ) {
-          console.log("gameStandby");
-          console.log("opponent name: " + parsedData.data.opponentName);
-          console.log("room author:");
-          const author = this.rooms[this.gameData.roomId - 1].roomAuthor;
-          console.log(author);
-          console.log("my nickname:");
-          console.log(this.myNickname);
           // if you are a room author
-          if (author === this.myNickname) {
+          if (this.amIRoomAuthor) {
             this.$notify({
               title: "Info",
               message: parsedData.data.opponentName + "さんが入室しました。",
