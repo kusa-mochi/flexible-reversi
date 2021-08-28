@@ -98,6 +98,11 @@ export default {
           switch (availability) {
             case "inUse":
               console.log("nickname is in use.");
+              this.$notify({
+                title: "Error",
+                message: `${this.tmpNickname} という名前は既に使われています。別の名前を指定してください。`,
+                type: "error",
+              });
               break;
             case "isAvailable":
               console.log("isAvailable");
