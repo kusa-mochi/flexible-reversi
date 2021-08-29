@@ -112,10 +112,10 @@ alt パスワードハッシュが一致した場合
         Player1 -[#Green]> Client1 : 石を置く
         Client1 -[#Green]> Client1 : チェック　石を置けるか
         Client1 -[#Green]> Client1 : 石を置く
-        Client1 -> Server : 石を置く
-        Server -> DB : 取得　現在の盤面情報
-        Server -> Server : チェック　石を置けるか
-        Server -> Server : 石を置く
+        Client1 -[#Green]> Server : 石を置く
+        Server -[#Green]> DB : 取得　現在の盤面情報
+        Server -[#Green]> Server : チェック　石を置けるか
+        Server -[#Green]> Server : 石を置く
         Server -> Server : チェック　石を置けるスペースが残っているか
         alt 石を置けるスペースが残っていない
             group ゲームの終了処理
@@ -152,8 +152,8 @@ alt パスワードハッシュが一致した場合
         activate DB
         DB --> Server : 更新完了
         deactivate DB
-        Server -> Client1 : 通知　更新後盤面状態、次のプレイヤー
-        Server -> Client2 : 通知　更新後盤面状態、次のプレイヤー
+        Server -[#Green]> Client1 : 通知　更新後盤面状態、次のプレイヤー
+        Server -[#Green]> Client2 : 通知　更新後盤面状態、次のプレイヤー
     end
 end
 
