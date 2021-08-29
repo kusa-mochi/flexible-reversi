@@ -202,21 +202,6 @@
         >
       </span>
     </el-dialog>
-    <!-- 観戦用パスワード入力ダイアログ -->
-    <!-- <el-dialog
-      :visible.sync="passwordToViewDialogVisible"
-      id="password-to-view-dialog"
-      title="観戦用パスワード入力"
-    >
-      <span slot="footer" class="password-to-view-dialog__footer">
-        <el-button type="secondary" @click="passwordToViewDialogVisible = false"
-          >キャンセル</el-button
-        >
-        <el-button type="primary" @click="passwordToViewDialogVisible = false"
-          >OK</el-button
-        >
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -699,15 +684,11 @@ export default {
   .room-name-input {
     width: 400px;
   }
-  .entry-password-input,
-  .view-password-input {
+  .entry-password-input {
     width: 330px;
   }
   .entry-password-input {
     margin-left: 22px;
-  }
-  .view-password-input {
-    margin-left: 44px;
   }
   .allow-view-checkbox {
     margin-left: 22px;
