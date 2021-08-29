@@ -262,6 +262,13 @@ export default {
       return;
     }
 
+    this.loading = this.$loading({
+      lock: true,
+      text: "読込中",
+      spinner: "el-icon-loading",
+      background: "rgba(0, 0, 0, 0.7)",
+    });
+
     // create a WebSocket instance.
     if (this.socket === null) {
       this.initializeWebSocket();
@@ -282,6 +289,7 @@ export default {
         roomAuthor: "",
         firstPlayer: true,
       },
+      loading: null,
       makeRoomDialogVisible: false,
       makeRoomDialogFormData: {
         entryPassword: "",
@@ -400,6 +408,7 @@ export default {
           console.log("get rooms data.");
           const getRoomsData = parsedData.data;
           this.$store.commit("updateLocalRoomsData", getRoomsData);
+          this.loading.close();
         } else if (parsedData.dataType === "checkedEntryPassword") {
           console.log("checked entry password.");
           const checkResult = parsedData.data.result;
