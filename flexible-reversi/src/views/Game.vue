@@ -12,6 +12,7 @@
         @click-cell="onClickCell"
         @pass-turn="onPassTurn"
         @game-set="onGameSet"
+        @stone-put="onStonePut"
         :board-width="800"
         :initial-board-status="initialBoardStatus"
         :is-read-only="isJustViewing"
@@ -134,11 +135,17 @@ export default {
       this.initializeWebSocket();
     }
 
+    // set current board status.
+    this.currentBoardStatus = [];
+    this.initialBoardStatus.forEach((row) => {
+      this.currentBoardStatus.push(row.slice());
+    });
+
     this.currentPage = "game";
   },
   data() {
     return {
-      // currentBoardStatus: null,
+      currentBoardStatus: null,
       // 1:black, 2:white
       currentPlayer: 1,
       hajimeLabelVisilibity: false,
@@ -212,6 +219,9 @@ export default {
           this.isJustViewing = parsedData.data.currentPlayer === "opponent";
 
           this.isGameReady = true;
+        } else if (parsedData.dataType === "putStone") {
+          console.log("putStone");
+          console.log(parsedData.data);
         }
       };
       this.socket.onclose = (e) => {
@@ -264,6 +274,27 @@ export default {
         this.sokomadeLabelVisibility = false;
       }, 3000);
       new Audio(require("@/assets/sounds/dodon.mp3")).play();
+    },
+    onStonePut(evt) {
+      const iColumn = evt.column;
+      const iRow = evt.row;
+      console.log(`put column:${iColumn} row:${iRow}`);
+
+      // make the board inoperable.
+      this.isJustViewing = true;
+
+      // send put data to the lambda.
+      this.socket.send(
+        JSON.stringify({
+          action: "putStone",
+          data: {
+            token: this.token,
+            roomId: this.gameData.roomId,
+            column: iColumn,
+            row: iRow,
+          },
+        })
+      );
     },
   },
   name: "Game",
