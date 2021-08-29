@@ -54,6 +54,7 @@ export default {
     if (this.currentPage !== "top") {
       // redirect to top page.
       this.$router.push("/");
+      return;
     }
 
     // create a WebSocket instance.
@@ -110,7 +111,7 @@ export default {
               this.myNickname = this.tmpNickname;
               // go to the room list page.
               this.$router.push("/room-list");
-              break;
+              return;
             default:
               break;
           }

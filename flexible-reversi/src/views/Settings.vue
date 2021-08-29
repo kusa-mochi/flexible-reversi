@@ -23,6 +23,7 @@ export default {
     if (this.currentPage !== "top") {
       // redirect to top page.
       this.$router.push("/");
+      return;
     }
     this.currentPage = "settings";
   },

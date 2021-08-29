@@ -126,6 +126,7 @@ export default {
     if (this.currentPage !== "room-list") {
       // redirect to top page.
       this.$router.push("/");
+      return;
     }
 
     // create a WebSocket instance.
