@@ -16,6 +16,7 @@
         :board-width="800"
         :initial-board-status="initialBoardStatus"
         :is-read-only="isJustViewing"
+        ref="board"
       ></reversi-board>
       <div class="hajime-label-container">
         <!-- <transition name="hajime-animation"> -->
@@ -222,6 +223,11 @@ export default {
         } else if (parsedData.dataType === "putStone") {
           console.log("putStone");
           console.log(parsedData.data);
+          this.currentBoardStatus.splice(0, this.currentBoardStatus.length);
+          parsedData.data.boardStatus.forEach((row) => {
+            this.currentBoardStatus.push(row.slice());
+          });
+          this.$refs.board.setBoardStatus(this.currentBoardStatus);
         }
       };
       this.socket.onclose = (e) => {

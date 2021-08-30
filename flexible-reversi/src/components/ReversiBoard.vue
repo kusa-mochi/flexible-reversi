@@ -5,7 +5,7 @@
         <div :key="iRow * numColumns + iColumn" class="reversi-cell">
           <reversi-cell
             @click="onClickCell(iColumn, iRow)"
-            :state="cellState(iColumn, iRow)"
+            :state="boardStatus._status[iRow][iColumn]"
           ></reversi-cell>
         </div>
       </template>
@@ -70,9 +70,6 @@ export default {
     };
   },
   methods: {
-    cellState(iColumn, iRow) {
-      return this.boardStatus._status[iRow][iColumn];
-    },
     onClickCell(iColumn, iRow) {
       if (this.isReadOnly) return;
 
@@ -119,6 +116,12 @@ export default {
       }
 
       this.$emit("click-cell", returnValue);
+    },
+    setBoardStatus(status) {
+      this.boardStatus._status.splice(0, this.boardStatus._status.length);
+      status.forEach((row) => {
+        this.boardStatus._status.push(row.slice());
+      });
     },
   },
   name: "ReversiBoard",
