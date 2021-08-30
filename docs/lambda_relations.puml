@@ -9,7 +9,8 @@ frame flexibleReversi_Lambdas {
     agent updateRoom
     agent checkEntryPassword
     agent gameStandby
-    agent CheckNicknameAvailability
+    agent checkNicknameAvailability
+    agent putStone
 
     updateRoom --> getRooms
 }
