@@ -39,12 +39,8 @@ export default class ReversiNode {
     // console.log(this._status);
   }
 
-  putStone(iColumn, iRow) {
-    return this.putStoneCore(iColumn, iRow, true);
-  }
-
   canPutStone(iColumn, iRow) {
-    return this.putStoneCore(iColumn, iRow, false);
+    return this.putStoneCore(iColumn, iRow);
   }
 
   canPutStoneOnAnyPlace() {
@@ -76,21 +72,13 @@ export default class ReversiNode {
     return output;
   }
 
-  goToNextTurn() {
-    this.switchPlayer();
-  }
-
-  // ifPut: true:put stone, false:just check if it is able to put stone (no put)
-  putStoneCore(iColumn, iRow, ifPut) {
+  putStoneCore(iColumn, iRow) {
     // console.log("putStoneCore begin.");
     if (!this.between(iColumn, 0, this._numColumn - 1)) {
       throw "invalid range 'iColumn'.";
     }
     if (!this.between(iRow, 0, this._numRow - 1)) {
       throw "invalid range 'iRow'.";
-    }
-    if (typeof ifPut !== "boolean") {
-      throw "'boolean' must be boolean.";
     }
 
     // if not an empty cell.
@@ -100,28 +88,17 @@ export default class ReversiNode {
       return false;
     }
 
-    const up = this.searchOnDirection(iColumn, iRow, 0, -1, ifPut);
-    const rightUp = this.searchOnDirection(iColumn, iRow, 1, -1, ifPut);
-    const right = this.searchOnDirection(iColumn, iRow, 1, 0, ifPut);
-    const rightDown = this.searchOnDirection(iColumn, iRow, 1, 1, ifPut);
-    const down = this.searchOnDirection(iColumn, iRow, 0, 1, ifPut);
-    const leftDown = this.searchOnDirection(iColumn, iRow, -1, 1, ifPut);
-    const left = this.searchOnDirection(iColumn, iRow, -1, 0, ifPut);
-    const leftUp = this.searchOnDirection(iColumn, iRow, -1, -1, ifPut);
+    const up = this.searchOnDirection(iColumn, iRow, 0, -1);
+    const rightUp = this.searchOnDirection(iColumn, iRow, 1, -1);
+    const right = this.searchOnDirection(iColumn, iRow, 1, 0);
+    const rightDown = this.searchOnDirection(iColumn, iRow, 1, 1);
+    const down = this.searchOnDirection(iColumn, iRow, 0, 1);
+    const leftDown = this.searchOnDirection(iColumn, iRow, -1, 1);
+    const left = this.searchOnDirection(iColumn, iRow, -1, 0);
+    const leftUp = this.searchOnDirection(iColumn, iRow, -1, -1);
 
     const searchResult =
       up || rightUp || right || rightDown || down || leftDown || left || leftUp;
-
-    // // if a player can put its stone on some direction.
-    // if (searchResult) {
-    //   console.log("enable.");
-    // } else {
-    //   console.log("disable.");
-    // }
-
-    if (ifPut && searchResult) {
-      this.switchPlayer();
-    }
 
     return searchResult;
   }
@@ -129,79 +106,83 @@ export default class ReversiNode {
   // search if a player can put its stone on specified direction.
   // columnDirection: -1/0/+1
   // rowDirection: -1/0/+1
-  // ifPut: boolean
-  searchOnDirection(iColumn, iRow, columnDirection, rowDirection, ifPut) {
-    const xNeighbor = iColumn + columnDirection;
-    const yNeighbor = iRow + rowDirection;
-    const opponent = this.opponentPlayer();
+  searchOnDirection(iColumn, iRow, dirColumn, dirRow) {
+    if (this._status[iRow][iColumn] != 0) {
+      return false;
+    }
+
+    const xNeighbor = iColumn + dirColumn;
+    const yNeighbor = iRow + dirRow;
+    const boardWidth = this._status[0].length;
+    const boardHeight = this._status.length;
     if (
-      !this.between(xNeighbor, 0, this._numColumn - 1) ||
-      !this.between(yNeighbor, 0, this._numRow - 1)
+      !this.between(xNeighbor, 0, boardWidth - 1) ||
+      !this.between(yNeighbor, 0, boardHeight - 1)
     ) {
       return false;
     }
 
-    let canPut = false;
     let x = xNeighbor;
     let y = yNeighbor;
+    const opponentPlayerColor = this.opponentPlayer();
 
-    // if a neighbor is opponent
-    // console.log(`(${x},${y}):`);
-    // console.log(this._status[y][x]);
-    if (this._status[y][x] === opponent) {
-      let ifBreak = false;
-      for (
-        x += columnDirection, y += rowDirection;
-        this.between(x, 0, this._numColumn - 1) &&
-        this.between(y, 0, this._numRow - 1);
-        x += columnDirection, y += rowDirection
-      ) {
-        // console.log(`(${x},${y}): ${this._status[y][x]}`);
-        const currentCell = this._status[y][x];
-        switch (currentCell) {
-          case 0: // empty cell
-            ifBreak = true;
-            break;
-          case 3: // wall
-            ifBreak = true;
-            break;
-          default:
-            if (currentCell === this._player) {
-              canPut = true;
-            } else if (currentCell === opponent) {
-              // do nothing.
-            } else {
-              throw "invalid cell state.";
-            }
-            break;
-        }
+    if (this._status[y][x] !== opponentPlayerColor) {
+      return false;
+    }
 
-        if (ifBreak) break;
-      }
-
-      if (canPut) {
-        if (ifPut) {
-          // put player stone.
-          this._status[iRow][iColumn] = this._player;
-          // turn over opponent stones.
-          for (
-            x = xNeighbor, y = yNeighbor;
-            this._status[y][x] === opponent;
-            x += columnDirection, y += rowDirection
-          ) {
-            this._status[y][x] = this._player;
-          }
-        }
-
+    x += dirColumn;
+    y += dirRow;
+    while (
+      this.between(x, 0, boardWidth - 1) &&
+      this.between(y, 0, boardHeight - 1)
+    ) {
+      if (this._status[y][x] == this._player) {
         return true;
+      }
+      if (this._status[y][x] == opponentPlayerColor) {
+        x += dirColumn;
+        y += dirRow;
       }
     }
 
-    return false;
-  }
+    // // if a neighbor is opponent
+    // if (this._status[y][x] === opponent) {
+    //   let ifBreak = false;
+    //   for (
+    //     x += columnDirection, y += rowDirection;
+    //     this.between(x, 0, this._numColumn - 1) &&
+    //     this.between(y, 0, this._numRow - 1);
+    //     x += columnDirection, y += rowDirection
+    //   ) {
+    //     // console.log(`(${x},${y}): ${this._status[y][x]}`);
+    //     const currentCell = this._status[y][x];
+    //     switch (currentCell) {
+    //       case 0: // empty cell
+    //         ifBreak = true;
+    //         break;
+    //       case 3: // wall
+    //         ifBreak = true;
+    //         break;
+    //       default:
+    //         if (currentCell === this._player) {
+    //           canPut = true;
+    //         } else if (currentCell === opponent) {
+    //           // do nothing.
+    //         } else {
+    //           throw `invalid cell state:${currentCell}`;
+    //         }
+    //         break;
+    //     }
 
-  switchPlayer() {
-    this._player = this._player === 1 ? 2 : 1;
+    //     if (ifBreak) break;
+    //   }
+
+    //   if (canPut) {
+    //     return true;
+    //   }
+    // }
+
+    return false;
   }
 
   opponentPlayer() {

@@ -2,21 +2,18 @@
   <div class="game">
     <p>game</p>
     <router-link to="/">Top</router-link>
-    <p>Player: {{ this.currentPlayer === 1 ? "Black" : "White" }}</p>
+    <p>Player: {{ this.currentPlayerColor === 1 ? "Black" : "White" }}</p>
     <p>Empty: {{ this.numEmpty }}</p>
     <p>Black: {{ this.numBlack }}</p>
     <p>White: {{ this.numWhite }}</p>
     <div class="board-container">
       <reversi-board
         @initialized="onInitialized"
-        @click-cell="onClickCell"
-        @pass-turn="onPassTurn"
-        @game-set="onGameSet"
         @stone-put="onStonePut"
         :board-width="800"
-        :initial-board-status="initialBoardStatus"
+        :board-status="boardStatus"
         :is-read-only="isJustViewing"
-        ref="board"
+        :player-color="currentPlayerColor"
       ></reversi-board>
       <div class="hajime-label-container">
         <!-- <transition name="hajime-animation"> -->
@@ -70,6 +67,16 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
+    // 1:black, 2:white
+    currentPlayerColor: {
+      get() {
+        return this.$store.state.gameData.currentPlayerColor;
+      },
+      set(newValue) {
+        if (newValue !== 1 && newValue !== 2) return;
+        this.$store.state.gameData.currentPlayerColor = newValue;
+      },
+    },
     room: {
       get() {
         return this.rooms[this.gameData.roomId];
@@ -86,9 +93,9 @@ export default {
         this.$store.state.gameData = newValue;
       },
     },
-    initialBoardStatus: {
+    boardStatus: {
       get() {
-        return this.$store.state.gameData.initialBoardStatus;
+        return this.$store.state.gameData.boardStatus;
       },
     },
     isJustViewing: {
@@ -136,19 +143,10 @@ export default {
       this.initializeWebSocket();
     }
 
-    // set current board status.
-    this.currentBoardStatus = [];
-    this.initialBoardStatus.forEach((row) => {
-      this.currentBoardStatus.push(row.slice());
-    });
-
     this.currentPage = "game";
   },
   data() {
     return {
-      currentBoardStatus: null,
-      // 1:black, 2:white
-      currentPlayer: 1,
       hajimeLabelVisilibity: false,
       isGameReady: false,
       numEmpty: 0,
@@ -216,18 +214,37 @@ export default {
             this.hajimeLabelVisilibity = false;
           }, 3000);
           new Audio(require("@/assets/sounds/don.mp3")).play();
-
           this.isJustViewing = parsedData.data.currentPlayer === "opponent";
-
           this.isGameReady = true;
         } else if (parsedData.dataType === "putStone") {
           console.log("putStone");
           console.log(parsedData.data);
-          this.currentBoardStatus.splice(0, this.currentBoardStatus.length);
+          new Audio(require("@/assets/sounds/put-stone.mp3")).play();
+          this.boardStatus.splice(0, this.boardStatus.length);
           parsedData.data.boardStatus.forEach((row) => {
-            this.currentBoardStatus.push(row.slice());
+            this.boardStatus.push(row.slice());
           });
-          this.$refs.board.setBoardStatus(this.currentBoardStatus);
+
+          switch (parsedData.data.nextPlayer) {
+            case "you":
+              this.currentPlayerColor = this.gameData.myColor;
+              this.isJustViewing = false;
+              break;
+            case "notYou":
+              this.currentPlayerColor = this.gameData.myColor == 1 ? 2 : 1;
+              this.isJustViewing = true;
+              break;
+            case "gameSet":
+              break;
+            default:
+              break;
+          }
+
+          // // set board status to ReversiNode instance.
+          // this.$refs.board.setBoardStatus(
+          //   this.currentBoardStatus,
+          //   this.currentPlayerColor
+          // );
         }
       };
       this.socket.onclose = (e) => {
@@ -242,39 +259,39 @@ export default {
     onInitialized(evt) {
       console.log("Game -onInitialied begin.");
       console.log(evt);
-      this.currentPlayer = evt.nextPlayer;
-      this.numEmpty = evt.numEmpty;
-      this.numBlack = evt.numBlack;
-      this.numWhite = evt.numWhite;
+      // this.currentPlayerColor = evt.nextPlayer;
+      // this.numEmpty = evt.numEmpty;
+      // this.numBlack = evt.numBlack;
+      // this.numWhite = evt.numWhite;
     },
-    onClickCell(evt) {
-      console.log("Game - onClickCell begin.");
-      console.log(evt);
-      this.currentPlayer = evt.nextPlayer;
-      this.numEmpty = evt.numEmpty;
-      this.numBlack = evt.numBlack;
-      this.numWhite = evt.numWhite;
-    },
-    onPassTurn(evt) {
-      console.log("Game - onPassTurn begin.");
-      console.log(evt);
-      this.numEmpty = evt.numEmpty;
-      this.numBlack = evt.numBlack;
-      this.numWhite = evt.numWhite;
-    },
+    // onClickCell(evt) {
+    //   console.log("Game - onClickCell begin.");
+    //   console.log(evt);
+    //   this.currentPlayerColor = evt.nextPlayer;
+    //   this.numEmpty = evt.numEmpty;
+    //   this.numBlack = evt.numBlack;
+    //   this.numWhite = evt.numWhite;
+    // },
+    // onPassTurn(evt) {
+    //   console.log("Game - onPassTurn begin.");
+    //   console.log(evt);
+    //   this.numEmpty = evt.numEmpty;
+    //   this.numBlack = evt.numBlack;
+    //   this.numWhite = evt.numWhite;
+    // },
     onGameSet(evt) {
       console.log("Game - onGameSet begin.");
       console.log(evt);
-      this.numEmpty = evt.numEmpty;
-      this.numBlack = evt.numBlack;
-      this.numWhite = evt.numWhite;
-      if (evt.numBlack > evt.numWhite) {
-        console.log("Winner BLACK !!!");
-      } else if (evt.numWhite > evt.numBlack) {
-        console.log("Winner WHITE !!!");
-      } else if (evt.numBlack === evt.numWhite) {
-        console.log("Draw");
-      }
+      // this.numEmpty = evt.numEmpty;
+      // this.numBlack = evt.numBlack;
+      // this.numWhite = evt.numWhite;
+      // if (evt.numBlack > evt.numWhite) {
+      //   console.log("Winner BLACK !!!");
+      // } else if (evt.numWhite > evt.numBlack) {
+      //   console.log("Winner WHITE !!!");
+      // } else if (evt.numBlack === evt.numWhite) {
+      //   console.log("Draw");
+      // }
       this.sokomadeLabelVisibility = true;
       window.setTimeout(() => {
         this.sokomadeLabelVisibility = false;
@@ -286,10 +303,11 @@ export default {
       const iRow = evt.row;
       console.log(`put column:${iColumn} row:${iRow}`);
 
-      // make the board inoperable.
+      // make the board readonly.
       this.isJustViewing = true;
 
       // send put data to the lambda.
+      console.log("sending putting data to the lambda..");
       this.socket.send(
         JSON.stringify({
           action: "putStone",

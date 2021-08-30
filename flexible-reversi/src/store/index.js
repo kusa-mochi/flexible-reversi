@@ -27,8 +27,9 @@ export default new Vuex.Store({
         height: 8,
         width: 16,
       },
-      // 0:blank, 1:black, 2:white
-      initialBoardStatus: [
+      currentPlayerColor: -1,
+      // 0:blank, 1:black, 2:white, 3:wall
+      boardStatus: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
         [0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -41,6 +42,7 @@ export default new Vuex.Store({
       isJustViewing: false,
       opponentNickname: "",
       roomId: -1,
+      myColor: -1,
     },
   },
   mutations: {

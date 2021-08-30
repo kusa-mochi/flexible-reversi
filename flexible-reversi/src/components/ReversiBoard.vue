@@ -5,7 +5,7 @@
         <div :key="iRow * numColumns + iColumn" class="reversi-cell">
           <reversi-cell
             @click="onClickCell(iColumn, iRow)"
-            :state="boardStatus._status[iRow][iColumn]"
+            :state="boardStatus[iRow][iColumn]"
           ></reversi-cell>
         </div>
       </template>
@@ -15,7 +15,6 @@
 
 <script>
 import ReversiCell from "@/components/ReversiCell";
-import ReversiNode from "@/classes/ReversiNode.js";
 
 export default {
   components: {
@@ -37,92 +36,208 @@ export default {
         };
       },
     },
-    currentBoardStatus: {
-      get() {
-        return this.boardStatus._status;
-      },
-    },
     numColumns: {
       get() {
-        return this.initialBoardStatus[0].length;
+        return this.boardStatus[0].length;
       },
     },
     numRows: {
       get() {
-        return this.initialBoardStatus.length;
+        return this.boardStatus.length;
+      },
+    },
+    opponentPlayerColor: {
+      get() {
+        return this.playerColor == 1 ? 2 : 1;
       },
     },
   },
   created() {
-    this.boardStatus = new ReversiNode(this.initialBoardStatus, 1);
-    const returnValue = {
-      nextPlayer: this.boardStatus._player,
-      numEmpty: this.boardStatus.getNumEmpty(),
-      numBlack: this.boardStatus.getNumBlack(),
-      numWhite: this.boardStatus.getNumWhite(),
-      canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
-    };
-    this.$emit("initialized", returnValue);
-  },
-  data() {
-    return {
-      boardStatus: null,
-    };
+    // this.boardStatus = new ReversiNode(this.initialBoardStatus, 1);
+    // const returnValue = {
+    //   nextPlayer: this.boardStatus._player,
+    //   numEmpty: this.boardStatus.getNumEmpty(),
+    //   numBlack: this.boardStatus.getNumBlack(),
+    //   numWhite: this.boardStatus.getNumWhite(),
+    //   canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
+    // };
+    // this.$emit("initialized", returnValue);
+    this.$emit("initialized");
   },
   methods: {
+    between(n, min, max) {
+      return min <= n && n <= max;
+    },
+    canPutStone(iColumn, iRow) {
+      // console.log("putStoneCore begin.");
+      if (!this.between(iColumn, 0, this.numColumns - 1)) {
+        throw "invalid range 'iColumn'.";
+      }
+      if (!this.between(iRow, 0, this.numRows - 1)) {
+        throw "invalid range 'iRow'.";
+      }
+
+      // if not an empty cell.
+      if (this.boardStatus[iRow][iColumn] !== 0) {
+        // console.log("it is not an empty cell.");
+        // it cannot put a stone.
+        return false;
+      }
+
+      const up = this.searchOnDirection(iColumn, iRow, 0, -1);
+      const rightUp = this.searchOnDirection(iColumn, iRow, 1, -1);
+      const right = this.searchOnDirection(iColumn, iRow, 1, 0);
+      const rightDown = this.searchOnDirection(iColumn, iRow, 1, 1);
+      const down = this.searchOnDirection(iColumn, iRow, 0, 1);
+      const leftDown = this.searchOnDirection(iColumn, iRow, -1, 1);
+      const left = this.searchOnDirection(iColumn, iRow, -1, 0);
+      const leftUp = this.searchOnDirection(iColumn, iRow, -1, -1);
+
+      const searchResult =
+        up ||
+        rightUp ||
+        right ||
+        rightDown ||
+        down ||
+        leftDown ||
+        left ||
+        leftUp;
+
+      return searchResult;
+    },
     onClickCell(iColumn, iRow) {
       if (this.isReadOnly) return;
 
-      const putSound = new Audio(require("@/assets/put-stone.mp3"));
-      console.log("on click cell: " + iColumn + ", " + iRow);
-      const result = this.boardStatus.putStone(iColumn, iRow);
-      this.boardStatus._status = this.boardStatus._status.slice(0);
+      console.log(`on click cell: ${iColumn}, ${iRow}`);
+      // const result = this.boardStatus.putStone(iColumn, iRow);
+      const result = this.canPutStone(iColumn, iRow);
+      console.log(`can put there ?: ${result}`);
+      // this.boardStatus._status = this.boardStatus._status.slice(0);
 
-      // if a stone was put.
+      // if you can put a stone
       if (result) {
+        console.log("emitting..");
         this.$emit("stone-put", {
           column: iColumn,
           row: iRow,
         });
-        putSound.play();
+        // this.putSound.play();
       }
 
-      const returnValue = {
-        nextPlayer: this.boardStatus._player,
-        numEmpty: this.boardStatus.getNumEmpty(),
-        numBlack: this.boardStatus.getNumBlack(),
-        numWhite: this.boardStatus.getNumWhite(),
-        canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
-      };
+      // const returnValue = {
+      //   nextPlayer: this.playerColor,
+      //   numEmpty: this.boardStatus.getNumEmpty(),
+      //   numBlack: this.boardStatus.getNumBlack(),
+      //   numWhite: this.boardStatus.getNumWhite(),
+      //   canPutStone: this.boardStatus.canPutStoneOnAnyPlace(),
+      // };
 
+      // if (
+      //   returnValue.numEmpty === 0 ||
+      //   returnValue.numBlack === 0 ||
+      //   returnValue.numWhite === 0
+      // ) {
+      //   this.$emit("game-set", returnValue);
+      //   return;
+      // }
+
+      // if (!returnValue.canPutStone) {
+      //   // this.boardStatus.goToNextTurn();
+      //   if (!this.boardStatus.canPutStoneOnAnyPlace()) {
+      //     this.$emit("game-set", returnValue);
+      //     return;
+      //   } else {
+      //     this.$emit("pass-turn", returnValue);
+      //   }
+      //   return;
+      // }
+
+      // this.$emit("click-cell", returnValue);
+      // this.$emit("click-cell");
+    },
+    searchOnDirection(iColumn, iRow, dirColumn, dirRow) {
+      // if (this.boardStatus[iRow][iColumn] != 0) {
+      //   return false;
+      // }
+
+      const xNeighbor = iColumn + dirColumn;
+      const yNeighbor = iRow + dirRow;
       if (
-        returnValue.numEmpty === 0 ||
-        returnValue.numBlack === 0 ||
-        returnValue.numWhite === 0
+        !this.between(xNeighbor, 0, this.numColumns - 1) ||
+        !this.between(yNeighbor, 0, this.numRows - 1)
       ) {
-        this.$emit("game-set", returnValue);
-        return;
+        return false;
       }
 
-      if (!returnValue.canPutStone) {
-        this.boardStatus.goToNextTurn();
-        if (!this.boardStatus.canPutStoneOnAnyPlace()) {
-          this.$emit("game-set", returnValue);
-          return;
-        } else {
-          this.$emit("pass-turn", returnValue);
+      let x = xNeighbor;
+      let y = yNeighbor;
+
+      if (this.boardStatus[y][x] !== this.opponentPlayerColor) {
+        return false;
+      }
+
+      x += dirColumn;
+      y += dirRow;
+      while (
+        this.between(x, 0, this.numColumns - 1) &&
+        this.between(y, 0, this.numRows - 1)
+      ) {
+        if (this.boardStatus[y][x] == this.playerColor) {
+          return true;
         }
-        return;
+        if (this.boardStatus[y][x] == this.opponentPlayerColor) {
+          x += dirColumn;
+          y += dirRow;
+        }
       }
 
-      this.$emit("click-cell", returnValue);
+      // // if a neighbor is opponent
+      // if (this._status[y][x] === opponent) {
+      //   let ifBreak = false;
+      //   for (
+      //     x += columnDirection, y += rowDirection;
+      //     this.between(x, 0, this._numColumn - 1) &&
+      //     this.between(y, 0, this._numRow - 1);
+      //     x += columnDirection, y += rowDirection
+      //   ) {
+      //     // console.log(`(${x},${y}): ${this._status[y][x]}`);
+      //     const currentCell = this._status[y][x];
+      //     switch (currentCell) {
+      //       case 0: // empty cell
+      //         ifBreak = true;
+      //         break;
+      //       case 3: // wall
+      //         ifBreak = true;
+      //         break;
+      //       default:
+      //         if (currentCell === this._player) {
+      //           canPut = true;
+      //         } else if (currentCell === opponent) {
+      //           // do nothing.
+      //         } else {
+      //           throw `invalid cell state:${currentCell}`;
+      //         }
+      //         break;
+      //     }
+
+      //     if (ifBreak) break;
+      //   }
+
+      //   if (canPut) {
+      //     return true;
+      //   }
+      // }
+
+      return false;
     },
-    setBoardStatus(status) {
-      this.boardStatus._status.splice(0, this.boardStatus._status.length);
-      status.forEach((row) => {
-        this.boardStatus._status.push(row.slice());
-      });
-    },
+    // setBoardStatus(status, nextPlayerColor) {
+    //   this.boardStatus.splice(0, this.boardStatus.length);
+    //   status.forEach((row) => {
+    //     this.boardStatus.push(row.slice());
+    //   });
+    //   this.playerColor = nextPlayerColor;
+    //   this.putSound.play();
+    // },
   },
   name: "ReversiBoard",
   props: {
@@ -131,7 +246,7 @@ export default {
       required: false,
       default: 800,
     },
-    initialBoardStatus: {
+    boardStatus: {
       type: Array,
       required: true,
       default: () => [
@@ -150,16 +265,11 @@ export default {
       required: false,
       default: false,
     },
-    // numColumns: {
-    //   type: Number,
-    //   required: false,
-    //   default: 8,
-    // },
-    // numRows: {
-    //   type: Number,
-    //   required: false,
-    //   default: 8,
-    // },
+    playerColor: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
   },
 };
 </script>
