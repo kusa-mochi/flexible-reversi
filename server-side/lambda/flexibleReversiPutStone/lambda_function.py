@@ -86,9 +86,6 @@ def canPutStoneOnAnywhere(board, playerColor):
 # dirColumn: -1=left, 0=no move, 1=right
 # dirRow: -1=up, 0=no move, 1=down
 def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
-    if board[iRow][iColumn] != 0:
-        return
-    
     xNeighbor = iColumn + dirColumn
     yNeighbor = iRow + dirRow
     boardWidth = len(board[0])
@@ -100,17 +97,17 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
     y = yNeighbor
     opponentPlayerColor = 1 if playerColor == 2 else 2
     
-    if board[y][x] != opponentPlayerColor:
+    if board[y][x] != Decimal(opponentPlayerColor):
         return
     
     x += dirColumn
     y += dirRow
     while between(x, 0, boardWidth - 1) == True and between(y, 0, boardHeight - 1) == True:
-        if board[y][x] == playerColor:
-            board[iRow][iColumn] = playerColor
+        if board[y][x] == Decimal(playerColor):
+            board[iRow][iColumn] = Decimal(playerColor)
             m = xNeighbor
             n = yNeighbor
-            while board[n][m] == opponentPlayerColor:
+            while board[n][m] == Decimal(opponentPlayerColor):
                 print('row:')
                 print(n)
                 print('column:')
@@ -121,7 +118,7 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
                 m += dirColumn
                 n += dirRow
             break
-        if board[y][x] == opponentPlayerColor:
+        if board[y][x] == Decimal(opponentPlayerColor):
             x += dirColumn
             y += dirRow
         else:
@@ -133,6 +130,8 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
 # iRow [number]: row position to put stone.
 # playerColor [number]: stone color to put. 1=black, 2=white
 def putStone(board, iColumn, iRow, playerColor):
+    if board[iRow][iColumn] != Decimal(0):
+        return
     putStoneOnDirection(board, iColumn, iRow, playerColor,  0, -1)
     putStoneOnDirection(board, iColumn, iRow, playerColor,  1, -1)
     putStoneOnDirection(board, iColumn, iRow, playerColor,  1,  0)
