@@ -2,10 +2,10 @@
   <div class="game">
     <p>game</p>
     <router-link to="/">Top</router-link>
-    <p>Player: {{ this.currentPlayerColor === 1 ? "Black" : "White" }}</p>
-    <p>Empty: {{ this.numEmpty }}</p>
-    <p>Black: {{ this.numBlack }}</p>
-    <p>White: {{ this.numWhite }}</p>
+    <p>Player: {{ gameData.currentPlayerColor === 1 ? "Black" : "White" }}</p>
+    <p>Empty: {{ numEmpty }}</p>
+    <p>Black: {{ numBlack }}</p>
+    <p>White: {{ numWhite }}</p>
     <div class="board-container">
       <reversi-board
         @initialized="onInitialized"
@@ -13,7 +13,7 @@
         :board-width="800"
         :board-status="boardStatus"
         :is-read-only="isJustViewing"
-        :player-color="currentPlayerColor"
+        :player-color="gameData.currentPlayerColor"
       ></reversi-board>
       <div class="hajime-label-container">
         <!-- <transition name="hajime-animation"> -->
@@ -67,16 +67,19 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
-    // 1:black, 2:white
-    currentPlayerColor: {
-      get() {
-        return this.$store.state.gameData.currentPlayerColor;
-      },
-      set(newValue) {
-        if (newValue !== 1 && newValue !== 2) return;
-        this.$store.state.gameData.currentPlayerColor = newValue;
-      },
-    },
+    // // 1:black, 2:white
+    // currentPlayerColor: {
+    //   get() {
+    //     return this.$store.state.gameData.currentPlayerColor;
+    //   },
+    //   set(newValue) {
+    //     console.log("currentPlayerColor new value:");
+    //     console.log(newValue);
+    //     if (newValue !== 1 && newValue !== 2 && newValue !== -1) return;
+    //     this.$store.state.gameData.currentPlayerColor = newValue;
+    //     console.log(this.$store.state.gameData.currentPlayerColor);
+    //   },
+    // },
     room: {
       get() {
         return this.rooms[this.gameData.roomId];
@@ -184,7 +187,7 @@ export default {
           console.log("get rooms data.");
           const getRoomsData = parsedData.data;
           this.$store.commit("updateLocalRoomsData", getRoomsData);
-          if(gotRoomData) return;
+          if (gotRoomData) return;
           else gotRoomData = true;
 
           // make a connection to the server side (lambda).
@@ -193,6 +196,7 @@ export default {
               action: "gameStandby",
               data: {
                 token: this.token,
+                nickname: this.myNickname,
                 roomId: this.gameData.roomId,
               },
             })
@@ -215,7 +219,10 @@ export default {
             this.hajimeLabelVisilibity = false;
           }, 3000);
           new Audio(require("@/assets/sounds/don.mp3")).play();
-          this.isJustViewing = parsedData.data.currentPlayer === "opponent";
+          this.isJustViewing = parsedData.data.currentPlayer !== "you";
+          this.gameData.myColor =
+            parsedData.data.currentPlayer === "you" ? 1 : 2;
+          this.gameData.currentPlayerColor = 1;
           this.isGameReady = true;
         } else if (parsedData.dataType === "putStone") {
           console.log("putStone");
@@ -228,11 +235,21 @@ export default {
 
           switch (parsedData.data.nextPlayer) {
             case "you":
-              this.currentPlayerColor = this.gameData.myColor;
+              console.log("you");
+              console.log("player color changes from:");
+              console.log(this.gameData.currentPlayerColor);
+              this.gameData.currentPlayerColor = this.gameData.myColor;
+              console.log("to:");
+              console.log(this.gameData.currentPlayerColor);
               this.isJustViewing = false;
               break;
             case "notYou":
-              this.currentPlayerColor = this.gameData.myColor == 1 ? 2 : 1;
+              console.log("notYou");
+              console.log("player color changes from:");
+              console.log(this.gameData.currentPlayerColor);
+              this.gameData.currentPlayerColor = this.gameData.myColor == 1 ? 2 : 1;
+              console.log("to:");
+              console.log(this.gameData.currentPlayerColor);
               this.isJustViewing = true;
               break;
             case "gameSet":
@@ -240,12 +257,6 @@ export default {
             default:
               break;
           }
-
-          // // set board status to ReversiNode instance.
-          // this.$refs.board.setBoardStatus(
-          //   this.currentBoardStatus,
-          //   this.currentPlayerColor
-          // );
         }
       };
       this.socket.onclose = (e) => {
@@ -260,39 +271,10 @@ export default {
     onInitialized(evt) {
       console.log("Game -onInitialied begin.");
       console.log(evt);
-      // this.currentPlayerColor = evt.nextPlayer;
-      // this.numEmpty = evt.numEmpty;
-      // this.numBlack = evt.numBlack;
-      // this.numWhite = evt.numWhite;
     },
-    // onClickCell(evt) {
-    //   console.log("Game - onClickCell begin.");
-    //   console.log(evt);
-    //   this.currentPlayerColor = evt.nextPlayer;
-    //   this.numEmpty = evt.numEmpty;
-    //   this.numBlack = evt.numBlack;
-    //   this.numWhite = evt.numWhite;
-    // },
-    // onPassTurn(evt) {
-    //   console.log("Game - onPassTurn begin.");
-    //   console.log(evt);
-    //   this.numEmpty = evt.numEmpty;
-    //   this.numBlack = evt.numBlack;
-    //   this.numWhite = evt.numWhite;
-    // },
     onGameSet(evt) {
       console.log("Game - onGameSet begin.");
       console.log(evt);
-      // this.numEmpty = evt.numEmpty;
-      // this.numBlack = evt.numBlack;
-      // this.numWhite = evt.numWhite;
-      // if (evt.numBlack > evt.numWhite) {
-      //   console.log("Winner BLACK !!!");
-      // } else if (evt.numWhite > evt.numBlack) {
-      //   console.log("Winner WHITE !!!");
-      // } else if (evt.numBlack === evt.numWhite) {
-      //   console.log("Draw");
-      // }
       this.sokomadeLabelVisibility = true;
       window.setTimeout(() => {
         this.sokomadeLabelVisibility = false;

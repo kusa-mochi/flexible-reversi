@@ -69,6 +69,8 @@ export default {
       return min <= n && n <= max;
     },
     canPutStone(iColumn, iRow) {
+      console.log("player color");
+      console.log(this.playerColor);
       // console.log("putStoneCore begin.");
       if (!this.between(iColumn, 0, this.numColumns - 1)) {
         throw "invalid range 'iColumn'.";
@@ -79,7 +81,7 @@ export default {
 
       // if not an empty cell.
       if (this.boardStatus[iRow][iColumn] !== 0) {
-        // console.log("it is not an empty cell.");
+        console.log("it is not an empty cell.");
         // it cannot put a stone.
         return false;
       }
@@ -92,6 +94,16 @@ export default {
       const leftDown = this.searchOnDirection(iColumn, iRow, -1, 1);
       const left = this.searchOnDirection(iColumn, iRow, -1, 0);
       const leftUp = this.searchOnDirection(iColumn, iRow, -1, -1);
+
+      console.log("all directions check result:");
+      console.log(up);
+      console.log(rightUp);
+      console.log(right);
+      console.log(rightDown);
+      console.log(down);
+      console.log(leftDown);
+      console.log(left);
+      console.log(leftUp);
 
       const searchResult =
         up ||
@@ -156,10 +168,6 @@ export default {
       // this.$emit("click-cell");
     },
     searchOnDirection(iColumn, iRow, dirColumn, dirRow) {
-      // if (this.boardStatus[iRow][iColumn] != 0) {
-      //   return false;
-      // }
-
       const xNeighbor = iColumn + dirColumn;
       const yNeighbor = iRow + dirRow;
       if (
@@ -176,57 +184,19 @@ export default {
         return false;
       }
 
-      x += dirColumn;
-      y += dirRow;
-      while (
+      for (
+        x += dirColumn, y += dirRow;
         this.between(x, 0, this.numColumns - 1) &&
-        this.between(y, 0, this.numRows - 1)
+        this.between(y, 0, this.numRows - 1);
+        x += dirColumn, y += dirRow
       ) {
-        if (this.boardStatus[y][x] == this.playerColor) {
+        if (this.boardStatus[y][x] === this.playerColor) {
           return true;
         }
-        if (this.boardStatus[y][x] == this.opponentPlayerColor) {
-          x += dirColumn;
-          y += dirRow;
+        if (this.boardStatus[y][x] !== this.opponentPlayerColor) {
+          return false;
         }
       }
-
-      // // if a neighbor is opponent
-      // if (this._status[y][x] === opponent) {
-      //   let ifBreak = false;
-      //   for (
-      //     x += columnDirection, y += rowDirection;
-      //     this.between(x, 0, this._numColumn - 1) &&
-      //     this.between(y, 0, this._numRow - 1);
-      //     x += columnDirection, y += rowDirection
-      //   ) {
-      //     // console.log(`(${x},${y}): ${this._status[y][x]}`);
-      //     const currentCell = this._status[y][x];
-      //     switch (currentCell) {
-      //       case 0: // empty cell
-      //         ifBreak = true;
-      //         break;
-      //       case 3: // wall
-      //         ifBreak = true;
-      //         break;
-      //       default:
-      //         if (currentCell === this._player) {
-      //           canPut = true;
-      //         } else if (currentCell === opponent) {
-      //           // do nothing.
-      //         } else {
-      //           throw `invalid cell state:${currentCell}`;
-      //         }
-      //         break;
-      //     }
-
-      //     if (ifBreak) break;
-      //   }
-
-      //   if (canPut) {
-      //     return true;
-      //   }
-      // }
 
       return false;
     },

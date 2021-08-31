@@ -27,7 +27,8 @@ export default new Vuex.Store({
         height: 8,
         width: 16,
       },
-      currentPlayerColor: -1,
+      // 1:black, 2:white
+      currentPlayerColor: 1,
       // 0:blank, 1:black, 2:white, 3:wall
       boardStatus: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

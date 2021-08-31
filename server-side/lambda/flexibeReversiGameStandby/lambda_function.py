@@ -101,6 +101,25 @@ def lambda_handler(event, context):
         
         am = boto3.client('apigatewaymanagementapi', endpoint_url=opponentUrl)
         _ = am.post_to_connection(ConnectionId=opponentConnectionId, Data=retToOpponent)
+        
+        # update room status
+        appData.update_item(
+            Key={'id': roomId},
+            UpdateExpression='set roomState=:roomState,roomAuthor=:roomAuthor,opponentName=:opponentName',
+            ExpressionAttributeValues={
+                ':roomState': 'inGame',
+                ':roomAuthor': roomAuthorNickname,
+                ':opponentName': opponentNickname
+            },
+            ReturnValues='UPDATED_NEW'
+            )
+        
+        # # notify all players of the status of each room.
+        # response = boto3.client('lambda').invoke(
+        #     FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiGetRooms',
+        #     InvocationType='Event',
+        #     Payload=json.dumps({'body':"{\"data\":{\"token\":\"" + token + "\"}}", 'requestContext':{'connectionId':connectionId}})
+        # )
     
     return {
         'statusCode': 200,
