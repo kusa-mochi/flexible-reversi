@@ -183,13 +183,10 @@ export default {
         if (parsedData.dataType === "getRooms") {
           console.log("get rooms data.");
           const getRoomsData = parsedData.data;
-          console.log(getRoomsData);
           this.$store.commit("updateLocalRoomsData", getRoomsData);
           if(gotRoomData) return;
           else gotRoomData = true;
 
-          console.log("room id");
-          console.log(this.gameData.roomId);
           // make a connection to the server side (lambda).
           this.socket.send(
             JSON.stringify({
