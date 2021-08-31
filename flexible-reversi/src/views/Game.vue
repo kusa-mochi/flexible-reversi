@@ -159,6 +159,8 @@ export default {
   methods: {
     initializeWebSocket() {
       this.socket = new WebSocket(this.serverUrl);
+      let gotRoomData = false;
+
       this.socket.onopen = (e) => {
         console.log("onopen");
         console.log(e);
@@ -183,6 +185,8 @@ export default {
           const getRoomsData = parsedData.data;
           console.log(getRoomsData);
           this.$store.commit("updateLocalRoomsData", getRoomsData);
+          if(gotRoomData) return;
+          else gotRoomData = true;
 
           console.log("room id");
           console.log(this.gameData.roomId);
