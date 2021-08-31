@@ -124,7 +124,7 @@
             >
               <reversi-board
                 :board-width="200"
-                :initial-board-status="
+                :board-status="
                   makeRoomDialogFormData.stageData[`stage${stageNumber}`]
                 "
                 :is-read-only="true"
@@ -157,9 +157,7 @@
       <div class="stage-image">
         <reversi-board
           :board-width="400"
-          :initial-board-status="
-            battleConfirmationDialogData.initialBoardStatus
-          "
+          :board-status="battleConfirmationDialogData.initialBoardStatus"
           :is-read-only="true"
         ></reversi-board>
       </div>
@@ -367,7 +365,7 @@ export default {
         }
       );
       const gameData = {
-        initialBoardStatus: boardStatus,
+        boardStatus: boardStatus,
         boardSize: {
           width: this.battleConfirmationDialogData.initialBoardStatus[0].length,
           height: this.battleConfirmationDialogData.initialBoardStatus.length,
@@ -376,6 +374,8 @@ export default {
         myNickname: this.myNickname,
         opponntNickname: this.battleConfirmationDialogData.roomAuthor,
         roomId: this.gameData.roomId,
+        // if firstPlayer is true, the room author(opponent) is a first player.
+        myColor: this.battleConfirmationDialogData.firstPlayer ? 2 : 1,
       };
       this.gameData = gameData;
       this.$router.push({ path: "/game" });
@@ -520,7 +520,7 @@ export default {
       console.log(dataToSend);
       this.socket.send(JSON.stringify(dataToSend));
       const gameData = {
-        initialBoardStatus: board,
+        boardStatus: board,
         boardSize: {
           width: board[0].length,
           height: board.length,
@@ -529,6 +529,7 @@ export default {
         myNickname: this.myNickname,
         opponntNickname: "",
         roomId: this.gameData.roomId,
+        myColor: this.makeRoomDialogFormData.firstPlayer ? 1 : 2,
       };
       this.gameData = gameData;
       this.makeRoomDialogVisible = false;

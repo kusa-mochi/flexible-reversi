@@ -86,9 +86,6 @@ def canPutStoneOnAnywhere(board, playerColor):
 # dirColumn: -1=left, 0=no move, 1=right
 # dirRow: -1=up, 0=no move, 1=down
 def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
-    if board[iRow][iColumn] != 0:
-        return
-    
     xNeighbor = iColumn + dirColumn
     yNeighbor = iRow + dirRow
     boardWidth = len(board[0])
@@ -100,17 +97,17 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
     y = yNeighbor
     opponentPlayerColor = 1 if playerColor == 2 else 2
     
-    if board[y][x] != opponentPlayerColor:
+    if board[y][x] != Decimal(opponentPlayerColor):
         return
     
     x += dirColumn
     y += dirRow
     while between(x, 0, boardWidth - 1) == True and between(y, 0, boardHeight - 1) == True:
-        if board[y][x] == playerColor:
-            board[iRow][iColumn] = playerColor
+        if board[y][x] == Decimal(playerColor):
+            board[iRow][iColumn] = Decimal(playerColor)
             m = xNeighbor
             n = yNeighbor
-            while board[n][m] == opponentPlayerColor:
+            while board[n][m] == Decimal(opponentPlayerColor):
                 print('row:')
                 print(n)
                 print('column:')
@@ -121,7 +118,7 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
                 m += dirColumn
                 n += dirRow
             break
-        if board[y][x] == opponentPlayerColor:
+        if board[y][x] == Decimal(opponentPlayerColor):
             x += dirColumn
             y += dirRow
         else:
@@ -133,6 +130,8 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
 # iRow [number]: row position to put stone.
 # playerColor [number]: stone color to put. 1=black, 2=white
 def putStone(board, iColumn, iRow, playerColor):
+    if board[iRow][iColumn] != Decimal(0):
+        return
     putStoneOnDirection(board, iColumn, iRow, playerColor,  0, -1)
     putStoneOnDirection(board, iColumn, iRow, playerColor,  1, -1)
     putStoneOnDirection(board, iColumn, iRow, playerColor,  1,  0)
@@ -143,8 +142,17 @@ def putStone(board, iColumn, iRow, playerColor):
     putStoneOnDirection(board, iColumn, iRow, playerColor, -1, -1)
     return
 
+def countBoardElement(board, element):
+    ret = 0
+    for row in board:
+        ret += row.count(element)
+    return ret
+
+def hasEmptyCell(board):
+    return countBoardElement(board, 0) > 0
+
 def lambda_handler(event, context):
-    print("getRooms start.")
+    print("putStone start.")
     print(event)
     
     # check a token from a client.
@@ -181,13 +189,13 @@ def lambda_handler(event, context):
     # room data
     roomData = appData.get_item(Key={'id': roomId})['Item']
     
-    # current player (room author/opponent)
-    currentPlayer = ''
+    # current player: True=room author, False=opponent
+    currentPlayer = True
     
-    # current player color: 1=black, 2=white
+    # current player color: 1=black, 2=white, -1=NULL
     currentPlayerColor = -1
     if roomData['roomAuthorId'] == currentPlayerToken:
-        currentPlayer = 'roomAuthor'
+        currentPlayer = True
         # if first player(black) is room author
         if roomData['firstPlayer'] == True:
             # current player color is black
@@ -196,7 +204,7 @@ def lambda_handler(event, context):
             # current player color is white
             currentPlayerColor = 2
     elif roomData['opponentId'] == currentPlayerToken:
-        currentPlayer = 'opponent'
+        currentPlayer = False
         # if first player(black) is room author
         if roomData['firstPlayer'] == True:
             # current player color is white
@@ -208,12 +216,8 @@ def lambda_handler(event, context):
         raise ValueError('a value of currentPlayerColor cannot be defined.')
 
     # get current board status from DB.
-    #currentBoardStatus = roomData['currentBoard']
-    tmpStatus = roomData['currentBoard']
-    currentBoardStatus = []
-    for row in tmpStatus:
-        currentBoardStatus.append(row[:])
-    
+    currentBoardStatus = roomData['currentBoard']
+
     # check if it can put stone on the specified position (column, row).
     canPut = canPutStone(currentBoardStatus, iColumn, iRow, currentPlayerColor)
     
@@ -234,43 +238,73 @@ def lambda_handler(event, context):
         'dataType': 'putStone',
         'data': {
             'boardStatus': [],
-            'nextPlayer': ''
+            'nextPlayer': '',  # 'you'/'notYou'
+            'black': 0,
+            'white': 0,
+            'empty': 0
         }
     }
     retToOpponent = {
         'dataType': 'putStone',
         'data': {
             'boardStatus': [],
-            'nextPlayer': ''
+            'nextPlayer': '',
+            'black': 0,
+            'white': 0,
+            'empty': 0
         }
     }
+    
+    # count board elements
+    retToRoomAuthor['data']['black'] = countBoardElement(currentBoardStatus, 1)
+    retToRoomAuthor['data']['white'] = countBoardElement(currentBoardStatus, 2)
+    retToRoomAuthor['data']['empty'] = countBoardElement(currentBoardStatus, 0)
+    retToOpponent['data']['black'] = retToRoomAuthor['data']['black']
+    retToOpponent['data']['white'] = retToRoomAuthor['data']['white']
+    retToOpponent['data']['empty'] = retToRoomAuthor['data']['empty']
     
     retToRoomAuthor['data']['boardStatus'] = currentBoardStatus
     retToOpponent['data']['boardStatus'] = currentBoardStatus
     
-    # if next player cannot put its stone
-    if canPutStoneOnAnywhere(currentBoardStatus, nextPlayerColor) == False:
-        # if current player also cannot put its stone
-        if canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) == False:
-            # game is set.
-            retToRoomAuthor['data']['nextPlayer'] = 'gameSet'
-            retToOpponent['data']['nextPlayer'] = 'gameSet'
-        else:
-            # next player is current player again.
-            if currentPlayer == 'roomAuthor':
-                retToRoomAuthor['data']['nextPlayer'] = 'you'
-                retToOpponent['data']['nextPlayer'] = 'notYou'
+    # if there is no empty cell
+    if hasEmptyCell(currentBoardStatus) == False:
+        print('hasEmptyCell(currentBoardStatus) == False')
+        # game is set.
+        retToRoomAuthor['data']['nextPlayer'] = 'gameSet'
+        retToOpponent['data']['nextPlayer'] = 'gameSet'
+    else:
+        print('hasEmptyCell(currentBoardStatus) != False')
+        # if next player cannot put its stone
+        if canPutStoneOnAnywhere(currentBoardStatus, nextPlayerColor) == False:
+            print('canPutStoneOnAnywhere(currentBoardStatus, nextPlayerColor) == False')
+            # if current player also cannot put its stone
+            if canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) == False:
+                print('canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) == False')
+                # game is set.
+                retToRoomAuthor['data']['nextPlayer'] = 'gameSet'
+                retToOpponent['data']['nextPlayer'] = 'gameSet'
             else:
+                print('canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) != False')
+                # next player is current player again.
+                if currentPlayer == True:
+                    print('currentPlayer == True')
+                    retToRoomAuthor['data']['nextPlayer'] = 'you'
+                    retToOpponent['data']['nextPlayer'] = 'notYou'
+                else:
+                    print('currentPlayer != True')
+                    retToRoomAuthor['data']['nextPlayer'] = 'notYou'
+                    retToOpponent['data']['nextPlayer'] = 'you'
+        else:
+            print('canPutStoneOnAnywhere(currentBoardStatus, nextPlayerColor) != False')
+            # change player.
+            if currentPlayer == True:
+                print('currentPlayer == True')
                 retToRoomAuthor['data']['nextPlayer'] = 'notYou'
                 retToOpponent['data']['nextPlayer'] = 'you'
-    else:
-        # change player.
-        if currentPlayer == 'roomAuthor':
-            retToRoomAuthor['data']['nextPlayer'] = 'notYou'
-            retToOpponent['data']['nextPlayer'] = 'you'
-        else:
-            retToRoomAuthor['data']['nextPlayer'] = 'you'
-            retToOpponent['data']['nextPlayer'] = 'notYou'
+            else:
+                print('currentPlayer != True')
+                retToRoomAuthor['data']['nextPlayer'] = 'you'
+                retToOpponent['data']['nextPlayer'] = 'notYou'
     
     # return values
     jsonToRoomAuthor = json.dumps(retToRoomAuthor, default=rooms_default_dumps)
@@ -301,6 +335,25 @@ def lambda_handler(event, context):
     _ = am.post_to_connection(ConnectionId=roomAuthorConnectionId, Data=jsonToRoomAuthor)
     am = boto3.client('apigatewaymanagementapi', endpoint_url=opponentUrl)
     _ = am.post_to_connection(ConnectionId=opponentConnectionId, Data=jsonToOpponent)
+    
+    # update room data
+    exp = 'set currentBoard=:currentBoard,currentPlayer=:currentPlayer'
+    eav = {
+        ':currentBoard': currentBoardStatus,
+        ':currentPlayer': retToRoomAuthor['data']['nextPlayer'] == 'you'
+    }
+    # if currentPlayer == True:
+    #     exp += ',roomAuthor=:roomAuthor'
+    #     eav[':roomAuthor'] = postData['nickname']
+    # else:
+    #     exp += ',opponentName=:opponentName'
+    #     eav[':opponentName'] = postData['nickname']
+    result = appData.update_item(
+        Key={'id': roomId},
+        UpdateExpression=exp,
+        ExpressionAttributeValues=eav,
+        ReturnValues='UPDATED_NEW'
+        )
     
     return {
         'statusCode': 200,
