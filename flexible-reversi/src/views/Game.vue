@@ -2,10 +2,11 @@
   <div class="game">
     <p>game</p>
     <router-link to="/">Top</router-link>
-    <p>Player: {{ gameData.currentPlayerColor === 1 ? "Black" : "White" }}</p>
-    <p>Empty: {{ numEmpty }}</p>
-    <p>Black: {{ numBlack }}</p>
-    <p>White: {{ numWhite }}</p>
+    <p>
+      {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
+        isMyTurn ? "あなた" : "相手"
+      }})の番です。
+    </p>
     <div class="board-container">
       <reversi-board
         @initialized="onInitialized"
@@ -135,6 +136,7 @@ export default {
     return {
       hajimeLabelVisilibity: false,
       isGameReady: false,
+      isMyTurn: false,
       numEmpty: 0,
       numBlack: 0,
       numWhite: 0,
@@ -208,6 +210,7 @@ export default {
           this.isJustViewing = parsedData.data.currentPlayer !== "you";
           this.gameData.myColor =
             parsedData.data.currentPlayer === "you" ? 1 : 2;
+          this.isMyTurn = parsedData.data.currentPlayer === "you";
           this.gameData.currentPlayerColor = 1;
           this.isGameReady = true;
         } else if (parsedData.dataType === "putStone") {
@@ -223,12 +226,14 @@ export default {
               console.log("next player is you.");
               this.gameData.currentPlayerColor = this.gameData.myColor;
               this.isJustViewing = false;
+              this.isMyTurn = true;
               break;
             case "notYou":
               console.log("next player is not you.");
               this.gameData.currentPlayerColor =
                 this.gameData.myColor == 1 ? 2 : 1;
               this.isJustViewing = true;
+              this.isMyTurn = false;
               break;
             case "gameSet":
               this.onGameSet();
@@ -253,6 +258,8 @@ export default {
     },
     onGameSet() {
       console.log("game is set.");
+      this.isJustViewing = true;
+      this.isMyTurn = false;
       this.sokomadeLabelVisibility = true;
       window.setTimeout(() => {
         this.sokomadeLabelVisibility = false;
