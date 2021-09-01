@@ -488,9 +488,9 @@ export default {
         board.push(row.slice());
       });
       const dataToSend = {
-        // ルートキー（request.body.actionの場合）
+        // root key
         action: "updateRoom",
-        // サーバに伝えるデータの中身の例
+        // data to the lambda
         data: {
           boardLogs: [],
           canView: this.makeRoomDialogFormData.canView,
