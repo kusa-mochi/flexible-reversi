@@ -90,7 +90,6 @@ export default {
         if (parsedData.dataType === "newToken") {
           console.log("newToken");
           const token = parsedData.data.token;
-          console.log(token);
           this.token = token;
           this.gotToken = true;
         } else if (parsedData.dataType === "checkNicknameAvailability") {
@@ -98,7 +97,6 @@ export default {
           const availability = parsedData.data.nicknameAvailability;
           switch (availability) {
             case "inUse":
-              console.log("nickname is in use.");
               this.$notify({
                 title: "Error",
                 message: `${this.tmpNickname} という名前は既に使われています。別の名前を指定してください。`,
@@ -106,7 +104,6 @@ export default {
               });
               break;
             case "isAvailable":
-              console.log("isAvailable");
               // save the nickname to a Vuex store.
               this.myNickname = this.tmpNickname;
               // go to the room list page.

@@ -71,7 +71,6 @@ export default {
     canPutStone(iColumn, iRow) {
       console.log("player color");
       console.log(this.playerColor);
-      // console.log("putStoneCore begin.");
       if (!this.between(iColumn, 0, this.numColumns - 1)) {
         throw "invalid range 'iColumn'.";
       }
@@ -95,16 +94,6 @@ export default {
       const left = this.searchOnDirection(iColumn, iRow, -1, 0);
       const leftUp = this.searchOnDirection(iColumn, iRow, -1, -1);
 
-      console.log("all directions check result:");
-      console.log(up);
-      console.log(rightUp);
-      console.log(right);
-      console.log(rightDown);
-      console.log(down);
-      console.log(leftDown);
-      console.log(left);
-      console.log(leftUp);
-
       const searchResult =
         up ||
         rightUp ||
@@ -121,10 +110,7 @@ export default {
       if (this.isReadOnly) return;
 
       console.log(`on click cell: ${iColumn}, ${iRow}`);
-      // const result = this.boardStatus.putStone(iColumn, iRow);
       const result = this.canPutStone(iColumn, iRow);
-      console.log(`can put there ?: ${result}`);
-      // this.boardStatus._status = this.boardStatus._status.slice(0);
 
       // if you can put a stone
       if (result) {

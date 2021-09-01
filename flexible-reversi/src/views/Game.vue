@@ -67,19 +67,6 @@ export default {
         this.$store.state.currentPage = newValue;
       },
     },
-    // // 1:black, 2:white
-    // currentPlayerColor: {
-    //   get() {
-    //     return this.$store.state.gameData.currentPlayerColor;
-    //   },
-    //   set(newValue) {
-    //     console.log("currentPlayerColor new value:");
-    //     console.log(newValue);
-    //     if (newValue !== 1 && newValue !== 2 && newValue !== -1) return;
-    //     this.$store.state.gameData.currentPlayerColor = newValue;
-    //     console.log(this.$store.state.gameData.currentPlayerColor);
-    //   },
-    // },
     room: {
       get() {
         return this.rooms[this.gameData.roomId];
@@ -226,7 +213,6 @@ export default {
           this.isGameReady = true;
         } else if (parsedData.dataType === "putStone") {
           console.log("putStone");
-          console.log(parsedData.data);
           new Audio(require("@/assets/sounds/put-stone.mp3")).play();
           this.boardStatus.splice(0, this.boardStatus.length);
           parsedData.data.boardStatus.forEach((row) => {
@@ -236,19 +222,12 @@ export default {
           switch (parsedData.data.nextPlayer) {
             case "you":
               console.log("you");
-              console.log("player color changes from:");
-              console.log(this.gameData.currentPlayerColor);
               this.gameData.currentPlayerColor = this.gameData.myColor;
-              console.log("to:");
-              console.log(this.gameData.currentPlayerColor);
               this.isJustViewing = false;
               break;
             case "notYou":
               console.log("notYou");
               console.log("player color changes from:");
-              console.log(this.gameData.currentPlayerColor);
-              this.gameData.currentPlayerColor = this.gameData.myColor == 1 ? 2 : 1;
-              console.log("to:");
               console.log(this.gameData.currentPlayerColor);
               this.isJustViewing = true;
               break;
@@ -290,7 +269,6 @@ export default {
       this.isJustViewing = true;
 
       // send put data to the lambda.
-      console.log("sending putting data to the lambda..");
       this.socket.send(
         JSON.stringify({
           action: "putStone",

@@ -271,7 +271,6 @@ export default {
     if (this.socket === null) {
       this.initializeWebSocket();
     } else {
-      console.log("else");
       this.reloadRooms();
     }
 
@@ -394,7 +393,6 @@ export default {
         console.log("onopen - begin");
         console.log(e);
         this.reloadRooms();
-        console.log("onopen - fin");
       };
       // if receive some data from API Gateway (Lambda)
       this.socket.onmessage = (e) => {
@@ -412,14 +410,11 @@ export default {
         } else if (parsedData.dataType === "checkedEntryPassword") {
           console.log("checked entry password.");
           const checkResult = parsedData.data.result;
-          console.log(checkResult);
           switch (checkResult) {
             case "OK":
               // show battleConfirmationDialog.
               this.battleConfirmationDialogData.firstPlayer =
                 parsedData.data.firstPlayer;
-              console.log("firstPlayer:");
-              console.log(parsedData.data.firstPlayer);
               this.battleConfirmationDialogData.initialBoardStatus =
                 parsedData.data.currentBoard;
               this.battleConfirmationDialogData.roomAuthor =
@@ -459,7 +454,6 @@ export default {
       this.makeRoomDialogVisible = true;
       this.makeRoomDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
-      console.log("room id : " + this.makeRoomDialogFormData.id);
       this.socket.send(
         JSON.stringify({
           action: "updateRoom",
@@ -546,7 +540,6 @@ export default {
           },
         })
       );
-      console.log("password: " + this.passwordToEntryDialogFormData.password);
       this.passwordToEntryDialogVisible = false;
     },
     onPasswordToEntryDialogOpen(roomId) {
@@ -554,15 +547,9 @@ export default {
       this.passwordToEntryDialogVisible = true;
       this.passwordToEntryDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
-      console.log("room id : " + this.passwordToEntryDialogFormData.id);
     },
-    // onViewButtonClick(isPasswordRequired) {
     onViewButtonClick() {
-      // if (isPasswordRequired) {
-      //   this.passwordToViewDialogVisible = true;
-      // } else {
       this.$router.push({ path: "/game" });
-      // }
     },
     reloadRooms() {
       this.socket.send(
@@ -630,8 +617,6 @@ export default {
   height: 200px;
   margin: $roomPadding;
   padding: $roomPadding;
-  // border-width: 8px;
-  // border-style: solid;
 
   .buttons-area {
     position: absolute;
@@ -660,22 +645,18 @@ export default {
   &.vacancy {
     $bg: #999999ff;
     background-color: rgba($bg, 0.3);
-    // border-color: $bg;
   }
   &.in-preparation {
     $bg: #f1c232ff;
     background-color: rgba($bg, 0.3);
-    // border-color: $bg;
   }
   &.standby {
     $bg: #e69138ff;
     background-color: rgba($bg, 0.3);
-    // border-color: $bg;
   }
   &.in-game {
     $bg: #a64d79ff;
     background-color: rgba($bg, 0.3);
-    // border-color: $bg;
   }
 }
 
