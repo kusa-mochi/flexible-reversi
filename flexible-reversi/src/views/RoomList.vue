@@ -253,9 +253,16 @@ export default {
     },
   },
   created() {
-    // if not accessed from "nickname" page.
-    if (this.currentPage !== "nickname") {
-      // redirect to top page.
+    // // if not accessed from "nickname" page.
+    // if (this.currentPage !== "nickname") {
+    //   // redirect to top page.
+    //   this.$router.push("/");
+    //   return;
+    // }
+
+    // if a nickname is not defined yet
+    if (!this.myNickname) {
+      // redirect to the top page.
       this.$router.push("/");
       return;
     }
