@@ -29,7 +29,7 @@
           v-if="sokomadeLabelVisibility"
           class="sokomade-label sokomade-label--showing"
         >
-          そこまで
+          勝負あり
         </div>
       </div>
     </div>
@@ -321,6 +321,7 @@ export default {
   .sokomade-label {
     font-family: "ShokakiUtage";
     animation: hajimeKeyFrames 3s;
+    white-space: nowrap;
   }
 }
 
