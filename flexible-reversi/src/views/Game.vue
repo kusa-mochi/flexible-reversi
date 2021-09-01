@@ -93,6 +93,22 @@ export default {
         this.$store.state.gameData.isJustViewing = newValue;
       },
     },
+    isGameReady: {
+      get() {
+        return this.$store.state.isGameReady;
+      },
+      set(newValue) {
+        this.$store.state.isGameReady = newValue;
+      },
+    },
+    isMyTurn: {
+      get() {
+        return this.$store.state.isMyTurn;
+      },
+      set(newValue) {
+        this.$store.state.isMyTurn = newValue;
+      },
+    },
     myNickname: {
       get() {
         return this.$store.state.myNickname;
@@ -118,12 +134,12 @@ export default {
     },
   },
   created() {
-    // if not accessed from "room list" page.
-    if (this.currentPage !== "room-list") {
-      // redirect to top page.
-      this.$router.push("/");
-      return;
-    }
+    // // if not accessed from "room list" page.
+    // if (this.currentPage !== "room-list") {
+    //   // redirect to top page.
+    //   this.$router.push("/");
+    //   return;
+    // }
 
     // create a WebSocket instance.
     if (this.socket === null) {
@@ -135,8 +151,6 @@ export default {
   data() {
     return {
       hajimeLabelVisilibity: false,
-      isGameReady: false,
-      isMyTurn: false,
       numEmpty: 0,
       numBlack: 0,
       numWhite: 0,
