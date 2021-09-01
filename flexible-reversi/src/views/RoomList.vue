@@ -423,6 +423,11 @@ export default {
               break;
             case "NG":
               // TODO: show NG password messagebox.
+              this.$notify({
+                title: "Error",
+                message: "パスワードが違います。",
+                type: "error",
+              });
               break;
             default:
               throw "invalid value @ checkResult";
