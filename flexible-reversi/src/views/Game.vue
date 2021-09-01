@@ -267,10 +267,10 @@ export default {
       };
     },
     onExitButtonClick() {
-      this.$confirm('敗戦となりますが、退室しますか？', '退室確認', {
-        confirmButtonText: 'はい',
-        cancelButtonText: 'いいえ',
-        type: 'warning'
+      this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
+        confirmButtonText: "はい",
+        cancelButtonText: "いいえ",
+        type: "warning",
       }).then(() => {
         // TODO: send exit signal to the lambda.
 

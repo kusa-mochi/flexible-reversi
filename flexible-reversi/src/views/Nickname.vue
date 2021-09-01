@@ -58,7 +58,7 @@ export default {
     // }
 
     // if your nickanme is already set.
-    if(this.myNickname) {
+    if (this.myNickname) {
       // redirect to the room list page.
       this.$router.push("/room-list");
     }
