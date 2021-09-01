@@ -372,6 +372,7 @@ def lambda_handler(event, context):
         ':currentBoard': currentBoardStatus,
         ':currentPlayer': retToRoomAuthor['data']['nextPlayer'] == 'you'
     }
+
     # if currentPlayer == True:
     #     exp += ',roomAuthor=:roomAuthor'
     #     eav[':roomAuthor'] = postData['nickname']
