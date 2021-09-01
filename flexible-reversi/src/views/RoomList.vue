@@ -1,7 +1,6 @@
 <template>
   <div class="room-list">
     <router-link to="/">Top</router-link>
-    <router-link to="/game">Game</router-link>
     <div>ようこそ{{ myNickname }}さん</div>
     <div class="rooms">
       <div
