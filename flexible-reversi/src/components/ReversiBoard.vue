@@ -114,7 +114,7 @@ export default {
 
       // if you can put a stone
       if (result) {
-        console.log("emitting..");
+        console.log("emitting stone-put.");
         this.$emit("stone-put", {
           column: iColumn,
           row: iRow,

@@ -390,7 +390,7 @@ export default {
     initializeWebSocket() {
       this.socket = new WebSocket(this.serverUrl);
       this.socket.onopen = (e) => {
-        console.log("onopen - begin");
+        console.log("onopen");
         console.log(e);
         this.reloadRooms();
       };
@@ -403,12 +403,12 @@ export default {
 
         // check data type
         if (parsedData.dataType === "getRooms") {
-          console.log("get rooms data.");
+          console.log("received getRooms.");
           const getRoomsData = parsedData.data;
           this.$store.commit("updateLocalRoomsData", getRoomsData);
           this.loading.close();
         } else if (parsedData.dataType === "checkedEntryPassword") {
-          console.log("checked entry password.");
+          console.log("received checkedEntryPassword.");
           const checkResult = parsedData.data.result;
           switch (checkResult) {
             case "OK":
@@ -450,7 +450,7 @@ export default {
       }
     },
     onMakeRoomDialogOpen(roomId) {
-      console.log("onMakeRoomDialogOpen start.");
+      console.log("onMakeRoomDialogOpen");
       this.makeRoomDialogVisible = true;
       this.makeRoomDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
@@ -480,7 +480,7 @@ export default {
       );
     },
     onMakeRoomWizardComplete() {
-      console.log("make room wizard completed.");
+      console.log("onMakeRoomWizardComplete");
       let board = [];
       this.makeRoomDialogFormData.stageData[
         this.makeRoomDialogFormData.stageName
@@ -543,7 +543,7 @@ export default {
       this.passwordToEntryDialogVisible = false;
     },
     onPasswordToEntryDialogOpen(roomId) {
-      console.log("onPasswordToEntryDialogOpen start.");
+      console.log("onPasswordToEntryDialogOpen");
       this.passwordToEntryDialogVisible = true;
       this.passwordToEntryDialogFormData.id = roomId;
       this.gameData.roomId = roomId;

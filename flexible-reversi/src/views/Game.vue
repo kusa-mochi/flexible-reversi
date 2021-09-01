@@ -171,9 +171,11 @@ export default {
 
         // check data type
         if (parsedData.dataType === "getRooms") {
-          console.log("get rooms data.");
+          console.log("received getRooms");
           const getRoomsData = parsedData.data;
           this.$store.commit("updateLocalRoomsData", getRoomsData);
+
+          // prevent subsequent processes from being called more than once.
           if (gotRoomData) return;
           else gotRoomData = true;
 
@@ -192,6 +194,7 @@ export default {
           parsedData.dataType === "gameStandby" &&
           this.isGameReady === false
         ) {
+          console.log("received gameStandby");
           // if you are a room author
           if (this.amIRoomAuthor) {
             this.$notify({
@@ -212,7 +215,7 @@ export default {
           this.gameData.currentPlayerColor = 1;
           this.isGameReady = true;
         } else if (parsedData.dataType === "putStone") {
-          console.log("putStone");
+          console.log("received putStone");
           new Audio(require("@/assets/sounds/put-stone.mp3")).play();
           this.boardStatus.splice(0, this.boardStatus.length);
           parsedData.data.boardStatus.forEach((row) => {
@@ -221,14 +224,14 @@ export default {
 
           switch (parsedData.data.nextPlayer) {
             case "you":
-              console.log("you");
+              console.log("next player is you.");
               this.gameData.currentPlayerColor = this.gameData.myColor;
               this.isJustViewing = false;
               break;
             case "notYou":
-              console.log("notYou");
-              console.log("player color changes from:");
-              console.log(this.gameData.currentPlayerColor);
+              console.log("next player is not you.");
+              this.gameData.currentPlayerColor =
+                this.gameData.myColor == 1 ? 2 : 1;
               this.isJustViewing = true;
               break;
             case "gameSet":
@@ -248,11 +251,11 @@ export default {
       };
     },
     onInitialized(evt) {
-      console.log("Game -onInitialied begin.");
+      console.log("reversi board initialized.");
       console.log(evt);
     },
     onGameSet(evt) {
-      console.log("Game - onGameSet begin.");
+      console.log("game is set.");
       console.log(evt);
       this.sokomadeLabelVisibility = true;
       window.setTimeout(() => {

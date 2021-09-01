@@ -83,17 +83,18 @@ export default {
       };
       this.socket.onmessage = (e) => {
         console.log("onmessage");
-        // console.log(e);
+        console.log(e);
         const parsedData = JSON.parse(e.data);
+        console.log(parsedData);
 
         // check data type
         if (parsedData.dataType === "newToken") {
-          console.log("newToken");
+          console.log("received newToken");
           const token = parsedData.data.token;
           this.token = token;
           this.gotToken = true;
         } else if (parsedData.dataType === "checkNicknameAvailability") {
-          console.log("checkNicknameAvailability");
+          console.log("received checkNicknameAvailability");
           const availability = parsedData.data.nicknameAvailability;
           switch (availability) {
             case "inUse":
