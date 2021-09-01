@@ -84,10 +84,13 @@ def lambda_handler(event, context):
     exp += 'currentPlayer=:currentPlayer,'
     exp += 'entryPassword=:entryPassword,'
     exp += 'firstPlayer=:firstPlayer,'
-    exp += 'opponentId=:opponentId,'
-    exp += 'opponentName=:opponentName,'
+    if postData['opponentId'] != "":
+        exp += 'opponentId=:opponentId,'
+        exp += 'opponentName=:opponentName,'
     exp += 'requireEntryPassword=:requireEntryPassword,'
-    exp += 'roomAuthor=:roomAuthor,'
+    if postData['roomAuthorId'] != '':
+        exp += 'roomAuthor=:roomAuthor,'
+        exp += 'roomAuthorId=:roomAuthorId,'
     exp += 'roomName=:roomName,'
     exp += 'roomState=:roomState,'
     exp += 'thinkingCounter=:thinkingCounter'
@@ -99,14 +102,25 @@ def lambda_handler(event, context):
         ':currentPlayer': postData['currentPlayer'],
         ':entryPassword': entryPasswordHash,
         ':firstPlayer': postData['firstPlayer'],
-        ':opponentId': postData['opponentId'],
-        ':opponentName': postData['opponentName'],
         ':requireEntryPassword': postData['requireEntryPassword'],
-        ':roomAuthor': postData['roomAuthor'],
         ':roomName': postData['roomName'],
         ':roomState': roomStateTo,
         ':thinkingCounter': postData['thinkingCounter']
     }
+    if postData['opponentId'] != '':
+        if postData['opponentId'] == "4dc4a59af1a341ee468607550985aa4a23437d5061c365f341aad92b09176035":
+            eav[':opponentId'] = ''
+            eav[':opponentName'] = ''
+        else:
+            eav[':opponentId'] = postData['opponentId']
+            eav[':opponentName'] = postData['opponentName']
+    if postData['roomAuthorId'] != '':
+        if postData['roomAuthorId'] == "4dc4a59af1a341ee468607550985aa4a23437d5061c365f341aad92b09176035":
+            eav[':roomAuthor'] = ''
+            eav[':roomAuthorId'] = ''
+        else:
+            eav[':roomAuthor'] = postData['roomAuthor']
+            eav[':roomAuthorId'] = postData['roomAuthorId']
     print('done.')
     
     print('updating room status...')
