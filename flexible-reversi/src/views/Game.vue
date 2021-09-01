@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <p>game</p>
-    <router-link to="/">Top</router-link>
+    <el-button @click="onExitButtonClick">退室</el-button>
     <p>
       {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
         isMyTurn ? "あなた" : "相手"
@@ -251,6 +251,18 @@ export default {
         console.log("onerror");
         console.log(e);
       };
+    },
+    onExitButtonClick() {
+      this.$confirm('敗戦となりますが、退室しますか？', '退室確認', {
+        confirmButtonText: 'はい',
+        cancelButtonText: 'いいえ',
+        type: 'warning'
+      }).then(() => {
+        // TODO: send exit signal to the lambda.
+
+        // go to the room list page.
+        this.$router.push("/room-list");
+      });
     },
     onInitialized(evt) {
       console.log("reversi board initialized.");
