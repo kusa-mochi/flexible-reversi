@@ -235,6 +235,7 @@ export default {
               this.isJustViewing = true;
               break;
             case "gameSet":
+              this.onGameSet();
               break;
             default:
               break;
@@ -254,9 +255,8 @@ export default {
       console.log("reversi board initialized.");
       console.log(evt);
     },
-    onGameSet(evt) {
+    onGameSet() {
       console.log("game is set.");
-      console.log(evt);
       this.sokomadeLabelVisibility = true;
       window.setTimeout(() => {
         this.sokomadeLabelVisibility = false;
