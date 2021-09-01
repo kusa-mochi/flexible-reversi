@@ -50,11 +50,17 @@ export default {
     },
   },
   created() {
-    // if not accessed from "top" page.
-    if (this.currentPage !== "top") {
-      // redirect to top page.
-      this.$router.push("/");
-      return;
+    // // if not accessed from "top" page.
+    // if (this.currentPage !== "top") {
+    //   // redirect to top page.
+    //   this.$router.push("/");
+    //   return;
+    // }
+
+    // if your nickanme is already set.
+    if(this.myNickname) {
+      // redirect to the room list page.
+      this.$router.push("/room-list");
     }
 
     // create a WebSocket instance.
