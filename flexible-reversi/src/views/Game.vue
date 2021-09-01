@@ -16,24 +16,20 @@
         :player-color="gameData.currentPlayerColor"
       ></reversi-board>
       <div class="hajime-label-container">
-        <!-- <transition name="hajime-animation"> -->
         <div
           v-if="hajimeLabelVisilibity"
           class="hajime-label hajime-label--showing"
         >
           はじめ
         </div>
-        <!-- </transition> -->
       </div>
       <div class="sokomade-label-container">
-        <!-- <transition name="sokomade-animation"> -->
         <div
           v-if="sokomadeLabelVisibility"
           class="sokomade-label sokomade-label--showing"
         >
           そこまで
         </div>
-        <!-- </transition> -->
       </div>
     </div>
   </div>
