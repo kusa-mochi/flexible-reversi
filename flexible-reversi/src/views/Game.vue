@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <p>game</p>
-    <router-link to="/">Top</router-link>
+    <el-button @click="onExitButtonClick">退室</el-button>
     <p>
       {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
         isMyTurn ? "あなた" : "相手"
@@ -93,6 +93,22 @@ export default {
         this.$store.state.gameData.isJustViewing = newValue;
       },
     },
+    isGameReady: {
+      get() {
+        return this.$store.state.isGameReady;
+      },
+      set(newValue) {
+        this.$store.state.isGameReady = newValue;
+      },
+    },
+    isMyTurn: {
+      get() {
+        return this.$store.state.isMyTurn;
+      },
+      set(newValue) {
+        this.$store.state.isMyTurn = newValue;
+      },
+    },
     myNickname: {
       get() {
         return this.$store.state.myNickname;
@@ -118,12 +134,12 @@ export default {
     },
   },
   created() {
-    // if not accessed from "room list" page.
-    if (this.currentPage !== "room-list") {
-      // redirect to top page.
-      this.$router.push("/");
-      return;
-    }
+    // // if not accessed from "room list" page.
+    // if (this.currentPage !== "room-list") {
+    //   // redirect to top page.
+    //   this.$router.push("/");
+    //   return;
+    // }
 
     // create a WebSocket instance.
     if (this.socket === null) {
@@ -135,8 +151,6 @@ export default {
   data() {
     return {
       hajimeLabelVisilibity: false,
-      isGameReady: false,
-      isMyTurn: false,
       numEmpty: 0,
       numBlack: 0,
       numWhite: 0,
@@ -251,6 +265,18 @@ export default {
         console.log("onerror");
         console.log(e);
       };
+    },
+    onExitButtonClick() {
+      this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
+        confirmButtonText: "はい",
+        cancelButtonText: "いいえ",
+        type: "warning",
+      }).then(() => {
+        // TODO: send exit signal to the lambda.
+
+        // go to the room list page.
+        this.$router.push("/room-list");
+      });
     },
     onInitialized(evt) {
       console.log("reversi board initialized.");

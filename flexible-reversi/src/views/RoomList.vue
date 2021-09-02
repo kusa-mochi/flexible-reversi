@@ -1,7 +1,6 @@
 <template>
   <div class="room-list">
     <router-link to="/">Top</router-link>
-    <router-link to="/game">Game</router-link>
     <div>ようこそ{{ myNickname }}さん</div>
     <div class="rooms">
       <div
@@ -253,9 +252,16 @@ export default {
     },
   },
   created() {
-    // if not accessed from "nickname" page.
-    if (this.currentPage !== "nickname") {
-      // redirect to top page.
+    // // if not accessed from "nickname" page.
+    // if (this.currentPage !== "nickname") {
+    //   // redirect to top page.
+    //   this.$router.push("/");
+    //   return;
+    // }
+
+    // if a nickname is not defined yet
+    if (!this.myNickname) {
+      // redirect to the top page.
       this.$router.push("/");
       return;
     }
