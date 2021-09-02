@@ -111,24 +111,38 @@
         </tab-content>
         <tab-content title="ステージ設定">
           <div class="stage-select">
-            <el-radio
-              v-for="stageNumber in Object.keys(
-                makeRoomDialogFormData.stageData
-              ).length"
-              v-model="makeRoomDialogFormData.stageName"
-              :key="stageNumber"
-              :label="`stage${stageNumber}`"
-              border
-              class="stage-select-radio"
+            <el-carousel
+              @change="onStageCarouselChanged"
+              :autoplay="false"
+              arrow="always"
+              indicator-position="none"
+              type="card"
+              height="256px"
             >
-              <reversi-board
-                :board-width="200"
-                :board-status="
-                  makeRoomDialogFormData.stageData[`stage${stageNumber}`]
-                "
-                :is-read-only="true"
-              ></reversi-board>
-            </el-radio>
+              <el-carousel-item
+                v-for="stageNumber in Object.keys(
+                  makeRoomDialogFormData.stageData
+                ).length"
+                :key="stageNumber"
+              >
+                <div class="stage-item">
+                  <el-radio
+                    v-model="makeRoomDialogFormData.stageName"
+                    :label="`stage${stageNumber}`"
+                    border
+                    class="stage-select-radio"
+                  >
+                    <reversi-board
+                      :board-width="200"
+                      :board-status="
+                        makeRoomDialogFormData.stageData[`stage${stageNumber}`]
+                      "
+                      :is-read-only="true"
+                    ></reversi-board>
+                  </el-radio>
+                </div>
+              </el-carousel-item>
+            </el-carousel>
           </div>
         </tab-content>
       </form-wizard>
@@ -559,6 +573,9 @@ export default {
       this.passwordToEntryDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
     },
+    onStageCarouselChanged(newIndex, _) {
+      this.makeRoomDialogFormData.stageName = `stage${newIndex + 1}`;
+    },
     onViewButtonClick() {
       this.$router.push({ path: "/game" });
     },
@@ -698,7 +715,17 @@ export default {
   }
 
   .stage-select {
+    .stage-item {
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+    }
     .stage-select-radio {
+      background-color: white;
       height: 240px;
     }
   }
@@ -718,6 +745,14 @@ export default {
   .el-dialog__body,
   .vue-form-wizard .wizard-header {
     padding-top: 0;
+  }
+  .stage-select {
+    .el-radio__inner {
+      display: none;
+    }
+    .el-radio.is-bordered.is-checked {
+      border-width: 3px;
+    }
   }
 }
 </style>
