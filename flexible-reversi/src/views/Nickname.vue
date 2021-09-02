@@ -1,13 +1,16 @@
 <template>
   <div class="nickname">
-    <el-form>
+    <el-form @submit.native.prevent="onSubmit" :inline="true" :model="form">
       <div>
         あなたのニックネームを決めてね
-        <el-input v-model="tmpNickname" type="text" required /><el-button
-          @click="onSubmit"
-          :disabled="!gotToken"
-          >OK</el-button
-        >
+        <el-input
+          v-model="form.tmpNickname"
+          @keyboard.enter.prevent
+          maxlength="20"
+          required
+          show-word-limit
+          type="text"
+        /><el-button @click="onSubmit" :disabled="!gotToken">OK</el-button>
       </div>
     </el-form>
   </div>
@@ -72,7 +75,9 @@ export default {
   },
   data() {
     return {
-      tmpNickname: "",
+      form: {
+        tmpNickname: "",
+      },
       socket: null,
       gotToken: false,
     };
@@ -106,13 +111,13 @@ export default {
             case "inUse":
               this.$notify({
                 title: "Error",
-                message: `${this.tmpNickname} という名前は既に使われています。別の名前を指定してください。`,
+                message: `${this.form.tmpNickname} という名前は既に使われています。別の名前を指定してください。`,
                 type: "error",
               });
               break;
             case "isAvailable":
               // save the nickname to a Vuex store.
-              this.myNickname = this.tmpNickname;
+              this.myNickname = this.form.tmpNickname;
               // go to the room list page.
               this.$router.push("/room-list");
               return;
@@ -131,13 +136,14 @@ export default {
       };
     },
     onSubmit(e) {
+      console.log("onSubmit");
       console.log(e);
       // check if a name is not already used by another player.
       this.socket.send(
         JSON.stringify({
           action: "checkNicknameAvailability",
           data: {
-            nickname: this.tmpNickname,
+            nickname: this.form.tmpNickname,
             token: this.token,
           },
         })
