@@ -1,5 +1,5 @@
 <template>
-  <div class="game">
+  <div class="game" :class="{'game--wait': !isMyTurn}">
     <p>game</p>
     <el-button @click="onExitButtonClick">退室</el-button>
     <p>
@@ -24,12 +24,20 @@
           はじめ
         </div>
       </div>
-      <div class="sokomade-label-container">
+      <div class="win-label-container">
         <div
-          v-if="sokomadeLabelVisibility"
-          class="sokomade-label sokomade-label--showing"
+          v-if="winLabelVisibility"
+          class="win-label win-label--showing"
         >
-          勝負あり
+          勝利！
+        </div>
+      </div>
+      <div class="lose-label-container">
+        <div
+          v-if="loseLabelVisibility"
+          class="lose-label lose-label--showing"
+        >
+          敗北。。
         </div>
       </div>
     </div>
@@ -155,7 +163,8 @@ export default {
       numBlack: 0,
       numWhite: 0,
       socket: null,
-      sokomadeLabelVisibility: false,
+      loseLabelVisibility: false,
+      winLabelVisibility: false,
     };
   },
   methods: {
@@ -249,8 +258,11 @@ export default {
               this.isJustViewing = true;
               this.isMyTurn = false;
               break;
-            case "gameSet":
-              this.onGameSet();
+            case "youWin":
+              this.onGameSet(true);
+              break;
+            case "youLose":
+              this.onGameSet(false);
               break;
             default:
               break;
@@ -282,14 +294,22 @@ export default {
       console.log("reversi board initialized.");
       console.log(evt);
     },
-    onGameSet() {
+    // gameResult: true=win, false=lose
+    onGameSet(gameResult) {
       console.log("game is set.");
       this.isJustViewing = true;
-      this.isMyTurn = false;
-      this.sokomadeLabelVisibility = true;
-      window.setTimeout(() => {
-        this.sokomadeLabelVisibility = false;
-      }, 3000);
+      this.isMyTurn = true;
+      if(gameResult) {
+        this.winLabelVisibility = true;
+        window.setTimeout(() => {
+          this.winLabelVisibility = false;
+        }, 3000);
+      } else {
+        this.loseLabelVisibility = true;
+        window.setTimeout(() => {
+          this.loseLabelVisibility = false;
+        }, 3000);
+      }
       new Audio(require("@/assets/sounds/dodon.mp3")).play();
     },
     onStonePut(evt) {
@@ -299,6 +319,8 @@ export default {
 
       // make the board readonly.
       this.isJustViewing = true;
+
+      this.isMyTurn = false;
 
       // send put data to the lambda.
       this.socket.send(
@@ -321,6 +343,10 @@ export default {
 <style lang="scss" scoped>
 .game {
   position: relative;
+
+  &--wait {
+    cursor: wait;
+  }
 }
 
 .board-container {
@@ -329,7 +355,8 @@ export default {
 }
 
 .hajime-label-container,
-.sokomade-label-container {
+.win-label-container,
+.lose-label-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -344,7 +371,8 @@ export default {
   align-items: center;
 
   .hajime-label,
-  .sokomade-label {
+  .win-label,
+  .lose-label {
     font-family: "ShokakiUtage";
     animation: hajimeKeyFrames 3s;
     white-space: nowrap;
