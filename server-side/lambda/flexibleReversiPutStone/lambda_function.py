@@ -192,12 +192,15 @@ def lambda_handler(event, context):
     # current player: True=room author, False=opponent
     currentPlayer = True
     
+    # first (black) player: True=room author, False=opponent
+    firstPlayer = roomData['firstPlayer']
+    
     # current player color: 1=black, 2=white, -1=NULL
     currentPlayerColor = -1
     if roomData['roomAuthorId'] == currentPlayerToken:
         currentPlayer = True
         # if first player(black) is room author
-        if roomData['firstPlayer'] == True:
+        if firstPlayer == True:
             # current player color is black
             currentPlayerColor = 1
         else:
@@ -206,7 +209,7 @@ def lambda_handler(event, context):
     elif roomData['opponentId'] == currentPlayerToken:
         currentPlayer = False
         # if first player(black) is room author
-        if roomData['firstPlayer'] == True:
+        if firstPlayer == True:
             # current player color is white
             currentPlayerColor = 2
         else:
@@ -266,12 +269,27 @@ def lambda_handler(event, context):
     retToRoomAuthor['data']['boardStatus'] = currentBoardStatus
     retToOpponent['data']['boardStatus'] = currentBoardStatus
     
+    # if a room author is black
+    if firstPlayer == True:
+        numRoomAuthorStones = countBoardElement(currentBoardStatus, 1)
+        numOpponentStones = countBoardElement(currentBoardStatus, 2)
+    else:
+        numRoomAuthorStones = countBoardElement(currentBoardStatus, 2)
+        numOpponentStones = countBoardElement(currentBoardStatus, 1)
+    
     # if there is no empty cell
     if hasEmptyCell(currentBoardStatus) == False:
         print('hasEmptyCell(currentBoardStatus) == False')
         # game is set.
-        retToRoomAuthor['data']['nextPlayer'] = 'gameSet'
-        retToOpponent['data']['nextPlayer'] = 'gameSet'
+        if numRoomAuthorStones > numOpponentStones:
+            retToRoomAuthor['data']['nextPlayer'] = 'youWin'
+            retToOpponent['data']['nextPlayer'] = 'youLose'
+        elif numRoomAuthorStones == numOpponentStones:
+            retToRoomAuthor['data']['nextPlayer'] = 'draw'
+            retToOpponent['data']['nextPlayer'] = 'draw'
+        else:
+            retToRoomAuthor['data']['nextPlayer'] = 'youLose'
+            retToOpponent['data']['nextPlayer'] = 'youWin'
     else:
         print('hasEmptyCell(currentBoardStatus) != False')
         # if next player cannot put its stone
@@ -281,8 +299,15 @@ def lambda_handler(event, context):
             if canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) == False:
                 print('canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) == False')
                 # game is set.
-                retToRoomAuthor['data']['nextPlayer'] = 'gameSet'
-                retToOpponent['data']['nextPlayer'] = 'gameSet'
+                if numRoomAuthorStones > numOpponentStones:
+                    retToRoomAuthor['data']['nextPlayer'] = 'youWin'
+                    retToOpponent['data']['nextPlayer'] = 'youLose'
+                elif numRoomAuthorStones == numOpponentStones:
+                    retToRoomAuthor['data']['nextPlayer'] = 'draw'
+                    retToOpponent['data']['nextPlayer'] = 'draw'
+                else:
+                    retToRoomAuthor['data']['nextPlayer'] = 'youLose'
+                    retToOpponent['data']['nextPlayer'] = 'youWin'
             else:
                 print('canPutStoneOnAnywhere(currentBoardStatus, currentPlayerColor) != False')
                 # next player is current player again.
