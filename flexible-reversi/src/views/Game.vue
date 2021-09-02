@@ -1,5 +1,5 @@
 <template>
-  <div class="game" :class="{'game--wait': !isMyTurn}">
+  <div class="game" :class="{ 'game--wait': !isMyTurn }">
     <p>game</p>
     <el-button @click="onExitButtonClick">退室</el-button>
     <p>
@@ -25,18 +25,12 @@
         </div>
       </div>
       <div class="win-label-container">
-        <div
-          v-if="winLabelVisibility"
-          class="win-label win-label--showing"
-        >
+        <div v-if="winLabelVisibility" class="win-label win-label--showing">
           勝利！
         </div>
       </div>
       <div class="lose-label-container">
-        <div
-          v-if="loseLabelVisibility"
-          class="lose-label lose-label--showing"
-        >
+        <div v-if="loseLabelVisibility" class="lose-label lose-label--showing">
           敗北。。
         </div>
       </div>
@@ -299,7 +293,7 @@ export default {
       console.log("game is set.");
       this.isJustViewing = true;
       this.isMyTurn = true;
-      if(gameResult) {
+      if (gameResult) {
         this.winLabelVisibility = true;
         window.setTimeout(() => {
           this.winLabelVisibility = false;
