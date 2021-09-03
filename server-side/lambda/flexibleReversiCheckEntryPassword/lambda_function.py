@@ -39,18 +39,24 @@ def lambda_handler(event, context):
     
     # DynamoDBから、部屋番号に対応する情報を取得する。
     response = appData.get_item(Key={'id': roomId})
-
-    # DynamoDBで持っているパスワードのハッシュ値の取得
-    dbPasswordHash = response['Item']['entryPassword']
-    print(dbPasswordHash)
     
-    # 送られてきたパスワードのハッシュ値を計算する。
-    postPasswordHash = hashlib.sha256(postData['password'].encode('utf-8')).hexdigest()
-    print(postPasswordHash)
+    # パスワードの入力が求められていない場合
+    isOpenEntry = False
+    if response['Item']['requireEntryPassword'] == False:
+        isOpenEntry = True
+    else:
+        isOpenEntry = False
+        # DynamoDBで持っているパスワードのハッシュ値の取得
+        dbPasswordHash = response['Item']['entryPassword']
+        print(dbPasswordHash)
+        
+        # 送られてきたパスワードのハッシュ値を計算する。
+        postPasswordHash = hashlib.sha256(postData['password'].encode('utf-8')).hexdigest()
+        print(postPasswordHash)
     
     # ハッシュ値同士を比較し、パスワードが正しいかチェックする。
     ret = ''
-    if postPasswordHash == dbPasswordHash:
+    if isOpenEntry == True or postPasswordHash == dbPasswordHash:
         # トークンを部屋情報に記載する。
         # この情報と照合することで、パスワードを入力したユーザは部屋への入室が可能となる
         exp = 'set '

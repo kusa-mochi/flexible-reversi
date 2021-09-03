@@ -492,8 +492,7 @@ export default {
       if (isPasswordRequired) {
         this.onPasswordToEntryDialogOpen(roomId);
       } else {
-        this.gameData.roomId = roomId;
-        this.battleConfirmationDialogVisible = true;
+        this.onOpenEntry(roomId);
       }
     },
     onMakeRoomDialogOpen(roomId) {
@@ -575,6 +574,19 @@ export default {
       this.gameData = gameData;
       this.makeRoomDialogVisible = false;
       this.$router.push({ path: "/game" });
+    },
+    onOpenEntry(roomId) {
+      this.gameData.roomId = roomId;
+      this.socket.send(
+        JSON.stringify({
+          action: "checkEntryPassword",
+          data: {
+            id: roomId,
+            password: "",
+            token: this.token,
+          },
+        })
+      );
     },
     onPasswordToEntryDialogOk() {
       this.socket.send(
