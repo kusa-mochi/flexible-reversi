@@ -772,8 +772,13 @@ export default {
     .el-radio__inner {
       display: none;
     }
-    .el-radio.is-bordered.is-checked {
-      border-width: 3px;
+    .el-radio.is-bordered {
+      transition: opacity 0.3s linear;
+      opacity: 0.6;
+      &.is-checked {
+        border-width: 3px;
+        opacity: 1;
+      }
     }
   }
 }
