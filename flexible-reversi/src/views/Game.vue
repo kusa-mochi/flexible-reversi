@@ -1,7 +1,7 @@
 <template>
   <div class="game" :class="{ 'game--wait': !isMyTurn }">
     <p>game</p>
-    <el-button @click="onExitButtonClick">退室</el-button>
+    <el-button @click="onExitButtonClick" icon="el-icon-back">退室</el-button>
     <p>
       {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
         isMyTurn ? "あなた" : "相手"
@@ -101,6 +101,14 @@ export default {
       },
       set(newValue) {
         this.$store.state.isGameReady = newValue;
+      },
+    },
+    isGaming: {
+      get() {
+        return this.$store.state.isGaming;
+      },
+      set(newValue) {
+        this.$store.state.isGaming = newValue;
       },
     },
     isMyTurn: {
@@ -219,6 +227,8 @@ export default {
             });
           }
 
+          // start game.
+
           this.hajimeLabelVisilibity = true;
           window.setTimeout(() => {
             this.hajimeLabelVisilibity = false;
@@ -230,6 +240,7 @@ export default {
           this.isMyTurn = parsedData.data.currentPlayer === "you";
           this.gameData.currentPlayerColor = 1;
           this.isGameReady = true;
+          this.isGaming = true;
         } else if (parsedData.dataType === "putStone") {
           console.log("received putStone");
           new Audio(require("@/assets/sounds/put-stone.mp3")).play();
@@ -261,6 +272,9 @@ export default {
             default:
               break;
           }
+        } else if (parsedData.dataType === "exitRoomDuringGame") {
+          console.log("received exitRoom");
+          this.onGameSet(true, "oppponentExit");
         }
       };
       this.socket.onclose = (e) => {
@@ -273,26 +287,47 @@ export default {
       };
     },
     onExitButtonClick() {
-      this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
-        confirmButtonText: "はい",
-        cancelButtonText: "いいえ",
-        type: "warning",
-      }).then(() => {
-        // TODO: send exit signal to the lambda.
+      if (this.isGaming) {
+        this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
+          confirmButtonText: "はい",
+          cancelButtonText: "いいえ",
+          type: "warning",
+        }).then(() => {
+          // send exit signal to the lambda.
+          this.socket.send(
+            JSON.stringify({
+              action: "exitRoomDuringGame",
+              data: {
+                token: this.token,
+                roomId: this.gameData.roomId,
+              },
+            })
+          );
+
+          this.onGameSet(false);
+          window.setTimeout(() => {
+            // go to the room list page.
+            this.$router.push("/room-list");
+          }, 2000);
+        });
+      } else {
+        // reset params.
+        this.isJustViewing = true;
+        this.isMyTurn = false;
+        this.isGameReady = false;
+        this.isGaming = false;
 
         // go to the room list page.
         this.$router.push("/room-list");
-      });
+      }
     },
     onInitialized(evt) {
       console.log("reversi board initialized.");
       console.log(evt);
     },
     // gameResult: true=win, false=lose
-    onGameSet(gameResult) {
+    onGameSet(gameResult, whyGameSet) {
       console.log("game is set.");
-      this.isJustViewing = true;
-      this.isMyTurn = true;
       if (gameResult) {
         this.winLabelVisibility = true;
         window.setTimeout(() => {
@@ -305,6 +340,25 @@ export default {
         }, 3000);
       }
       new Audio(require("@/assets/sounds/dodon.mp3")).play();
+
+      // reset params.
+      this.isJustViewing = true;
+      this.isMyTurn = false;
+      this.isGameReady = false;
+      this.isGaming = false;
+
+      // reason of game set
+      switch (whyGameSet) {
+        case "oppponentExit":
+          this.$notify({
+            title: "Info",
+            message: "対戦相手の退室により勝利しました。",
+            type: "info",
+          });
+          break;
+        default:
+          break;
+      }
     },
     onStonePut(evt) {
       const iColumn = evt.column;
