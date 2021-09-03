@@ -316,8 +316,6 @@ export default {
     // gameResult: true=win, false=lose
     onGameSet(gameResult) {
       console.log("game is set.");
-      this.isJustViewing = true;
-      this.isMyTurn = true;
       if (gameResult) {
         this.winLabelVisibility = true;
         window.setTimeout(() => {
@@ -330,6 +328,11 @@ export default {
         }, 3000);
       }
       new Audio(require("@/assets/sounds/dodon.mp3")).play();
+
+      // reset params.
+      this.isJustViewing = true;
+      this.isMyTurn = false;
+      this.isGameReady = false;
       this.isGaming = false;
     },
     onStonePut(evt) {
