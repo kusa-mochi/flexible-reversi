@@ -217,7 +217,7 @@ export default {
   opacity: 0.6;
 }
 .form-container {
-  background-color: rgba(white, 0.8);
+  background-color: rgba(white, 0.95);
   padding: 16px;
   z-index: 10;
 }
