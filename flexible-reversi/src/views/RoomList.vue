@@ -780,6 +780,15 @@ export default {
         opacity: 1;
       }
     }
+    .el-carousel__item {
+      &.is-active {
+        pointer-events: none;
+
+        .el-radio {
+          pointer-events: auto;
+        }
+      }
+    }
   }
 }
 </style>
