@@ -1,23 +1,38 @@
 <template>
   <div class="nickname">
-    <el-form @submit.native.prevent="onSubmit" :inline="true" :model="form">
-      <div>
-        あなたのニックネームを決めてね
-        <el-input
-          v-model="form.tmpNickname"
-          @keyboard.enter.prevent
-          maxlength="20"
-          required
-          show-word-limit
-          type="text"
-        /><el-button @click="onSubmit" :disabled="!gotToken">OK</el-button>
-      </div>
-    </el-form>
+    <reversi-board
+      :board-width="2000"
+      :board-status="boardStatus"
+      :is-read-only="true"
+      class="nickname-background"
+      z-index="0"
+    ></reversi-board>
+    <div class="form-container">
+      <el-form @submit.native.prevent="onSubmit" :inline="true" :model="form">
+        <div>
+          <div class="nickname-input-label">あなたのニックネームを決めてね</div>
+          <el-input
+            v-model="form.tmpNickname"
+            @keyboard.enter.prevent
+            class="nickname-input"
+            maxlength="20"
+            placeholder="ニックネーム"
+            required
+            show-word-limit
+            type="text"
+          /><el-button @click="onSubmit" :disabled="!gotToken">OK</el-button>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
+import ReversiBoard from "@/components/ReversiBoard.vue";
 export default {
+  components: {
+    ReversiBoard,
+  },
   computed: {
     currentPage: {
       get() {
@@ -53,13 +68,6 @@ export default {
     },
   },
   created() {
-    // // if not accessed from "top" page.
-    // if (this.currentPage !== "top") {
-    //   // redirect to top page.
-    //   this.$router.push("/");
-    //   return;
-    // }
-
     // if your nickanme is already set.
     if (this.myNickname) {
       // redirect to the room list page.
@@ -75,6 +83,36 @@ export default {
   },
   data() {
     return {
+      boardStatus: [
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+      ],
       form: {
         tmpNickname: "",
       },
@@ -154,4 +192,33 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.nickname {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.nickname-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.6;
+}
+.form-container {
+  background-color: rgba(white, 0.8);
+  padding: 16px;
+  z-index: 10;
+}
+.nickname-input {
+  width: 376px;
+  margin-right: 8px;
+}
+</style>
