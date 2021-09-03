@@ -1,7 +1,7 @@
 <template>
   <div class="game" :class="{ 'game--wait': !isMyTurn }">
     <p>game</p>
-    <el-button @click="onExitButtonClick">退室</el-button>
+    <el-button @click="onExitButtonClick" icon="el-icon-back">退室</el-button>
     <p>
       {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
         isMyTurn ? "あなた" : "相手"
