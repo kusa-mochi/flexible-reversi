@@ -240,6 +240,7 @@ export default {
           this.isMyTurn = parsedData.data.currentPlayer === "you";
           this.gameData.currentPlayerColor = 1;
           this.isGameReady = true;
+          this.isGaming = true;
         } else if (parsedData.dataType === "putStone") {
           console.log("received putStone");
           new Audio(require("@/assets/sounds/put-stone.mp3")).play();
@@ -315,6 +316,7 @@ export default {
         }, 3000);
       }
       new Audio(require("@/assets/sounds/dodon.mp3")).play();
+      this.isGaming = false;
     },
     onStonePut(evt) {
       const iColumn = evt.column;
