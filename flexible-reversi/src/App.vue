@@ -38,6 +38,7 @@ body {
   width: 100%;
   height: 100%;
   font-family: "Roboto", sans-serif;
+  color: #2a2a2a;
 }
 
 .app-container {
