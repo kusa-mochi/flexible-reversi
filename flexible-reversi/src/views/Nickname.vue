@@ -17,6 +17,7 @@
             class="nickname-input"
             maxlength="20"
             placeholder="ニックネーム"
+            ref="nicknameInput"
             required
             show-word-limit
             type="text"
@@ -187,6 +188,9 @@ export default {
         })
       );
     },
+  },
+  mounted() {
+    this.$refs.nicknameInput.focus();
   },
   name: "Nickname",
 };
