@@ -1,5 +1,5 @@
 <template>
-  <div class="stage-editor">工事中</div>
+  <div class="stage-editor">気が向いたらつくります</div>
 </template>
 
 <script>
