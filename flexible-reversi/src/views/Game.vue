@@ -272,8 +272,9 @@ export default {
             default:
               break;
           }
-        } else if (parsedData.dataType === "exitRoom") {
+        } else if (parsedData.dataType === "exitRoomDuringGame") {
           console.log("received exitRoom");
+          this.onGameSet(true, "oppponentExit");
         }
       };
       this.socket.onclose = (e) => {
@@ -292,7 +293,7 @@ export default {
           cancelButtonText: "いいえ",
           type: "warning",
         }).then(() => {
-          // TODO: send exit signal to the lambda.
+          // send exit signal to the lambda.
           this.socket.send(JSON.stringify({
             action: "exitRoomDuringGame",
             data: {
@@ -301,8 +302,11 @@ export default {
             }
           }));
 
-          // go to the room list page.
-          this.$router.push("/room-list");
+          this.onGameSet(false);
+          window.setTimeout(() => {
+            // go to the room list page.
+            this.$router.push("/room-list");
+          }, 2000);
         });
       } else {
         // go to the room list page.
@@ -314,7 +318,7 @@ export default {
       console.log(evt);
     },
     // gameResult: true=win, false=lose
-    onGameSet(gameResult) {
+    onGameSet(gameResult, whyGameSet) {
       console.log("game is set.");
       if (gameResult) {
         this.winLabelVisibility = true;
@@ -334,6 +338,19 @@ export default {
       this.isMyTurn = false;
       this.isGameReady = false;
       this.isGaming = false;
+
+      // reason of game set
+      switch (whyGameSet) {
+        case "oppponentExit":
+          this.$notify({
+              title: "Info",
+              message: "対戦相手の退室により勝利しました。",
+              type: "info",
+            });
+          break;
+        default:
+          break;
+      }
     },
     onStonePut(evt) {
       const iColumn = evt.column;
