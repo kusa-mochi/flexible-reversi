@@ -118,6 +118,7 @@ export default {
   }
   .app-name {
     $fontSize: 32px;
+    color: #2a2a2a;
     position: absolute;
     top: calc(50% - 109px);
     left: calc(50% - 534px);
