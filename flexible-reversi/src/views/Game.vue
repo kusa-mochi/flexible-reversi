@@ -103,6 +103,14 @@ export default {
         this.$store.state.isGameReady = newValue;
       },
     },
+    isGaming: {
+      get() {
+        return this.$store.state.isGaming;
+      },
+      set(newValue) {
+        this.$store.state.isGaming = newValue;
+      }
+    },
     isMyTurn: {
       get() {
         return this.$store.state.isMyTurn;

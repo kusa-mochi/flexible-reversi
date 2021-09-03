@@ -49,6 +49,7 @@ export default new Vuex.Store({
     //// game data
     isGameReady: false,
     isMyTurn: false,
+    isGaming: false
   },
   mutations: {
     updateLocalRoomsData(state, newData) {
