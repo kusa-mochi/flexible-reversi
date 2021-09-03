@@ -272,6 +272,8 @@ export default {
             default:
               break;
           }
+        } else if (parsedData.dataType === "exitRoom") {
+          console.log("received exitRoom");
         }
       };
       this.socket.onclose = (e) => {
