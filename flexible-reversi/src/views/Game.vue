@@ -109,7 +109,7 @@ export default {
       },
       set(newValue) {
         this.$store.state.isGaming = newValue;
-      }
+      },
     },
     isMyTurn: {
       get() {
@@ -287,20 +287,22 @@ export default {
       };
     },
     onExitButtonClick() {
-      if(this.isGaming) {
+      if (this.isGaming) {
         this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
           confirmButtonText: "はい",
           cancelButtonText: "いいえ",
           type: "warning",
         }).then(() => {
           // send exit signal to the lambda.
-          this.socket.send(JSON.stringify({
-            action: "exitRoomDuringGame",
-            data: {
-              token: this.token,
-              roomId: this.gameData.roomId
-            }
-          }));
+          this.socket.send(
+            JSON.stringify({
+              action: "exitRoomDuringGame",
+              data: {
+                token: this.token,
+                roomId: this.gameData.roomId,
+              },
+            })
+          );
 
           this.onGameSet(false);
           window.setTimeout(() => {
@@ -349,10 +351,10 @@ export default {
       switch (whyGameSet) {
         case "oppponentExit":
           this.$notify({
-              title: "Info",
-              message: "対戦相手の退室により勝利しました。",
-              type: "info",
-            });
+            title: "Info",
+            message: "対戦相手の退室により勝利しました。",
+            type: "info",
+          });
           break;
         default:
           break;
