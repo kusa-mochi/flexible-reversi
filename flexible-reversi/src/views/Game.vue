@@ -284,16 +284,28 @@ export default {
       };
     },
     onExitButtonClick() {
-      this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
-        confirmButtonText: "はい",
-        cancelButtonText: "いいえ",
-        type: "warning",
-      }).then(() => {
-        // TODO: send exit signal to the lambda.
+      if(this.isGaming) {
+        this.$confirm("敗戦となりますが、退室しますか？", "退室確認", {
+          confirmButtonText: "はい",
+          cancelButtonText: "いいえ",
+          type: "warning",
+        }).then(() => {
+          // TODO: send exit signal to the lambda.
+          this.socket.send(JSON.stringify({
+            action: "exitRoomDuringGame",
+            data: {
+              token: this.token,
+              roomId: this.gameData.roomId
+            }
+          }));
 
+          // go to the room list page.
+          this.$router.push("/room-list");
+        });
+      } else {
         // go to the room list page.
         this.$router.push("/room-list");
-      });
+      }
     },
     onInitialized(evt) {
       console.log("reversi board initialized.");
