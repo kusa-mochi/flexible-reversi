@@ -9,15 +9,11 @@
     ></reversi-board>
     <div class="app-logo">
       <a href="https://slash-mochi.net/">
-      <img alt="app logo" src="../assets/logo_mochi.png" />
+        <img alt="app logo" src="../assets/logo_mochi.png" />
       </a>
     </div>
     <div class="app-name">Flexible Reversi</div>
-    <el-menu
-      class="top-menu"
-      router
-      @open="handleOpen"
-      @close="handleClose">
+    <el-menu class="top-menu" router @open="handleOpen" @close="handleClose">
       <el-menu-item class="top-menu-item" index="Nickname">
         <i class="el-icon-s-grid"></i>スタート
       </el-menu-item>
@@ -99,10 +95,10 @@ export default {
   height: 100%;
 
   display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	justify-content: center;
-	align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 
   .top-background {
     position: absolute;
@@ -126,7 +122,7 @@ export default {
     top: calc(50% - 109px);
     left: calc(50% - 534px);
     font-size: 102px;
-    font-family: 'Bungee Inline', Roboto, cursive;
+    font-family: "Bungee Inline", Roboto, cursive;
   }
   .top-menu {
     margin-top: 440px;
