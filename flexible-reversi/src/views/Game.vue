@@ -309,6 +309,12 @@ export default {
           }, 2000);
         });
       } else {
+        // reset params.
+        this.isJustViewing = true;
+        this.isMyTurn = false;
+        this.isGameReady = false;
+        this.isGaming = false;
+
         // go to the room list page.
         this.$router.push("/room-list");
       }
