@@ -219,6 +219,8 @@ export default {
             });
           }
 
+          // start game.
+
           this.hajimeLabelVisilibity = true;
           window.setTimeout(() => {
             this.hajimeLabelVisilibity = false;
