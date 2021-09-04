@@ -27,3 +27,9 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### how to generate SVG files
+1. draw image using LibreOffice Impress.
+1. export image as svg.
+1. convert image svg -> eps using Inkscape.
+1. convert image eps -> plane svg using Inkscape.

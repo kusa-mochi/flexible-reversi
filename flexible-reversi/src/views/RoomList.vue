@@ -1,21 +1,33 @@
 <template>
   <div class="room-list">
-    <router-link to="/">Top</router-link>
-    <div>ようこそ{{ myNickname }}さん</div>
-    <div class="rooms">
-      <div
-        v-for="room in rooms"
-        :key="room.roomCounter"
-        :class="`room ${room.roomState}`"
+    <reversi-board
+      :board-width="2000"
+      :board-status="backgroundBoardStatus"
+      :is-read-only="true"
+      class="room-list__background"
+      z-index="0"
+    ></reversi-board>
+    <div class="room-list__header">
+      <el-button
+        @click="onGoToTopButtonClick"
+        class="go-to-top-button"
+        icon="el-icon-s-home"
+        >トップに戻る</el-button
       >
-        <div class="room-number">#{{ room.id }}</div>
-        <div v-if="roomTitleVisible(room.roomState)" class="room-title">
-          {{ room.roomName }}
-        </div>
-        <div v-if="roomAuthorVisible(room.roomState)" class="room-host">
-          開設者：{{ room.roomAuthor }}
-        </div>
-        <div class="room-state">{{ roomStateLabel(room.roomState) }}</div>
+      <div class="welcome-message">
+        ようこそ&nbsp;<span class="my-nickname">{{ myNickname }}</span
+        >&nbsp;さん
+      </div>
+    </div>
+    <div class="rooms">
+      <div v-for="room in rooms" :key="room.roomCounter" class="room">
+        <match-room
+          :author-name="room.roomAuthor"
+          :room-id="room.id"
+          :state="room.roomState"
+          :title="room.roomName"
+          width="400px"
+        ></match-room>
         <div class="buttons-area">
           <el-button
             v-if="makeButtonVisible(room)"
@@ -217,9 +229,14 @@
 </template>
 
 <script>
+import MatchRoom from "@/components/MatchRoom.vue";
 import ReversiBoard from "@/components/ReversiBoard.vue";
+
 export default {
-  components: { ReversiBoard },
+  components: {
+    MatchRoom,
+    ReversiBoard,
+  },
   computed: {
     currentPage: {
       get() {
@@ -266,13 +283,6 @@ export default {
     },
   },
   created() {
-    // // if not accessed from "nickname" page.
-    // if (this.currentPage !== "nickname") {
-    //   // redirect to top page.
-    //   this.$router.push("/");
-    //   return;
-    // }
-
     // if a nickname is not defined yet
     if (!this.myNickname) {
       // redirect to the top page.
@@ -306,6 +316,36 @@ export default {
         roomAuthor: "",
         firstPlayer: true,
       },
+      backgroundBoardStatus: [
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+      ],
       loading: null,
       makeRoomDialogVisible: false,
       makeRoomDialogFormData: {
@@ -495,6 +535,9 @@ export default {
         this.onOpenEntry(roomId);
       }
     },
+    onGoToTopButtonClick() {
+      this.$router.push({ path: "/" });
+    },
     onMakeRoomDialogOpen(roomId) {
       console.log("onMakeRoomDialogOpen");
       this.makeRoomDialogVisible = true;
@@ -664,26 +707,84 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rooms {
+$headerHeight: 56px;
+
+.room-list {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.room-list__header {
+  position: relative;
+  width: 100%;
+  height: $headerHeight;
+  background-color: rgba(white, 0.95);
+
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+.room-list__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.4;
+}
+.go-to-top-button {
+  position: relative;
+  margin: 8px;
+  z-index: 10;
+}
+.welcome-message {
+  position: relative;
+  margin: 0px 8px;
+  z-index: 10;
+}
+.my-nickname {
+  font-size: 24px;
+}
+.rooms {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
+
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 100%;
+  height: calc(100% - #{$headerHeight});
 }
 .room {
   $roomPadding: 8px;
   position: relative;
-  width: 350px;
-  height: 200px;
   margin: $roomPadding;
   padding: $roomPadding;
+  height: 243px;
+  background-color: rgba(white, 0.95);
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-end;
 
   .buttons-area {
-    position: absolute;
-    right: $roomPadding;
-    bottom: $roomPadding;
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: flex-start;
   }
 
   &__make-button,
@@ -702,23 +803,6 @@ export default {
       width: 20px;
       height: 20px;
     }
-  }
-
-  &.vacancy {
-    $bg: #999999ff;
-    background-color: rgba($bg, 0.3);
-  }
-  &.in-preparation {
-    $bg: #f1c232ff;
-    background-color: rgba($bg, 0.3);
-  }
-  &.standby {
-    $bg: #e69138ff;
-    background-color: rgba($bg, 0.3);
-  }
-  &.in-game {
-    $bg: #a64d79ff;
-    background-color: rgba($bg, 0.3);
   }
 }
 
