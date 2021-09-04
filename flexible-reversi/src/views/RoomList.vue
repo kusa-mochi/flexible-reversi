@@ -681,10 +681,10 @@ export default {
   background-color: rgba(white, 0.8);
 
   display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	justify-content: space-between;
-	align-items: flex-end;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-end;
 
   .buttons-area {
     position: relative;
@@ -693,10 +693,10 @@ export default {
     width: 100%;
 
     display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	justify-content: flex-end;
-	align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: flex-start;
   }
 
   &__make-button,

@@ -34,7 +34,9 @@
       <img v-else src="@/assets/room_vacancy.svg" />
     </div>
     <div class="room-id">No.{{ roomId }}</div>
-    <div v-if="authorName" class="room-author-name">{{ authorName }}&nbsp;の部屋</div>
+    <div v-if="authorName" class="room-author-name">
+      {{ authorName }}&nbsp;の部屋
+    </div>
     <div v-if="!authorName" class="room-author-name">空室</div>
     <div class="room-title">{{ title }}</div>
   </div>
