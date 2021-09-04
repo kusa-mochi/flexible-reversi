@@ -3,19 +3,22 @@
     <router-link to="/">Top</router-link>
     <div>ようこそ{{ myNickname }}さん</div>
     <div class="rooms">
-      <div
-        v-for="room in rooms"
-        :key="room.roomCounter"
-        :class="`room ${room.roomState}`"
-      >
-        <div class="room-number">#{{ room.id }}</div>
-        <div v-if="roomTitleVisible(room.roomState)" class="room-title">
+      <div v-for="room in rooms" :key="room.roomCounter" class="room">
+        <match-room
+          :author-name="room.roomAuthor"
+          :room-id="room.id"
+          :state="room.roomState"
+          :title="room.roomName"
+          width="400px"
+        ></match-room>
+        <!-- <div class="room-number">#{{ room.id }}</div> -->
+        <!-- <div v-if="roomTitleVisible(room.roomState)" class="room-title">
           {{ room.roomName }}
         </div>
         <div v-if="roomAuthorVisible(room.roomState)" class="room-host">
           開設者：{{ room.roomAuthor }}
         </div>
-        <div class="room-state">{{ roomStateLabel(room.roomState) }}</div>
+        <div class="room-state">{{ roomStateLabel(room.roomState) }}</div> -->
         <div class="buttons-area">
           <el-button
             v-if="makeButtonVisible(room)"
@@ -217,9 +220,14 @@
 </template>
 
 <script>
+import MatchRoom from "@/components/MatchRoom.vue";
 import ReversiBoard from "@/components/ReversiBoard.vue";
+
 export default {
-  components: { ReversiBoard },
+  components: {
+    MatchRoom,
+    ReversiBoard,
+  },
   computed: {
     currentPage: {
       get() {
@@ -675,8 +683,6 @@ export default {
 .room {
   $roomPadding: 8px;
   position: relative;
-  width: 350px;
-  height: 200px;
   margin: $roomPadding;
   padding: $roomPadding;
 
@@ -704,22 +710,22 @@ export default {
     }
   }
 
-  &.vacancy {
-    $bg: #999999ff;
-    background-color: rgba($bg, 0.3);
-  }
-  &.in-preparation {
-    $bg: #f1c232ff;
-    background-color: rgba($bg, 0.3);
-  }
-  &.standby {
-    $bg: #e69138ff;
-    background-color: rgba($bg, 0.3);
-  }
-  &.in-game {
-    $bg: #a64d79ff;
-    background-color: rgba($bg, 0.3);
-  }
+  // &.vacancy {
+  //   $bg: #999999ff;
+  //   background-color: rgba($bg, 0.3);
+  // }
+  // &.in-preparation {
+  //   $bg: #f1c232ff;
+  //   background-color: rgba($bg, 0.3);
+  // }
+  // &.standby {
+  //   $bg: #e69138ff;
+  //   background-color: rgba($bg, 0.3);
+  // }
+  // &.in-game {
+  //   $bg: #a64d79ff;
+  //   background-color: rgba($bg, 0.3);
+  // }
 }
 
 .room-number {
