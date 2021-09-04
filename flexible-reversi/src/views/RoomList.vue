@@ -1,14 +1,23 @@
 <template>
   <div class="room-list">
-    <el-button
-      @click="onGoToTopButtonClick"
-      class="go-to-top-button"
-      icon="el-icon-s-home"
-      >トップに戻る</el-button
-    >
-    <div class="welcome-message">
-      ようこそ&nbsp;<span class="my-nickname">{{ myNickname }}</span
-      >&nbsp;さん
+    <reversi-board
+      :board-width="2000"
+      :board-status="backgroundBoardStatus"
+      :is-read-only="true"
+      class="room-list__background"
+      z-index="0"
+    ></reversi-board>
+    <div class="room-list__header">
+      <el-button
+        @click="onGoToTopButtonClick"
+        class="go-to-top-button"
+        icon="el-icon-s-home"
+        >トップに戻る</el-button
+      >
+      <div class="welcome-message">
+        ようこそ&nbsp;<span class="my-nickname">{{ myNickname }}</span
+        >&nbsp;さん
+      </div>
     </div>
     <div class="rooms">
       <div v-for="room in rooms" :key="room.roomCounter" class="room">
@@ -307,6 +316,36 @@ export default {
         roomAuthor: "",
         firstPlayer: true,
       },
+      backgroundBoardStatus: [
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+      ],
       loading: null,
       makeRoomDialogVisible: false,
       makeRoomDialogFormData: {
@@ -668,11 +707,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$headerHeight: 56px;
+
+.room-list {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.room-list__header {
+  position: relative;
+  width: 100%;
+  height: $headerHeight;
+  background-color: rgba(white, 0.95);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+.room-list__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.4;
+}
 .go-to-top-button {
-  margin: 4px;
+  position: relative;
+  margin: 8px;
+  z-index: 10;
 }
 .welcome-message {
-  margin: 4px;
+  position: relative;
+  margin: 0px 8px;
+  z-index: 10;
 }
 .my-nickname {
   font-size: 24px;
@@ -681,9 +752,15 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
+
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 100%;
+  height: calc(100% - #{$headerHeight});
 }
 .room {
   $roomPadding: 8px;
@@ -691,7 +768,7 @@ export default {
   margin: $roomPadding;
   padding: $roomPadding;
   height: 243px;
-  background-color: rgba(white, 0.8);
+  background-color: rgba(white, 0.95);
 
   display: flex;
   flex-direction: column;
