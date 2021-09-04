@@ -113,8 +113,8 @@ export default {
 
   .room-title {
     width: 200px;
-    top: 1%;
-    left: 51%;
+    top: 3%;
+    left: 50%;
   }
 
   .room-image {
