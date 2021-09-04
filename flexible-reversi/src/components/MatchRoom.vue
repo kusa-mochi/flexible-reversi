@@ -38,7 +38,8 @@
       {{ authorName }}&nbsp;の部屋
     </div>
     <div v-if="!authorName" class="room-author-name">空室</div>
-    <div class="room-title">{{ title }}</div>
+    <div v-if="state == 'inPreparation'" class="room-title">ただいま準備中</div>
+    <div v-else class="room-title">{{ title }}</div>
   </div>
 </template>
 
