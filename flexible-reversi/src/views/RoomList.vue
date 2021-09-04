@@ -11,14 +11,6 @@
           :title="room.roomName"
           width="400px"
         ></match-room>
-        <!-- <div class="room-number">#{{ room.id }}</div> -->
-        <!-- <div v-if="roomTitleVisible(room.roomState)" class="room-title">
-          {{ room.roomName }}
-        </div>
-        <div v-if="roomAuthorVisible(room.roomState)" class="room-host">
-          開設者：{{ room.roomAuthor }}
-        </div>
-        <div class="room-state">{{ roomStateLabel(room.roomState) }}</div> -->
         <div class="buttons-area">
           <el-button
             v-if="makeButtonVisible(room)"
@@ -685,11 +677,26 @@ export default {
   position: relative;
   margin: $roomPadding;
   padding: $roomPadding;
+  height: 243px;
+  background-color: rgba(white, 0.8);
+
+  display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: flex-end;
 
   .buttons-area {
-    position: absolute;
-    right: $roomPadding;
-    bottom: $roomPadding;
+    position: relative;
+    // right: $roomPadding;
+    // bottom: $roomPadding;
+    width: 100%;
+
+    display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-end;
+	align-items: flex-start;
   }
 
   &__make-button,
