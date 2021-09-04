@@ -1,7 +1,15 @@
 <template>
   <div class="room-list">
-    <router-link to="/">Top</router-link>
-    <div>ようこそ{{ myNickname }}さん</div>
+    <el-button
+      @click="onGoToTopButtonClick"
+      class="go-to-top-button"
+      icon="el-icon-s-home"
+      >トップに戻る</el-button
+    >
+    <div class="welcome-message">
+      ようこそ&nbsp;<span class="my-nickname">{{ myNickname }}</span
+      >&nbsp;さん
+    </div>
     <div class="rooms">
       <div v-for="room in rooms" :key="room.roomCounter" class="room">
         <match-room
@@ -488,6 +496,9 @@ export default {
         this.onOpenEntry(roomId);
       }
     },
+    onGoToTopButtonClick() {
+      this.$router.push({ path: "/" });
+    },
     onMakeRoomDialogOpen(roomId) {
       console.log("onMakeRoomDialogOpen");
       this.makeRoomDialogVisible = true;
@@ -657,6 +668,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.go-to-top-button {
+  margin: 4px;
+}
+.welcome-message {
+  margin: 4px;
+}
+.my-nickname {
+  font-size: 24px;
+}
 .rooms {
   display: flex;
   flex-direction: row;
