@@ -266,13 +266,6 @@ export default {
     },
   },
   created() {
-    // // if not accessed from "nickname" page.
-    // if (this.currentPage !== "nickname") {
-    //   // redirect to top page.
-    //   this.$router.push("/");
-    //   return;
-    // }
-
     // if a nickname is not defined yet
     if (!this.myNickname) {
       // redirect to the top page.
@@ -688,8 +681,6 @@ export default {
 
   .buttons-area {
     position: relative;
-    // right: $roomPadding;
-    // bottom: $roomPadding;
     width: 100%;
 
     display: flex;
@@ -716,23 +707,6 @@ export default {
       height: 20px;
     }
   }
-
-  // &.vacancy {
-  //   $bg: #999999ff;
-  //   background-color: rgba($bg, 0.3);
-  // }
-  // &.in-preparation {
-  //   $bg: #f1c232ff;
-  //   background-color: rgba($bg, 0.3);
-  // }
-  // &.standby {
-  //   $bg: #e69138ff;
-  //   background-color: rgba($bg, 0.3);
-  // }
-  // &.in-game {
-  //   $bg: #a64d79ff;
-  //   background-color: rgba($bg, 0.3);
-  // }
 }
 
 .room-number {
