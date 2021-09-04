@@ -1,11 +1,88 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <reversi-board
+      :board-width="2000"
+      :board-status="backgroundBoardStatus"
+      :is-read-only="true"
+      class="about-background"
+      z-index="0"
+    ></reversi-board>
+    <div class="about__header">
+      <el-button
+        @click="onGoToTopButtonClick"
+        class="go-to-top-button"
+        icon="el-icon-s-home"
+        >トップに戻る</el-button
+      >
+    </div>
+    <div class="about__body">
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+      <div>あああああああ</div>
+    </div>
   </div>
 </template>
 
 <script>
+import ReversiBoard from "@/components/ReversiBoard.vue";
+
 export default {
+  components: {
+    ReversiBoard,
+  },
   computed: {
     currentPage: {
       get() {
@@ -25,8 +102,96 @@ export default {
     }
     this.currentPage = "about";
   },
+  data() {
+    return {
+      backgroundBoardStatus: [
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+        [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        [3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2],
+        [2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1],
+        [1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0],
+      ],
+    };
+  },
+  methods: {
+    onGoToTopButtonClick() {
+      this.$router.push({ path: "/" });
+    },
+  },
   name: "About",
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+$headerHeight: 56px;
+
+.about {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.about-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.6;
+  z-index: 0;
+}
+.about__header {
+  position: relative;
+  width: 100%;
+  height: $headerHeight;
+  background-color: rgba(white, 0.95);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+
+  .go-to-top-button {
+    position: relative;
+    margin: 8px;
+    z-index: 10;
+  }
+}
+.about__body {
+  position: relative;
+  width: 100%;
+  height: calc(100% - #{$headerHeight});
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+</style>
