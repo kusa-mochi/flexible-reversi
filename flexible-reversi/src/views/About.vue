@@ -16,62 +16,64 @@
       >
     </div>
     <div class="about__body">
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
-      <div>あああああああ</div>
+      <div class="about__content">
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+        <div>あああああああ</div>
+      </div>
     </div>
   </div>
 </template>
@@ -189,9 +191,26 @@ $headerHeight: 56px;
   overflow-y: scroll;
 
   display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	justify-content: flex-start;
-	align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.about__content {
+  background-color: rgba(white, 0.95);
+  width: 50%;
+  margin: 8px 0px;
+}
+
+@media screen and (max-width: 1000px) {
+  .about__content {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .about__content {
+    width: 90%;
+  }
 }
 </style>
