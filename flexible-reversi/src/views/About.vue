@@ -17,62 +17,66 @@
     </div>
     <div class="about__body">
       <div class="about__content">
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
-        <div>あああああああ</div>
+        <table class="about__table">
+          <tbody>
+            <tr>
+              <td>ゲーム名</td>
+              <td>Flexible Reversi</td>
+            </tr>
+            <tr>
+              <td>バージョン</td>
+              <td>1.0.0</td>
+            </tr>
+            <tr>
+              <td>作者</td>
+              <td>もち</td>
+            </tr>
+            <tr>
+              <td>作者サイト</td>
+              <td>
+                <el-link
+                  href="https://slash-mochi.net/"
+                  target="_blank"
+                  type="primary"
+                  >// もちぶろ</el-link
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>ライセンス</td>
+              <td>フリー（GPL 3）</td>
+            </tr>
+            <tr>
+              <td>ソースコード</td>
+              <td>
+                <el-link
+                  href="https://github.com/kusa-mochi/flexible-reversi"
+                  target="_blank"
+                  type="primary"
+                  >https://github.com/kusa-mochi/flexible-reversi</el-link
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>お問合せ</td>
+              <td class="email">@</td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="history">
+          <thead>
+            <tr>
+              <th>バージョン</th>
+              <th>更新内容</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1.0.0</td>
+              <td>新規リリース</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -197,9 +201,37 @@ $headerHeight: 56px;
   align-items: center;
 }
 .about__content {
-  background-color: rgba(white, 0.95);
+  // background-color: rgba(white, 0.95);
   width: 50%;
-  margin: 8px 0px;
+  margin: 4px 0px;
+}
+.about__table {
+  width: 100%;
+  background-color: rgba(white, 0.95);
+  margin: 4px 0;
+
+  td {
+    padding: 16px;
+
+    &.email {
+      &:before {
+        content: "whoatemyapplepie";
+      }
+      &:after {
+        content: "gmail.com";
+      }
+    }
+  }
+}
+.history {
+  width: 100%;
+  background-color: rgba(white, 0.95);
+  margin: 8px 0 4px 0;
+
+  th,
+  td {
+    padding: 16px;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -211,6 +243,13 @@ $headerHeight: 56px;
 @media screen and (max-width: 767px) {
   .about__content {
     width: 90%;
+  }
+  .about__table,
+  .history {
+    th,
+    td {
+      padding: 4px;
+    }
   }
 }
 </style>
