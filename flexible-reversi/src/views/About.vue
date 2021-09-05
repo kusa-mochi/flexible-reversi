@@ -93,7 +93,7 @@ export default {
     backgroundBoardStatus: {
       get() {
         return this.$store.state.backgroundBoardStatus;
-      }
+      },
     },
     currentPage: {
       get() {

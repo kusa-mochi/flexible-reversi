@@ -167,7 +167,10 @@ export default {
       let y = yNeighbor;
       const reversibleColor = 4;
 
-      if (this.boardStatus[y][x] !== this.opponentPlayerColor && this.boardStatus[y][x] != reversibleColor) {
+      if (
+        this.boardStatus[y][x] !== this.opponentPlayerColor &&
+        this.boardStatus[y][x] != reversibleColor
+      ) {
         return false;
       }
 
@@ -180,7 +183,10 @@ export default {
         if (this.boardStatus[y][x] === this.playerColor) {
           return true;
         }
-        if (this.boardStatus[y][x] !== this.opponentPlayerColor && this.boardStatus[y][x] !== reversibleColor) {
+        if (
+          this.boardStatus[y][x] !== this.opponentPlayerColor &&
+          this.boardStatus[y][x] !== reversibleColor
+        ) {
           return false;
         }
       }

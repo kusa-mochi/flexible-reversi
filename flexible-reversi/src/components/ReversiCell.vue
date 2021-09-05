@@ -87,7 +87,7 @@ export default {
     height: 50%;
     background-color: #505050;
     border: none;
-    border-radius:50% 50% 0 0/100% 100% 0 0;
+    border-radius: 50% 50% 0 0/100% 100% 0 0;
   }
   &__white {
     top: 50%;
@@ -95,7 +95,7 @@ export default {
     height: 50%;
     background-color: #f5f5f5;
     border: none;
-    border-radius:0 0 50% 50% /0 0 100% 100%;
+    border-radius: 0 0 50% 50% /0 0 100% 100%;
   }
   &__border {
     width: 100%;
