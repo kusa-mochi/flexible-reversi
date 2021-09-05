@@ -38,9 +38,9 @@ def lambda_handler(event, context):
                     }
                 )
     
-    # id 4の部屋情報をid 5~10にコピーする。
+    # id 4の部屋情報をid 5~20にコピーする。
     vacancyRoomData = appData.get_item(Key={'id': 4})['Item']
-    for roomId in range(5, 11):
+    for roomId in range(5, 21):
         vacancyRoomData['id'] = roomId
         appData.put_item(Item=vacancyRoomData)
     
