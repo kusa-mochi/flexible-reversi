@@ -317,6 +317,15 @@ export default {
         this.isGameReady = false;
         this.isGaming = false;
 
+        // send exit signal to the lambda.
+        this.socket.send(JSON.stringify({
+          action: "exitRoom",
+          data: {
+            token: this.token,
+            roomId: this.gameData.roomId
+          }
+        }));
+
         // go to the room list page.
         this.$router.push("/room-list");
       }
