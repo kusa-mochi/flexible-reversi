@@ -47,13 +47,13 @@
               <img v-if="room.requireEntryPassword" src="@/assets/key.svg" />
             </div>
           </el-button>
-          <el-button
+          <!-- <el-button
             v-if="viewButtonVisible(room)"
             @click="onViewButtonClick()"
             class="room__view-button"
           >
             <div class="button-label">観戦</div>
-          </el-button>
+          </el-button> -->
         </div>
       </div>
     </div>
@@ -114,11 +114,11 @@
                 ></el-input>
               </div>
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-checkbox v-model="makeRoomDialogFormData.canView"
                 >観戦を許可する。</el-checkbox
               >
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </tab-content>
         <tab-content title="ステージ設定">
