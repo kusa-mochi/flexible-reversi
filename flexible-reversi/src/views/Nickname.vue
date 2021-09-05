@@ -7,23 +7,35 @@
       class="nickname-background"
       z-index="0"
     ></reversi-board>
-    <div class="form-container">
-      <el-form @submit.native.prevent="onSubmit" :inline="true" :model="form">
-        <div>
-          <div class="nickname-input-label">あなたのニックネームを決めてね</div>
-          <el-input
-            v-model="form.tmpNickname"
-            @keyboard.enter.prevent
-            class="nickname-input"
-            maxlength="20"
-            placeholder="ニックネーム"
-            ref="nicknameInput"
-            required
-            show-word-limit
-            type="text"
-          /><el-button @click="onSubmit" :disabled="!gotToken">OK</el-button>
-        </div>
-      </el-form>
+    <div class="nickname__header">
+      <el-button
+        @click="onGoToTopButtonClick"
+        class="go-to-top-button"
+        icon="el-icon-s-home"
+        >トップに戻る</el-button
+      >
+    </div>
+    <div class="nickname__body">
+      <div class="form-container">
+        <el-form @submit.native.prevent="onSubmit" :inline="true" :model="form">
+          <div>
+            <div class="nickname-input-label">
+              あなたのニックネームを決めてね
+            </div>
+            <el-input
+              v-model="form.tmpNickname"
+              @keyboard.enter.prevent
+              class="nickname-input"
+              maxlength="20"
+              placeholder="ニックネーム"
+              ref="nicknameInput"
+              required
+              show-word-limit
+              type="text"
+            /><el-button @click="onSubmit" :disabled="!gotToken">OK</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -149,6 +161,9 @@ export default {
         console.log(e);
       };
     },
+    onGoToTopButtonClick() {
+      this.$router.push({ path: "/" });
+    },
     onSubmit(e) {
       console.log("onSubmit");
       console.log(e);
@@ -172,17 +187,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$headerHeight: 56px;
+
 .nickname {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
 }
 .nickname-background {
   position: absolute;
@@ -191,13 +202,45 @@ export default {
   width: 100%;
   opacity: 0.6;
 }
-.form-container {
+.nickname__header {
+  position: relative;
+  width: 100%;
+  height: $headerHeight;
   background-color: rgba(white, 0.95);
-  padding: 16px;
-  z-index: 10;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+
+  .go-to-top-button {
+    position: relative;
+    margin: 8px;
+    z-index: 10;
+  }
 }
-.nickname-input {
-  width: 376px;
-  margin-right: 8px;
+.nickname__body {
+  position: relative;
+  width: 100%;
+  height: calc(100% - #{$headerHeight});
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+
+  .form-container {
+    background-color: rgba(white, 0.95);
+    padding: 16px;
+    z-index: 10;
+  }
+  .nickname-input {
+    width: 376px;
+    margin-right: 8px;
+  }
 }
 </style>
