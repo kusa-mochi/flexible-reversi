@@ -34,8 +34,9 @@ def canPutOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
     x = xNeighbor
     y = yNeighbor
     opponentPlayerColor = 1 if playerColor == 2 else 2
+    reversibleColor = 4
     
-    if board[y][x] != opponentPlayerColor:
+    if board[y][x] != opponentPlayerColor and board[y][x] != reversibleColor:
         return False
     
     x += dirColumn
@@ -43,7 +44,7 @@ def canPutOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
     while between(x, 0, boardWidth - 1) == True and between(y, 0, boardHeight - 1) == True:
         if board[y][x] == playerColor:
             return True
-        if board[y][x] == opponentPlayerColor:
+        if board[y][x] == opponentPlayerColor or board[y][x] == reversibleColor:
             x += dirColumn
             y += dirRow
         else:
@@ -96,8 +97,9 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
     x = xNeighbor
     y = yNeighbor
     opponentPlayerColor = 1 if playerColor == 2 else 2
+    reversibleColor = 4
     
-    if board[y][x] != Decimal(opponentPlayerColor):
+    if board[y][x] != Decimal(opponentPlayerColor) and board[y][x] != Decimal(reversibleColor):
         return
     
     x += dirColumn
@@ -107,7 +109,7 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
             board[iRow][iColumn] = Decimal(playerColor)
             m = xNeighbor
             n = yNeighbor
-            while board[n][m] == Decimal(opponentPlayerColor):
+            while board[n][m] == Decimal(opponentPlayerColor) or board[n][m] == Decimal(reversibleColor):
                 print('row:')
                 print(n)
                 print('column:')
@@ -118,7 +120,7 @@ def putStoneOnDirection(board, iColumn, iRow, playerColor, dirColumn, dirRow):
                 m += dirColumn
                 n += dirRow
             break
-        if board[y][x] == Decimal(opponentPlayerColor):
+        if board[y][x] == Decimal(opponentPlayerColor) or board[y][x] == Decimal(reversibleColor):
             x += dirColumn
             y += dirRow
         else:
