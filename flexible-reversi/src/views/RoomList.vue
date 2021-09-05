@@ -189,7 +189,7 @@
       <span slot="footer" class="battle-confirmation-dialog__footer">
         <el-button
           type="secondary"
-          @click="battleConfirmationDialogVisible = false"
+          @click="battleConfirmationDialogOnCancel"
           >キャンセル</el-button
         >
         <el-button type="primary" @click="battleConfirmationDialogOnStart"
@@ -217,7 +217,7 @@
       <span slot="footer" class="password-to-entry-dialog__footer">
         <el-button
           type="secondary"
-          @click="passwordToEntryDialogVisible = false"
+          @click="onPasswordToEntryDialogCancel"
           >キャンセル</el-button
         >
         <el-button type="primary" @click="onPasswordToEntryDialogOk"
@@ -422,7 +422,12 @@ export default {
     window.removeEventListener("beforeunload", this.closeSocket);
   },
   methods: {
+    battleConfirmationDialogOnCancel() {
+      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.battleConfirmationDialogVisible = false
+    },
     battleConfirmationDialogOnStart() {
+      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
       this.battleConfirmationDialogVisible = false;
       let boardStatus = [];
       this.battleConfirmationDialogData.initialBoardStatus.forEach(
@@ -479,6 +484,7 @@ export default {
           const checkResult = parsedData.data.result;
           switch (checkResult) {
             case "OK":
+              new Audio(require("@/assets/sounds/ok-button.mp3")).play();
               // show battleConfirmationDialog.
               this.battleConfirmationDialogData.firstPlayer =
                 parsedData.data.firstPlayer;
@@ -489,7 +495,7 @@ export default {
               this.battleConfirmationDialogVisible = true;
               break;
             case "NG":
-              // TODO: show NG password messagebox.
+              new Audio(require("@/assets/sounds/info.mp3")).play();
               this.$notify({
                 title: "Error",
                 message: "パスワードが違います。",
@@ -514,6 +520,7 @@ export default {
       return room.roomState === "vacancy";
     },
     onEntryButtonClick(roomId, isPasswordRequired) {
+      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
       if (isPasswordRequired) {
         this.onPasswordToEntryDialogOpen(roomId);
       } else {
@@ -521,10 +528,12 @@ export default {
       }
     },
     onGoToTopButtonClick() {
+      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
       this.$router.push({ path: "/" });
     },
     onMakeRoomDialogOpen(roomId) {
       console.log("onMakeRoomDialogOpen");
+      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
       this.makeRoomDialogVisible = true;
       this.makeRoomDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
@@ -615,6 +624,10 @@ export default {
           },
         })
       );
+    },
+    onPasswordToEntryDialogCancel() {
+      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.passwordToEntryDialogVisible = false;
     },
     onPasswordToEntryDialogOk() {
       this.socket.send(
