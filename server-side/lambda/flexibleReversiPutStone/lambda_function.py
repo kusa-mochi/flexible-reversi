@@ -364,7 +364,7 @@ def lambda_handler(event, context):
     # update room data
     
     # if game is set
-    if retToRoomAuthor['data']['nextPlayer'] == 'gameSet':
+    if retToRoomAuthor['data']['nextPlayer'] == 'youWin' or retToRoomAuthor['data']['nextPlayer'] == 'youLose':
         sendData = "{\"data\":{\"token\":\"" + roomAuthorToken + "\","
         sendData += "\"id\":" + str(roomId) + ","
         sendData += "\"boardLogs\":[],"
