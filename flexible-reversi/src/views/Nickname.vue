@@ -135,6 +135,7 @@ export default {
           const availability = parsedData.data.nicknameAvailability;
           switch (availability) {
             case "inUse":
+              new Audio(require("@/assets/sounds/info.mp3")).play();
               this.$notify({
                 title: "Error",
                 message: `${this.form.tmpNickname} という名前は既に使われています。別の名前を指定してください。`,
@@ -142,6 +143,7 @@ export default {
               });
               break;
             case "isAvailable":
+              new Audio(require("@/assets/sounds/ok-button.mp3")).play();
               // save the nickname to a Vuex store.
               this.myNickname = this.form.tmpNickname;
               // go to the room list page.
@@ -162,6 +164,7 @@ export default {
       };
     },
     onGoToTopButtonClick() {
+      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
       this.$router.push({ path: "/" });
     },
     onSubmit(e) {

@@ -14,7 +14,7 @@
     </div>
     <div class="app-name">Flexible Reversi</div>
     <el-menu class="top-menu" router @open="handleOpen" @close="handleClose">
-      <el-menu-item class="top-menu-item" index="Nickname">
+      <el-menu-item @click="playOk" class="top-menu-item" index="Nickname">
         <i class="el-icon-s-grid"></i>スタート
       </el-menu-item>
       <el-menu-item class="top-menu-item" disabled index="Settings">
@@ -23,7 +23,7 @@
       <el-menu-item class="top-menu-item" disabled index="StageEditor">
         <i class="el-icon-edit"></i>ステージをつくる
       </el-menu-item>
-      <el-menu-item class="top-menu-item" index="About">
+      <el-menu-item @click="playOk" class="top-menu-item" index="About">
         <i class="el-icon-cold-drink"></i>バージョン情報
       </el-menu-item>
     </el-menu>
@@ -53,6 +53,11 @@ export default {
   },
   created() {
     this.currentPage = "top";
+  },
+  methods: {
+    playOk() {
+      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+    }
   },
   name: "Top",
 };

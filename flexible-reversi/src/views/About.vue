@@ -115,6 +115,7 @@ export default {
   },
   methods: {
     onGoToTopButtonClick() {
+      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
       this.$router.push({ path: "/" });
     },
   },
