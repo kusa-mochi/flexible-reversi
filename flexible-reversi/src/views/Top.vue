@@ -13,7 +13,7 @@
       </a>
     </div>
     <div class="app-name">Flexible Reversi</div>
-    <el-menu class="top-menu" router @open="handleOpen" @close="handleClose">
+    <el-menu class="top-menu" router>
       <el-menu-item
         @click="onStartClick"
         class="top-menu-item"
