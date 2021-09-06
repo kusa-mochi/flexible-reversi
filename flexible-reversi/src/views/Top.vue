@@ -14,7 +14,11 @@
     </div>
     <div class="app-name">Flexible Reversi</div>
     <el-menu class="top-menu" router @open="handleOpen" @close="handleClose">
-      <el-menu-item @click="playOk" class="top-menu-item" index="Nickname">
+      <el-menu-item
+        @click="onStartClick"
+        class="top-menu-item"
+        index="Nickname"
+      >
         <i class="el-icon-s-grid"></i>スタート
       </el-menu-item>
       <el-menu-item class="top-menu-item" disabled index="Settings">
@@ -23,7 +27,11 @@
       <el-menu-item class="top-menu-item" disabled index="StageEditor">
         <i class="el-icon-edit"></i>ステージをつくる
       </el-menu-item>
-      <el-menu-item @click="playOk" class="top-menu-item" index="About">
+      <el-menu-item
+        @click="onVersionInfoClick"
+        class="top-menu-item"
+        index="About"
+      >
         <i class="el-icon-cold-drink"></i>バージョン情報
       </el-menu-item>
     </el-menu>
@@ -42,6 +50,14 @@ export default {
         return this.$store.state.backgroundBoardStatus;
       },
     },
+    bgmPlayer: {
+      get() {
+        return this.$store.state.bgmPlayer;
+      },
+      set(newValue) {
+        this.$store.state.bgmPlayer = newValue;
+      },
+    },
     currentPage: {
       get() {
         return this.$store.state.currentPage;
@@ -55,9 +71,18 @@ export default {
     this.currentPage = "top";
   },
   methods: {
-    playOk() {
+    onStartClick() {
       new Audio(require("@/assets/sounds/ok-button.mp3")).play();
-    }
+      if (!this.bgmPlayer) {
+        this.bgmPlayer = new Audio(require("@/assets/sounds/freshtea.mp3"));
+        this.bgmPlayer.loop = true;
+        this.bgmPlayer.volume = 0.4;
+        this.bgmPlayer.play();
+      }
+    },
+    onVersionInfoClick() {
+      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+    },
   },
   name: "Top",
 };

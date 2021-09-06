@@ -80,6 +80,8 @@ export default new Vuex.Store({
     isGameReady: false,
     isMyTurn: false,
     isGaming: false,
+    /// bgm player
+    bgmPlayer: null,
   },
   mutations: {
     updateLocalRoomsData(state, newData) {
