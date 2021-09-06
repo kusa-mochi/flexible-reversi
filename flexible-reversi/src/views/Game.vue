@@ -71,7 +71,7 @@
       <span slot="footer" class="dialog-footer">
         <el-form @submit.native.prevent="onChatSubmit" :inline="true" :model="chatForm">
           <el-input v-model="chatForm.chatInput" placeholder="対戦相手とのチャットだよ">
-            <el-button slot="append" icon="el-icon-s-promotion"></el-button>
+            <el-button @click="onChatSubmit" slot="append" icon="el-icon-s-promotion"></el-button>
           </el-input>
         </el-form>
       </span>
@@ -204,86 +204,14 @@ export default {
       chatForm: {
         chatInput: ""
       },
-      chatInput: "",
+      chatLogCounter: 0,
       chatLogs: [
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 0,
-        },
-        {
-          nickname: "さくらもち",
-          message:
-            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 1,
-        },
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 2,
-        },
-        {
-          nickname: "さくらもち",
-          message:
-            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 3,
-        },
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 4,
-        },
-        {
-          nickname: "さくらもち",
-          message:
-            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 5,
-        },
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 6,
-        },
-        {
-          nickname: "さくらもち",
-          message:
-            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 7,
-        },
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 8,
-        },
-        {
-          nickname: "さくらもち",
-          message:
-            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 9,
-        },
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 10,
-        },
-        {
-          nickname: "さくらもち",
-          message:
-            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 11,
-        },
-        {
-          nickname: "くさもち",
-          message:
-            "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 12,
-        },
+        // {
+        //   nickname: "くさもち",
+        //   message:
+        //     "こんにちはあああああああああああああああああああああああああああああああああ",
+        //   key: 0,
+        // },
       ],
       chatVisibility: false,
       hajimeLabelVisilibity: false,
@@ -402,6 +330,13 @@ export default {
         } else if (parsedData.dataType === "exitRoomDuringGame") {
           console.log("received exitRoom");
           this.onGameSet(true, "oppponentExit");
+        } else if (parsedData.dataType === "sendChat") {
+          this.$store.dispatch("playSound", "receive-chat.mp3");
+          this.chatLogs.unshift({
+            nickname: parsedData.data.nickname,
+            message: parsedData.data.message,
+            key: this.chatLogCounter++
+          });
         }
       };
       this.socket.onclose = (e) => {
