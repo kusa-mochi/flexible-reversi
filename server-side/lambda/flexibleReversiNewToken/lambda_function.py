@@ -21,7 +21,7 @@ def lambda_handler(event, context):
     print(nowString)
     
     # トークンの有効期限
-    expirationDatetime = now + datetime.timedelta(days=1)
+    expirationDatetime = now + datetime.timedelta(hours=3)
     
     # 現在時刻から新規にトークンを生成する。トークンは以後の通信でクライアントの識別に用いる。
     token = hashlib.sha256(nowString.encode('utf-8')).hexdigest()
