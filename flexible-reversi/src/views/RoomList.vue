@@ -127,7 +127,8 @@
               @change="onStageCarouselChanged"
               :autoplay="false"
               arrow="always"
-              indicator-position="none"
+              indicator-position="outside"
+              trigger="click"
               type="card"
               height="256px"
             >
