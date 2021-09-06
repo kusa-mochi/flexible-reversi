@@ -187,9 +187,7 @@
         ></reversi-board>
       </div>
       <span slot="footer" class="battle-confirmation-dialog__footer">
-        <el-button
-          type="secondary"
-          @click="battleConfirmationDialogOnCancel"
+        <el-button type="secondary" @click="battleConfirmationDialogOnCancel"
           >キャンセル</el-button
         >
         <el-button type="primary" @click="battleConfirmationDialogOnStart"
@@ -215,9 +213,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="password-to-entry-dialog__footer">
-        <el-button
-          type="secondary"
-          @click="onPasswordToEntryDialogCancel"
+        <el-button type="secondary" @click="onPasswordToEntryDialogCancel"
           >キャンセル</el-button
         >
         <el-button type="primary" @click="onPasswordToEntryDialogOk"
@@ -424,7 +420,7 @@ export default {
   methods: {
     battleConfirmationDialogOnCancel() {
       new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
-      this.battleConfirmationDialogVisible = false
+      this.battleConfirmationDialogVisible = false;
     },
     battleConfirmationDialogOnStart() {
       new Audio(require("@/assets/sounds/ok-button.mp3")).play();
