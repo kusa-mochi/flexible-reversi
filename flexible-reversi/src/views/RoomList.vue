@@ -63,104 +63,119 @@
     <el-dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
       title="部屋作成"
       width="784px"
     >
-      <form-wizard
-        @on-complete="onMakeRoomWizardComplete"
-        color="#078080"
-        title=""
-        subtitle=""
-      >
-        <tab-content title="部屋のパスワードなどの設定">
-          <el-form :model="makeRoomDialogFormData">
-            <el-form-item>
-              <el-input
-                v-model="makeRoomDialogFormData.roomName"
-                class="room-name-input"
-                placeholder="部屋の名前(20文字以内)"
-                maxlength="20"
-                show-word-limit
-              />
-            </el-form-item>
-            <el-form-item>
-              あなたは
-              <el-radio
-                v-model="makeRoomDialogFormData.firstPlayer"
-                :label="true"
-                >先攻(黒)</el-radio
-              >
-              <el-radio
-                v-model="makeRoomDialogFormData.firstPlayer"
-                :label="false"
-                >後攻(白)</el-radio
-              >
-            </el-form-item>
-            <el-form-item>
-              <el-checkbox v-model="makeRoomDialogFormData.requireEntryPassword"
-                >対戦者の入室にパスワードを要求する。</el-checkbox
-              >
-            </el-form-item>
-            <el-form-item>
-              <div>
-                <el-input
-                  v-model="makeRoomDialogFormData.entryPassword"
-                  :disabled="!makeRoomDialogFormData.requireEntryPassword"
-                  class="entry-password-input"
-                  placeholder="パスワードを入力してください(20文字以内)"
-                  maxlength="20"
-                  show-password
-                  show-word-limit
-                ></el-input>
-              </div>
-            </el-form-item>
-            <!-- <el-form-item>
+      <div class="make-room-dialog__content">
+        <div class="make-room-dialog__body">
+          <form-wizard
+            @on-complete="onMakeRoomWizardComplete"
+            color="#078080"
+            title=""
+            subtitle=""
+          >
+            <tab-content title="部屋のパスワードなどの設定">
+              <el-form :model="makeRoomDialogFormData">
+                <el-form-item>
+                  <el-input
+                    v-model="makeRoomDialogFormData.roomName"
+                    class="room-name-input"
+                    placeholder="部屋の名前(20文字以内)"
+                    maxlength="20"
+                    show-word-limit
+                  />
+                </el-form-item>
+                <el-form-item>
+                  あなたは
+                  <el-radio
+                    v-model="makeRoomDialogFormData.firstPlayer"
+                    :label="true"
+                    >先攻(黒)</el-radio
+                  >
+                  <el-radio
+                    v-model="makeRoomDialogFormData.firstPlayer"
+                    :label="false"
+                    >後攻(白)</el-radio
+                  >
+                </el-form-item>
+                <el-form-item>
+                  <el-checkbox
+                    v-model="makeRoomDialogFormData.requireEntryPassword"
+                    >対戦者の入室にパスワードを要求する。</el-checkbox
+                  >
+                </el-form-item>
+                <el-form-item>
+                  <div>
+                    <el-input
+                      v-model="makeRoomDialogFormData.entryPassword"
+                      :disabled="!makeRoomDialogFormData.requireEntryPassword"
+                      class="entry-password-input"
+                      placeholder="パスワードを入力してください(20文字以内)"
+                      maxlength="20"
+                      show-password
+                      show-word-limit
+                    ></el-input>
+                  </div>
+                </el-form-item>
+                <!-- <el-form-item>
               <el-checkbox v-model="makeRoomDialogFormData.canView"
                 >観戦を許可する。</el-checkbox
               >
             </el-form-item> -->
-          </el-form>
-        </tab-content>
-        <tab-content title="ステージ設定">
-          <div class="stage-select">
-            <el-carousel
-              @change="onStageCarouselChanged"
-              :autoplay="false"
-              arrow="always"
-              indicator-position="outside"
-              trigger="click"
-              type="card"
-              height="256px"
-            >
-              <el-carousel-item
-                v-for="stageNumber in Object.keys(
-                  makeRoomDialogFormData.stageData
-                ).length"
-                :key="stageNumber"
-              >
-                <div class="stage-item">
-                  <el-radio
-                    v-model="makeRoomDialogFormData.stageName"
-                    :label="`stage${stageNumber}`"
-                    border
-                    class="stage-select-radio"
+              </el-form>
+            </tab-content>
+            <tab-content title="ステージ設定">
+              <div class="stage-select">
+                <el-carousel
+                  @change="onStageCarouselChanged"
+                  :autoplay="false"
+                  arrow="always"
+                  indicator-position="outside"
+                  trigger="click"
+                  type="card"
+                  height="256px"
+                >
+                  <el-carousel-item
+                    v-for="stageNumber in Object.keys(
+                      makeRoomDialogFormData.stageData
+                    ).length"
+                    :key="stageNumber"
                   >
-                    <reversi-board
-                      :board-width="200"
-                      :board-status="
-                        makeRoomDialogFormData.stageData[`stage${stageNumber}`]
-                      "
-                      :is-read-only="true"
-                    ></reversi-board>
-                  </el-radio>
-                </div>
-              </el-carousel-item>
-            </el-carousel>
+                    <div class="stage-item">
+                      <el-radio
+                        v-model="makeRoomDialogFormData.stageName"
+                        :label="`stage${stageNumber}`"
+                        border
+                        class="stage-select-radio"
+                      >
+                        <reversi-board
+                          :board-width="200"
+                          :board-status="
+                            makeRoomDialogFormData.stageData[
+                              `stage${stageNumber}`
+                            ]
+                          "
+                          :is-read-only="true"
+                        ></reversi-board>
+                      </el-radio>
+                    </div>
+                  </el-carousel-item>
+                </el-carousel>
+              </div>
+            </tab-content>
+          </form-wizard>
+        </div>
+        <div class="make-room-dialog__footer">
+          <div class="footer-left">
+            <el-button @click="onMakeRoomDialogCancel()" type="primary"
+              >キャンセル</el-button
+            >
           </div>
-        </tab-content>
-      </form-wizard>
+        </div>
+      </div>
     </el-dialog>
     <!-- 対局前確認ダイアログ -->
     <el-dialog
@@ -529,6 +544,20 @@ export default {
       new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
       this.$router.push({ path: "/" });
     },
+    onMakeRoomDialogCancel() {
+      console.log("onMakeRoomDialogCancel");
+      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.makeRoomDialogVisible = false;
+      this.socket.send(
+        JSON.stringify({
+          action: "exitRoom",
+          data: {
+            token: this.token,
+            roomId: this.makeRoomDialogFormData.id,
+          },
+        })
+      );
+    },
     onMakeRoomDialogOpen(roomId) {
       console.log("onMakeRoomDialogOpen");
       new Audio(require("@/assets/sounds/ok-button.mp3")).play();
@@ -817,6 +846,35 @@ $headerHeight: 56px;
 }
 
 #make-room-dialog {
+  .make-room-dialog__content {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .make-room-dialog__body {
+    width: 100%;
+  }
+
+  .make-room-dialog__footer {
+    width: 100%;
+    border-top: 1px solid gray;
+    padding-top: 20px;
+
+    .footer-left {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      align-content: center;
+    }
+  }
+
   .room-name-input {
     width: 400px;
   }
@@ -861,6 +919,9 @@ $headerHeight: 56px;
   .el-dialog__body,
   .vue-form-wizard .wizard-header {
     padding-top: 0;
+  }
+  .el-dialog__body {
+    padding-bottom: 20px;
   }
   .stage-select {
     .el-radio__inner {
