@@ -519,7 +519,6 @@ export default {
       return room.roomState === "vacancy";
     },
     onEntryButtonClick(roomId, isPasswordRequired) {
-      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
       if (isPasswordRequired) {
         this.onPasswordToEntryDialogOpen(roomId);
       } else {
@@ -643,6 +642,7 @@ export default {
     },
     onPasswordToEntryDialogOpen(roomId) {
       console.log("onPasswordToEntryDialogOpen");
+      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
       this.passwordToEntryDialogVisible = true;
       this.passwordToEntryDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
