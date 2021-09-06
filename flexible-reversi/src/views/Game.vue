@@ -62,20 +62,18 @@
       width="400px"
     >
       <div class="chat-log">
-        <table class="chat-log-table">
-          <tbody>
-            <tr v-for="logItem in chatLogs" :key="logItem.key">
-              <td class="log__nickname">{{ logItem.nickname }}</td>
-              <td>:</td>
-              <td>{{ logItem.message }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-for="logItem in chatLogs" :key="logItem.key" class="log-record">
+          <div class="log-record__nickname">{{ logItem.nickname }}</div>
+          <div class="log-record__colon">:</div>
+          <div class="log-record__message">{{ logItem.message }}</div>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-input v-model="chatInput" placeholder="対戦相手とのチャットだよ">
-          <el-button slot="append" icon="el-icon-s-promotion"></el-button>
-        </el-input>
+        <el-form @submit.native.prevent="onChatSubmit" :inline="true" :model="chatForm">
+          <el-input v-model="chatForm.chatInput" placeholder="対戦相手とのチャットだよ">
+            <el-button slot="append" icon="el-icon-s-promotion"></el-button>
+          </el-input>
+        </el-form>
       </span>
     </el-dialog>
   </div>
@@ -203,6 +201,9 @@ export default {
   },
   data() {
     return {
+      chatForm: {
+        chatInput: ""
+      },
       chatInput: "",
       chatLogs: [
         {
@@ -221,61 +222,67 @@ export default {
           nickname: "くさもち",
           message:
             "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 0,
+          key: 2,
         },
         {
           nickname: "さくらもち",
           message:
             "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 1,
+          key: 3,
         },
         {
           nickname: "くさもち",
           message:
             "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 0,
+          key: 4,
         },
         {
           nickname: "さくらもち",
           message:
             "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 1,
+          key: 5,
         },
         {
           nickname: "くさもち",
           message:
             "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 0,
+          key: 6,
         },
         {
           nickname: "さくらもち",
           message:
             "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 1,
+          key: 7,
         },
         {
           nickname: "くさもち",
           message:
             "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 0,
+          key: 8,
         },
         {
           nickname: "さくらもち",
           message:
             "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 1,
+          key: 9,
         },
         {
           nickname: "くさもち",
           message:
             "こんにちはあああああああああああああああああああああああああああああああああ",
-          key: 0,
+          key: 10,
         },
         {
           nickname: "さくらもち",
           message:
             "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
-          key: 1,
+          key: 11,
+        },
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 12,
         },
       ],
       chatVisibility: false,
@@ -405,6 +412,17 @@ export default {
         console.log("onerror");
         console.log(e);
       };
+    },
+    onChatSubmit() {
+      // send input text to opponent through lambda.
+      this.socket.send(JSON.stringify({
+        action: "sendChat",
+        data: {
+          token: this.token,
+          message: this.chatForm.chatInput,
+          roomId: this.gameData.roomId
+        }
+      }));
     },
     onExitButtonClick() {
       if (this.isGaming) {
@@ -638,22 +656,40 @@ $headerHeight: 56px;
 }
 
 .chat-log {
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: 410px;
   background-color: rgba(black, 0.1);
   overflow-x: hidden;
   overflow-y: auto;
 
-  .chat-log-table {
-    td {
-      text-align: left;
-      vertical-align: top;
-      padding: 4px;
-    }
-  }
+  display: flex;
+	flex-direction: column-reverse;
+	flex-wrap: nowrap;
 
-  .log__nickname {
-    width: 96px;
+  .log-record {
+    display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+
+  position: relative;
+  width: 100%;
+  margin: 4px;
+
+    &__nickname {
+      position: relative;
+      width: 96px;
+    }
+    &__colon {
+      position: relative;
+      width: 16px;
+    }
+    &__message {
+      position: relative;
+      width: calc(100% - 96px - 16px);
+    }
   }
 }
 
