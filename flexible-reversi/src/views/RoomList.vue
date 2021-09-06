@@ -61,6 +61,8 @@
     <!-- 各種ダイアログ -->
     <!-- 部屋作成ダイアログ -->
     <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
       title="部屋作成"
