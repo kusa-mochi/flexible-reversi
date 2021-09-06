@@ -84,6 +84,24 @@ export default new Vuex.Store({
     bgmPlayer: null,
   },
   mutations: {
+    playBgm(state, fileName) {
+      if (!state.bgmPlayer) {
+        state.bgmPlayer = new Audio(require(`@/assets/sounds/${fileName}`));
+        state.bgmPlayer.loop = true;
+        state.bgmPlayer.volume = 0.4;
+        state.bgmPlayer.play();
+      }
+    },
+    playSound(state, fileName) {
+      new Audio(require(`@/assets/sounds/${fileName}`)).play();
+    },
+    stopBgm(state) {
+      if (!state.bgmPlayer) {
+        state.bgmPlayer.pause();
+        state.bgmPlayer.currentTime = 0;
+        state.bgmPlayer = null;
+      }
+    },
     updateLocalRoomsData(state, newData) {
       // sort newData by id
       newData.rooms.sort((roomA, roomB) => {
@@ -113,7 +131,17 @@ export default new Vuex.Store({
       state.rooms.splice();
     },
   },
-  actions: {},
+  actions: {
+    playBgm(context, fileName) {
+      context.commit("playBgm", fileName);
+    },
+    playSound(context, fileName) {
+      context.commit("playSound", fileName);
+    },
+    stopBgm(context) {
+      context.commit("stopBgm");
+    },
+  },
   modules: {},
   plugins: [
     createPersistedState({

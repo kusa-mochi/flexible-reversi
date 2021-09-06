@@ -72,16 +72,11 @@ export default {
   },
   methods: {
     onStartClick() {
-      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
-      if (!this.bgmPlayer) {
-        this.bgmPlayer = new Audio(require("@/assets/sounds/freshtea.mp3"));
-        this.bgmPlayer.loop = true;
-        this.bgmPlayer.volume = 0.4;
-        this.bgmPlayer.play();
-      }
+      this.$store.dispatch("playSound", "ok-button.mp3");
+      this.$store.dispatch("playBgm", "freshtea.mp3");
     },
     onVersionInfoClick() {
-      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+      this.$store.dispatch("playSound", "ok-button.mp3");
     },
   },
   name: "Top",

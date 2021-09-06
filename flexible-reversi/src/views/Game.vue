@@ -231,7 +231,7 @@ export default {
           console.log("received gameStandby");
           // if you are a room author
           if (this.amIRoomAuthor) {
-            new Audio(require("@/assets/sounds/info.mp3")).play();
+            this.$store.dispatch("playSound", "info.mp3");
             this.$notify({
               title: "Info",
               message: parsedData.data.opponentName + "さんが入室しました。",
@@ -245,7 +245,7 @@ export default {
           window.setTimeout(() => {
             this.hajimeLabelVisilibity = false;
           }, 3000);
-          new Audio(require("@/assets/sounds/don.mp3")).play();
+          this.$store.dispatch("playSound", "don.mp3");
           this.isJustViewing = parsedData.data.currentPlayer !== "you";
           this.gameData.myColor =
             parsedData.data.currentPlayer === "you" ? 1 : 2;
@@ -255,7 +255,7 @@ export default {
           this.isGaming = true;
         } else if (parsedData.dataType === "putStone") {
           console.log("received putStone");
-          new Audio(require("@/assets/sounds/put-stone.mp3")).play();
+          this.$store.dispatch("playSound", "put-stone.mp3");
           this.boardStatus.splice(0, this.boardStatus.length);
           parsedData.data.boardStatus.forEach((row) => {
             this.boardStatus.push(row.slice());
@@ -318,7 +318,7 @@ export default {
 
           this.onGameSet(false);
           window.setTimeout(() => {
-            new Audio(require("@/assets/sounds/open-door.mp3")).play();
+            this.$store.dispatch("playSound", "open-door.mp3");
             // go to the room list page.
             this.$router.push("/room-list");
           }, 2000);
@@ -330,7 +330,7 @@ export default {
         this.isGameReady = false;
         this.isGaming = false;
 
-        new Audio(require("@/assets/sounds/open-door.mp3")).play();
+        this.$store.dispatch("playSound", "open-door.mp3");
 
         // send exit signal to the lambda.
         this.socket.send(
@@ -365,7 +365,7 @@ export default {
           this.loseLabelVisibility = false;
         }, 3000);
       }
-      new Audio(require("@/assets/sounds/dodon.mp3")).play();
+      this.$store.dispatch("playSound", "dodon.mp3");
 
       // reset params.
       this.isJustViewing = true;
@@ -376,7 +376,7 @@ export default {
       // reason of game set
       switch (whyGameSet) {
         case "oppponentExit":
-          new Audio(require("@/assets/sounds/info.mp3")).play();
+          this.$store.dispatch("playSound", "info.mp3");
           this.$notify({
             title: "Info",
             message: "対戦相手の退室により勝利しました。",

@@ -437,11 +437,11 @@ export default {
   },
   methods: {
     battleConfirmationDialogOnCancel() {
-      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.$store.dispatch("playSound", "cancel-button.mp3");
       this.battleConfirmationDialogVisible = false;
     },
     battleConfirmationDialogOnStart() {
-      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+      this.$store.dispatch("playSound", "ok-button.mp3");
       this.battleConfirmationDialogVisible = false;
       let boardStatus = [];
       this.battleConfirmationDialogData.initialBoardStatus.forEach(
@@ -498,7 +498,7 @@ export default {
           const checkResult = parsedData.data.result;
           switch (checkResult) {
             case "OK":
-              new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+              this.$store.dispatch("playSound", "ok-button.mp3");
               // show battleConfirmationDialog.
               this.battleConfirmationDialogData.firstPlayer =
                 parsedData.data.firstPlayer;
@@ -509,7 +509,7 @@ export default {
               this.battleConfirmationDialogVisible = true;
               break;
             case "NG":
-              new Audio(require("@/assets/sounds/info.mp3")).play();
+              this.$store.dispatch("playSound", "info.mp3");
               this.$notify({
                 title: "Error",
                 message: "パスワードが違います。",
@@ -541,12 +541,12 @@ export default {
       }
     },
     onGoToTopButtonClick() {
-      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.$store.dispatch("playSound", "cancel-button.mp3");
       this.$router.push({ path: "/" });
     },
     onMakeRoomDialogCancel() {
       console.log("onMakeRoomDialogCancel");
-      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.$store.dispatch("playSound", "cancel-button.mp3");
       this.makeRoomDialogVisible = false;
       this.socket.send(
         JSON.stringify({
@@ -560,7 +560,7 @@ export default {
     },
     onMakeRoomDialogOpen(roomId) {
       console.log("onMakeRoomDialogOpen");
-      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+      this.$store.dispatch("playSound", "ok-button.mp3");
       this.makeRoomDialogVisible = true;
       this.makeRoomDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
@@ -653,7 +653,7 @@ export default {
       );
     },
     onPasswordToEntryDialogCancel() {
-      new Audio(require("@/assets/sounds/cancel-button.mp3")).play();
+      this.$store.dispatch("playSound", "cancel-button.mp3");
       this.passwordToEntryDialogVisible = false;
     },
     onPasswordToEntryDialogOk() {
@@ -671,13 +671,13 @@ export default {
     },
     onPasswordToEntryDialogOpen(roomId) {
       console.log("onPasswordToEntryDialogOpen");
-      new Audio(require("@/assets/sounds/ok-button.mp3")).play();
+      this.$store.dispatch("playSound", "ok-button.mp3");
       this.passwordToEntryDialogVisible = true;
       this.passwordToEntryDialogFormData.id = roomId;
       this.gameData.roomId = roomId;
     },
     onStageCarouselChanged(newIndex, _) {
-      new Audio(require("@/assets/sounds/stage-select.mp3")).play();
+      this.$store.dispatch("playSound", "stage-select.mp3");
       this.makeRoomDialogFormData.stageName = `stage${newIndex + 1}`;
     },
     onViewButtonClick() {
