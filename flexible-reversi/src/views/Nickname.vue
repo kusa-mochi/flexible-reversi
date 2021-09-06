@@ -90,6 +90,7 @@ export default {
     if (this.myNickname) {
       // redirect to the room list page.
       this.$router.push("/room-list");
+      return;
     }
 
     // create a WebSocket instance.
@@ -115,8 +116,10 @@ export default {
         console.log("onopen");
         console.log(e);
 
-        // request a token to keep communicating with the server even after a page transition.
-        this.socket.send(JSON.stringify({ action: "newToken" }));
+        if (!this.token) {
+          // request a token to keep communicating with the server even after a page transition.
+          this.socket.send(JSON.stringify({ action: "newToken" }));
+        }
       };
       this.socket.onmessage = (e) => {
         console.log("onmessage");
