@@ -3,6 +3,7 @@
 # 2. send data to all WebSocket clients.
 
 import boto3
+from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 import json
 
@@ -14,6 +15,15 @@ def rooms_default_dumps(obj):
     if isinstance(obj, Decimal):
         return int(obj)
     raise TypeError
+
+def send_data(sendProperties):
+    try:
+        print(sendProperties['data'])
+        am = boto3.client('apigatewaymanagementapi', endpoint_url=sendProperties['url'])
+        print('sending..')
+        _ = am.post_to_connection(ConnectionId=sendProperties['connectionId'], Data=sendProperties['data'])
+    except:
+        pass
 
 def lambda_handler(event, context):
     print("getRooms start.")
@@ -66,13 +76,17 @@ def lambda_handler(event, context):
         return { 'statusCode': 500, 'body': 'something went wrong' }
     
     print("transactions start.")
-    for item in connectionTable:
-        try:
-            print(item)
-            am = boto3.client('apigatewaymanagementapi', endpoint_url=item['endpointUrl'])
-            _ = am.post_to_connection(ConnectionId=item['connectionId'], Data=ret)
-        except:
-            pass
+    with ThreadPoolExecutor(max_workers=10, thread_name_prefix="thread") as executor:
+        for item in connectionTable:
+            executor.submit(
+                send_data,
+                {
+                    'url': item['endpointUrl'],
+                    'connectionId': item['connectionId'],
+                    'data': ret
+                }
+            )
+    
     return {
         'statusCode': 200,
         'body': json.dumps('getrooms fin.')
