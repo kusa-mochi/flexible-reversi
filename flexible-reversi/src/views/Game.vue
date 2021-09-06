@@ -358,6 +358,8 @@ export default {
           roomId: this.gameData.roomId
         }
       }));
+
+      this.chatForm.chatInput = "";
     },
     onExitButtonClick() {
       if (this.isGaming) {
