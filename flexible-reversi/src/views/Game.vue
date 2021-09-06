@@ -1,37 +1,48 @@
 <template>
   <div class="game" :class="{ 'game--wait': !isMyTurn }">
-    <p>game</p>
-    <el-button @click="onExitButtonClick" icon="el-icon-back">退室</el-button>
-    <p>
-      {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
-        isMyTurn ? "あなた" : "相手"
-      }})の番です。
-    </p>
-    <div class="board-container">
-      <reversi-board
-        @initialized="onInitialized"
-        @stone-put="onStonePut"
-        :board-width="800"
-        :board-status="boardStatus"
-        :is-read-only="isJustViewing"
-        :player-color="gameData.currentPlayerColor"
-      ></reversi-board>
-      <div class="hajime-label-container">
-        <div
-          v-if="hajimeLabelVisilibity"
-          class="hajime-label hajime-label--showing"
-        >
-          はじめ
+    <div class="game__header">
+      <el-button
+        @click="onExitButtonClick"
+        class="exit-button"
+        icon="el-icon-back"
+        >退室</el-button
+      >
+      <p>
+        {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
+          isMyTurn ? "あなた" : "相手"
+        }})の番です。
+      </p>
+    </div>
+    <div class="game__body">
+      <div class="board-container">
+        <reversi-board
+          @initialized="onInitialized"
+          @stone-put="onStonePut"
+          :board-width="800"
+          :board-status="boardStatus"
+          :is-read-only="isJustViewing"
+          :player-color="gameData.currentPlayerColor"
+        ></reversi-board>
+        <div class="hajime-label-container">
+          <div
+            v-if="hajimeLabelVisilibity"
+            class="hajime-label hajime-label--showing"
+          >
+            はじめ
+          </div>
         </div>
-      </div>
-      <div class="win-label-container">
-        <div v-if="winLabelVisibility" class="win-label win-label--showing">
-          勝利！
+        <div class="win-label-container">
+          <div v-if="winLabelVisibility" class="win-label win-label--showing">
+            勝利！
+          </div>
         </div>
-      </div>
-      <div class="lose-label-container">
-        <div v-if="loseLabelVisibility" class="lose-label lose-label--showing">
-          敗北。。
+        <div class="lose-label-container">
+          <div
+            v-if="loseLabelVisibility"
+            class="lose-label lose-label--showing"
+          >
+            敗北。。
+          </div>
         </div>
       </div>
     </div>
@@ -307,6 +318,7 @@ export default {
 
           this.onGameSet(false);
           window.setTimeout(() => {
+            new Audio(require("@/assets/sounds/open-door.mp3")).play();
             // go to the room list page.
             this.$router.push("/room-list");
           }, 2000);
@@ -317,6 +329,8 @@ export default {
         this.isMyTurn = false;
         this.isGameReady = false;
         this.isGaming = false;
+
+        new Audio(require("@/assets/sounds/open-door.mp3")).play();
 
         // send exit signal to the lambda.
         this.socket.send(
@@ -402,12 +416,63 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$headerHeight: 56px;
+
 .game {
   position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 
   &--wait {
     cursor: wait;
   }
+}
+
+.game-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.6;
+  z-index: 0;
+
+  background-color: black;
+  height: 100%;
+}
+
+.game__header {
+  position: relative;
+  width: 100%;
+  height: $headerHeight;
+  background-color: rgba(white, 0.95);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+
+  .exit-button {
+    position: relative;
+    margin: 8px;
+    z-index: 10;
+  }
+}
+
+.game__body {
+  position: relative;
+  width: 100%;
+  height: calc(100% - #{$headerHeight});
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .board-container {
