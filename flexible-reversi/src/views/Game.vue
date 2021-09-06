@@ -1,17 +1,26 @@
 <template>
   <div class="game" :class="{ 'game--wait': !isMyTurn }">
     <div class="game__header">
-      <el-button
-        @click="onExitButtonClick"
-        class="exit-button"
-        icon="el-icon-back"
-        >退室</el-button
-      >
-      <p>
-        {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
-          isMyTurn ? "あなた" : "相手"
-        }})の番です。
-      </p>
+      <div class="header-left">
+        <el-button
+          @click="onExitButtonClick"
+          class="exit-button"
+          icon="el-icon-back"
+          >退室</el-button
+        >
+        <p>
+          {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
+            isMyTurn ? "あなた" : "相手"
+          }})の番です。
+        </p>
+      </div>
+      <div class="header-right">
+        <el-button
+          @click="chatVisibility = !chatVisibility"
+          circle
+          icon="el-icon-chat-dot-round"
+        ></el-button>
+      </div>
     </div>
     <div class="game__body">
       <div class="board-container">
@@ -46,6 +55,29 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      :modal="false"
+      :visible.sync="chatVisibility"
+      id="chat-window"
+      width="400px"
+    >
+      <div class="chat-log">
+        <table class="chat-log-table">
+          <tbody>
+            <tr v-for="logItem in chatLogs" :key="logItem.key">
+              <td class="log__nickname">{{ logItem.nickname }}</td>
+              <td>:</td>
+              <td>{{ logItem.message }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-input v-model="chatInput" placeholder="対戦相手とのチャットだよ">
+          <el-button slot="append" icon="el-icon-s-promotion"></el-button>
+        </el-input>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -171,6 +203,82 @@ export default {
   },
   data() {
     return {
+      chatInput: "",
+      chatLogs: [
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 0,
+        },
+        {
+          nickname: "さくらもち",
+          message:
+            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
+          key: 1,
+        },
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 0,
+        },
+        {
+          nickname: "さくらもち",
+          message:
+            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
+          key: 1,
+        },
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 0,
+        },
+        {
+          nickname: "さくらもち",
+          message:
+            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
+          key: 1,
+        },
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 0,
+        },
+        {
+          nickname: "さくらもち",
+          message:
+            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
+          key: 1,
+        },
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 0,
+        },
+        {
+          nickname: "さくらもち",
+          message:
+            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
+          key: 1,
+        },
+        {
+          nickname: "くさもち",
+          message:
+            "こんにちはあああああああああああああああああああああああああああああああああ",
+          key: 0,
+        },
+        {
+          nickname: "さくらもち",
+          message:
+            "こんばんはでしょおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお",
+          key: 1,
+        },
+      ],
+      chatVisibility: false,
       hajimeLabelVisilibity: false,
       numEmpty: 0,
       numBlack: 0,
@@ -450,11 +558,35 @@ $headerHeight: 56px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   align-content: center;
 
-  .exit-button {
+  .header-left {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+
+    position: relative;
+
+    .exit-button {
+      position: relative;
+      margin: 8px;
+      z-index: 10;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+
     position: relative;
     margin: 8px;
     z-index: 10;
@@ -505,6 +637,26 @@ $headerHeight: 56px;
   }
 }
 
+.chat-log {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(black, 0.1);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .chat-log-table {
+    td {
+      text-align: left;
+      vertical-align: top;
+      padding: 4px;
+    }
+  }
+
+  .log__nickname {
+    width: 96px;
+  }
+}
+
 @keyframes hajimeKeyFrames {
   0% {
     opacity: 0;
@@ -525,6 +677,26 @@ $headerHeight: 56px;
   100% {
     opacity: 0;
     font-size: 200px;
+  }
+}
+</style>
+
+<style lang="scss">
+#chat-window {
+  .el-dialog {
+    position: absolute;
+    margin: 0;
+    margin-top: 0 !important;
+    top: 64px;
+    right: 8px;
+    height: 540px;
+  }
+  .el-dialog__body {
+    height: calc(100% - 100px);
+    padding: 30px 20px 0 20px;
+  }
+  .el-icon-s-promotion {
+    font-size: 24px;
   }
 }
 </style>
