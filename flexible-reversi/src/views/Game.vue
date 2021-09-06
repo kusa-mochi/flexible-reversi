@@ -69,9 +69,20 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-form @submit.native.prevent="onChatSubmit" :inline="true" :model="chatForm">
-          <el-input v-model="chatForm.chatInput" placeholder="対戦相手とのチャットだよ">
-            <el-button @click="onChatSubmit" slot="append" icon="el-icon-s-promotion"></el-button>
+        <el-form
+          @submit.native.prevent="onChatSubmit"
+          :inline="true"
+          :model="chatForm"
+        >
+          <el-input
+            v-model="chatForm.chatInput"
+            placeholder="対戦相手とのチャットだよ"
+          >
+            <el-button
+              @click="onChatSubmit"
+              slot="append"
+              icon="el-icon-s-promotion"
+            ></el-button>
           </el-input>
         </el-form>
       </span>
@@ -202,7 +213,7 @@ export default {
   data() {
     return {
       chatForm: {
-        chatInput: ""
+        chatInput: "",
       },
       chatLogCounter: 0,
       chatLogs: [
@@ -335,7 +346,7 @@ export default {
           this.chatLogs.unshift({
             nickname: parsedData.data.nickname,
             message: parsedData.data.message,
-            key: this.chatLogCounter++
+            key: this.chatLogCounter++,
           });
         }
       };
@@ -350,14 +361,16 @@ export default {
     },
     onChatSubmit() {
       // send input text to opponent through lambda.
-      this.socket.send(JSON.stringify({
-        action: "sendChat",
-        data: {
-          token: this.token,
-          message: this.chatForm.chatInput,
-          roomId: this.gameData.roomId
-        }
-      }));
+      this.socket.send(
+        JSON.stringify({
+          action: "sendChat",
+          data: {
+            token: this.token,
+            message: this.chatForm.chatInput,
+            roomId: this.gameData.roomId,
+          },
+        })
+      );
 
       this.chatForm.chatInput = "";
     },
@@ -601,19 +614,19 @@ $headerHeight: 56px;
   overflow-y: auto;
 
   display: flex;
-	flex-direction: column-reverse;
-	flex-wrap: nowrap;
+  flex-direction: column-reverse;
+  flex-wrap: nowrap;
 
   .log-record {
     display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	justify-content: flex-start;
-	align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-  position: relative;
-  width: 100%;
-  margin: 4px;
+    position: relative;
+    width: 100%;
+    margin: 4px;
 
     &__nickname {
       position: relative;
