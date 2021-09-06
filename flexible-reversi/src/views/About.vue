@@ -58,6 +58,28 @@
               </td>
             </tr>
             <tr>
+              <td>BGM</td>
+              <td>
+                <el-link
+                  href="https://dova-s.jp/bgm/play8333.html"
+                  target="_blank"
+                  type="primary"
+                  >「フレッシュティー」by.かずち様</el-link
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>効果音</td>
+              <td>
+                <el-link
+                  href="https://soundeffect-lab.info/"
+                  target="_blank"
+                  type="primary"
+                  >効果音ラボ様</el-link
+                >
+              </td>
+            </tr>
+            <tr>
               <td>お問合せ</td>
               <td class="email">@</td>
             </tr>
