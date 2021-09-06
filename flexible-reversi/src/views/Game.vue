@@ -220,6 +220,7 @@ export default {
           console.log("received gameStandby");
           // if you are a room author
           if (this.amIRoomAuthor) {
+            new Audio(require("@/assets/sounds/info.mp3")).play();
             this.$notify({
               title: "Info",
               message: parsedData.data.opponentName + "さんが入室しました。",
@@ -361,6 +362,7 @@ export default {
       // reason of game set
       switch (whyGameSet) {
         case "oppponentExit":
+          new Audio(require("@/assets/sounds/info.mp3")).play();
           this.$notify({
             title: "Info",
             message: "対戦相手の退室により勝利しました。",
