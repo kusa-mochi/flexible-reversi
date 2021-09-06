@@ -645,6 +645,7 @@ export default {
       this.gameData.roomId = roomId;
     },
     onStageCarouselChanged(newIndex, _) {
+      new Audio(require("@/assets/sounds/stage-select.mp3")).play();
       this.makeRoomDialogFormData.stageName = `stage${newIndex + 1}`;
     },
     onViewButtonClick() {
