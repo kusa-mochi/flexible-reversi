@@ -1,5 +1,5 @@
 <template>
-  <div class="game" :class="{ 'game--wait': !isMyTurn }">
+  <div id="game" class="game" :class="{ 'game--wait': !isMyTurn }">
     <div class="game__header">
       <div class="header-left">
         <el-button
@@ -668,6 +668,12 @@ $headerHeight: 56px;
 </style>
 
 <style lang="scss">
+#game {
+  .el-icon-chat-dot-round {
+    font-size: 20px;
+  }
+}
+
 #chat-window {
   .el-dialog {
     position: absolute;
