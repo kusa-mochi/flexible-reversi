@@ -80,7 +80,7 @@ export default new Vuex.Store({
     isGameReady: false,
     isMyTurn: false,
     isGaming: false,
-    /// bgm player
+    //// BGM player
     bgmPlayer: null,
   },
   mutations: {
