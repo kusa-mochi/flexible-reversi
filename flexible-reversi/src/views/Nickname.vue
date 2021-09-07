@@ -22,17 +22,21 @@
             <div class="nickname-input-label">
               あなたのニックネームを決めてね
             </div>
-            <el-input
-              v-model="form.tmpNickname"
-              @keyboard.enter.prevent
-              class="nickname-input"
-              maxlength="20"
-              placeholder="ニックネーム"
-              ref="nicknameInput"
-              required
-              show-word-limit
-              type="text"
-            /><el-button @click="onSubmit" :disabled="!gotToken">OK</el-button>
+            <div class="nickname-input-container">
+              <el-input
+                v-model="form.tmpNickname"
+                @keyboard.enter.prevent
+                class="nickname-input"
+                maxlength="20"
+                placeholder="ニックネーム"
+                ref="nicknameInput"
+                required
+                show-word-limit
+                type="text"
+              /><el-button @click="onSubmit" :disabled="!gotToken"
+                >OK</el-button
+              >
+            </div>
           </div>
         </el-form>
       </div>
@@ -243,6 +247,14 @@ $headerHeight: 56px;
     background-color: rgba(white, 0.95);
     padding: 16px;
     z-index: 10;
+  }
+  .nickname-input-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
   }
   .nickname-input {
     width: 376px;
