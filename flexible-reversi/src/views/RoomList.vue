@@ -219,6 +219,7 @@
     <el-dialog
       :visible.sync="passwordToEntryDialogVisible"
       id="pass-to-entry-dialog"
+      class="pass-to-entry-dialog"
       title="対局用パスワード入力"
     >
       <el-form>
@@ -1002,6 +1003,14 @@ export default {
   }
 }
 
+@media screen and (max-width: 767px) {
+  #pass-to-entry-dialog {
+    .el-dialog {
+      width: 70%;
+    }
+  }
+}
+
 @media screen and (max-width: 480px) {
   #make-room-dialog {
     .el-dialog__header {
@@ -1030,6 +1039,12 @@ export default {
     }
     .make-room-dialog__footer {
       padding-top: 12px;
+    }
+  }
+
+  #pass-to-entry-dialog {
+    .el-dialog {
+      width: 96%;
     }
   }
 }
