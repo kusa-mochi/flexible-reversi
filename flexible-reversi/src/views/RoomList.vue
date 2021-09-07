@@ -66,8 +66,9 @@
       :show-close="false"
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
+      class="make-room-dialog"
       title="部屋作成"
-      width="784px"
+      width="100%"
     >
       <div class="make-room-dialog__content">
         <div class="make-room-dialog__body">
@@ -135,7 +136,7 @@
                   arrow="always"
                   indicator-position="outside"
                   trigger="click"
-                  type="card"
+                  :type="stageCarouselType"
                   height="256px"
                 >
                   <el-carousel-item
@@ -255,6 +256,15 @@ export default {
     backgroundBoardStatus: {
       get() {
         return this.$store.state.backgroundBoardStatus;
+      },
+    },
+    stageCarouselType: {
+      get() {
+        if (this.windowWidth > 556) {
+          return "card";
+        } else {
+          return "";
+        }
       },
     },
     currentPage: {
@@ -430,10 +440,12 @@ export default {
       passwordToEntryDialogVisible: false,
       // passwordToViewDialogVisible: false,
       socket: null,
+      windowWidth: 800,
     };
   },
   destroyed() {
     window.removeEventListener("beforeunload", this.closeSocket);
+    window.removeEventListener("resize", this.onWindowResize);
   },
   methods: {
     battleConfirmationDialogOnCancel() {
@@ -683,6 +695,9 @@ export default {
     onViewButtonClick() {
       this.$router.push({ path: "/game" });
     },
+    onWindowResize() {
+      this.windowWidth = window.innerWidth;
+    },
     reloadRooms() {
       this.socket.send(
         JSON.stringify({
@@ -728,6 +743,10 @@ export default {
         (room.roomState === "standby" || room.roomState === "inGame")
       );
     },
+  },
+  mounted() {
+    this.windowWidth = window.innerWidth;
+    window.addEventListener("resize", this.onWindowResize);
   },
   name: "RoomList",
 };
@@ -846,7 +865,7 @@ export default {
   min-width: 442px;
 }
 
-#make-room-dialog {
+.make-room-dialog {
   .make-room-dialog__content {
     width: 100%;
 
@@ -917,6 +936,9 @@ export default {
 
 <style lang="scss">
 #make-room-dialog {
+  .el-dialog {
+    max-width: 800px;
+  }
   .el-dialog__body,
   .vue-form-wizard .wizard-header {
     padding-top: 0;
@@ -944,6 +966,41 @@ export default {
           pointer-events: auto;
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: 556px) {
+}
+
+@media screen and (max-width: 480px) {
+  #make-room-dialog {
+    .el-dialog__header {
+      padding: 10px;
+    }
+    .el-dialog__body {
+      padding: 10px;
+    }
+    .wizard-header {
+      padding: 0;
+    }
+    .wizard-tab-content {
+      padding: 30px 0 0 0;
+    }
+    .room-name-input {
+      width: 100%;
+    }
+    .entry-password-input {
+      width: 90%;
+    }
+    .el-form-item {
+      margin-bottom: 12px;
+    }
+    .vue-form-wizard {
+      padding-bottom: 12px;
+    }
+    .make-room-dialog__footer {
+      padding-top: 12px;
     }
   }
 }
