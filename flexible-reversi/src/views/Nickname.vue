@@ -261,4 +261,12 @@ $headerHeight: 56px;
     margin-right: 8px;
   }
 }
+
+@media screen and (max-width: 400px) {
+  .nickname__body {
+    .nickname-input {
+      width: 100%;
+    }
+  }
+}
 </style>
