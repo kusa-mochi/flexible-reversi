@@ -947,6 +947,9 @@ export default {
     padding-bottom: 20px;
   }
   .stage-select {
+    .el-radio {
+      padding: 8px;
+    }
     .el-radio__inner {
       display: none;
     }
