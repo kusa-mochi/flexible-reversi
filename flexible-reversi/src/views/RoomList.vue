@@ -26,7 +26,7 @@
           :room-id="room.id"
           :state="room.roomState"
           :title="room.roomName"
-          width="400px"
+          width="330px"
         ></match-room>
         <div class="buttons-area">
           <el-button
@@ -734,18 +734,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$headerHeight: 56px;
-
 .room-list {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
 }
 .room-list__header {
   position: relative;
   width: 100%;
-  height: $headerHeight;
   background-color: rgba(white, 0.95);
 
   display: flex;
@@ -769,7 +769,7 @@ $headerHeight: 56px;
 }
 .welcome-message {
   position: relative;
-  margin: 0px 8px;
+  margin: 8px;
   z-index: 10;
 }
 .my-nickname {
@@ -783,18 +783,19 @@ $headerHeight: 56px;
   align-items: flex-start;
   align-content: flex-start;
 
+  flex-grow: 1;
+
   position: relative;
   overflow-x: hidden;
   overflow-y: scroll;
   width: 100%;
-  height: calc(100% - #{$headerHeight});
 }
 .room {
   $roomPadding: 8px;
   position: relative;
   margin: $roomPadding;
   padding: $roomPadding;
-  height: 243px;
+  height: 211px;
   background-color: rgba(white, 0.95);
 
   display: flex;

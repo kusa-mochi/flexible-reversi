@@ -95,7 +95,7 @@ export default {
     left: 0;
     text-align: left;
     font-family: "Bungee Inline", Roboto, cursive;
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .room-author-name,
@@ -104,20 +104,21 @@ export default {
     top: 0;
     left: 0;
     text-align: center;
+    font-size: 14px;
   }
 
   .room-author-name {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 4px;
-    left: 15%;
+    left: 12%;
     top: 24%;
-    width: 200px;
+    width: 180px;
   }
 
   .room-title {
-    width: 200px;
+    width: 170px;
     top: 3%;
-    left: 50%;
+    left: 49%;
   }
 
   .room-image {
