@@ -182,8 +182,9 @@
     <el-dialog
       :visible.sync="battleConfirmationDialogVisible"
       id="battle-confirmation-dialog"
+      class="battle-confirmation-dialog"
       title="対局前確認"
-      width="440px"
+      :width="battleConfirmationDialogWidth"
     >
       <div class="main-message">
         <span class="room-author">{{
@@ -200,7 +201,7 @@
       <div class="stage-image-label">使用ステージ</div>
       <div class="stage-image">
         <reversi-board
-          :board-width="400"
+          :board-width="boardWidthOnBattleConfirmationDialog"
           :board-status="battleConfirmationDialogData.initialBoardStatus"
           :is-read-only="true"
         ></reversi-board>
@@ -256,6 +257,28 @@ export default {
     backgroundBoardStatus: {
       get() {
         return this.$store.state.backgroundBoardStatus;
+      },
+    },
+    battleConfirmationDialogWidth: {
+      get() {
+        if (this.windowWidth < 360) {
+          return `${this.windowWidth - 8}px`;
+        } else if (this.windowWidth < 448) {
+          return `${this.windowWidth - 16}px`;
+        } else {
+          return "448px";
+        }
+      },
+    },
+    boardWidthOnBattleConfirmationDialog: {
+      get() {
+        if (this.windowWidth < 360) {
+          return this.windowWidth - 48;
+        } else if (this.windowWidth < 448) {
+          return this.windowWidth - 56;
+        } else {
+          return 398;
+        }
       },
     },
     stageCarouselType: {
@@ -925,7 +948,7 @@ export default {
   }
 }
 
-#battle-confirmation-dialog {
+.battle-confirmation-dialog {
   .room-author,
   .who-is-first-span {
     font-weight: bold;
@@ -973,7 +996,10 @@ export default {
   }
 }
 
-@media screen and (max-width: 556px) {
+#battle-confirmation-dialog {
+  .el-dialog__body {
+    padding: 10px 20px;
+  }
 }
 
 @media screen and (max-width: 480px) {
