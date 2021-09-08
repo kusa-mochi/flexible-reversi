@@ -47,4 +47,8 @@ body {
   height: 100%;
   background-color: #eeeeee;
 }
+
+.el-message-box__wrapper .el-message-box {
+  width: unset;
+}
 </style>
