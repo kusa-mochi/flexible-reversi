@@ -8,7 +8,7 @@
           icon="el-icon-back"
           >退室</el-button
         >
-        <span class="room-number">部屋No.{{gameData.roomId}}</span>
+        <span class="room-number">部屋No.{{ gameData.roomId }}</span>
         <span>
           {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
             isMyTurn ? "あなた" : "相手"
@@ -435,7 +435,7 @@ export default {
           window.setTimeout(() => {
             this.$store.dispatch("playSound", "open-door.mp3");
             this.socket.send(
-            JSON.stringify({
+              JSON.stringify({
                 action: "exitRoom",
                 data: {
                   token: this.token,
@@ -532,7 +532,7 @@ export default {
       this.chatBadgeHidden = true;
       this.chatVisibility = false;
       this.$store.commit("resetGameData");
-    }
+    },
   },
   mounted() {
     this.windowWidth = window.innerWidth;
