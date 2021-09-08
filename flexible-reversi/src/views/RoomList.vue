@@ -78,7 +78,7 @@
             title=""
             subtitle=""
           >
-            <tab-content title="部屋のパスワードなどの設定">
+            <tab-content title="部屋の名前などの設定">
               <el-form :model="makeRoomDialogFormData">
                 <el-form-item>
                   <el-input
