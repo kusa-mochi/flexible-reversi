@@ -26,7 +26,7 @@
           :room-id="room.id"
           :state="room.roomState"
           :title="room.roomName"
-          width="400px"
+          width="330px"
         ></match-room>
         <div class="buttons-area">
           <el-button
@@ -66,8 +66,9 @@
       :show-close="false"
       :visible.sync="makeRoomDialogVisible"
       id="make-room-dialog"
+      class="make-room-dialog"
       title="部屋作成"
-      width="784px"
+      width="100%"
     >
       <div class="make-room-dialog__content">
         <div class="make-room-dialog__body">
@@ -135,7 +136,7 @@
                   arrow="always"
                   indicator-position="outside"
                   trigger="click"
-                  type="card"
+                  :type="stageCarouselType"
                   height="256px"
                 >
                   <el-carousel-item
@@ -181,8 +182,9 @@
     <el-dialog
       :visible.sync="battleConfirmationDialogVisible"
       id="battle-confirmation-dialog"
+      class="battle-confirmation-dialog"
       title="対局前確認"
-      width="440px"
+      :width="battleConfirmationDialogWidth"
     >
       <div class="main-message">
         <span class="room-author">{{
@@ -199,7 +201,7 @@
       <div class="stage-image-label">使用ステージ</div>
       <div class="stage-image">
         <reversi-board
-          :board-width="400"
+          :board-width="boardWidthOnBattleConfirmationDialog"
           :board-status="battleConfirmationDialogData.initialBoardStatus"
           :is-read-only="true"
         ></reversi-board>
@@ -217,6 +219,7 @@
     <el-dialog
       :visible.sync="passwordToEntryDialogVisible"
       id="pass-to-entry-dialog"
+      class="pass-to-entry-dialog"
       title="対局用パスワード入力"
     >
       <el-form>
@@ -255,6 +258,37 @@ export default {
     backgroundBoardStatus: {
       get() {
         return this.$store.state.backgroundBoardStatus;
+      },
+    },
+    battleConfirmationDialogWidth: {
+      get() {
+        if (this.windowWidth < 360) {
+          return `${this.windowWidth - 8}px`;
+        } else if (this.windowWidth < 448) {
+          return `${this.windowWidth - 16}px`;
+        } else {
+          return "448px";
+        }
+      },
+    },
+    boardWidthOnBattleConfirmationDialog: {
+      get() {
+        if (this.windowWidth < 360) {
+          return this.windowWidth - 48;
+        } else if (this.windowWidth < 448) {
+          return this.windowWidth - 56;
+        } else {
+          return 398;
+        }
+      },
+    },
+    stageCarouselType: {
+      get() {
+        if (this.windowWidth > 556) {
+          return "card";
+        } else {
+          return "";
+        }
       },
     },
     currentPage: {
@@ -430,10 +464,12 @@ export default {
       passwordToEntryDialogVisible: false,
       // passwordToViewDialogVisible: false,
       socket: null,
+      windowWidth: 800,
     };
   },
   destroyed() {
     window.removeEventListener("beforeunload", this.closeSocket);
+    window.removeEventListener("resize", this.onWindowResize);
   },
   methods: {
     battleConfirmationDialogOnCancel() {
@@ -683,6 +719,9 @@ export default {
     onViewButtonClick() {
       this.$router.push({ path: "/game" });
     },
+    onWindowResize() {
+      this.windowWidth = window.innerWidth;
+    },
     reloadRooms() {
       this.socket.send(
         JSON.stringify({
@@ -729,23 +768,27 @@ export default {
       );
     },
   },
+  mounted() {
+    this.windowWidth = window.innerWidth;
+    window.addEventListener("resize", this.onWindowResize);
+  },
   name: "RoomList",
 };
 </script>
 
 <style lang="scss" scoped>
-$headerHeight: 56px;
-
 .room-list {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
 }
 .room-list__header {
   position: relative;
   width: 100%;
-  height: $headerHeight;
   background-color: rgba(white, 0.95);
 
   display: flex;
@@ -769,7 +812,7 @@ $headerHeight: 56px;
 }
 .welcome-message {
   position: relative;
-  margin: 0px 8px;
+  margin: 8px;
   z-index: 10;
 }
 .my-nickname {
@@ -783,18 +826,19 @@ $headerHeight: 56px;
   align-items: flex-start;
   align-content: flex-start;
 
+  flex-grow: 1;
+
   position: relative;
   overflow-x: hidden;
   overflow-y: scroll;
   width: 100%;
-  height: calc(100% - #{$headerHeight});
 }
 .room {
   $roomPadding: 8px;
   position: relative;
   margin: $roomPadding;
   padding: $roomPadding;
-  height: 243px;
+  height: 211px;
   background-color: rgba(white, 0.95);
 
   display: flex;
@@ -845,7 +889,7 @@ $headerHeight: 56px;
   min-width: 442px;
 }
 
-#make-room-dialog {
+.make-room-dialog {
   .make-room-dialog__content {
     width: 100%;
 
@@ -905,7 +949,7 @@ $headerHeight: 56px;
   }
 }
 
-#battle-confirmation-dialog {
+.battle-confirmation-dialog {
   .room-author,
   .who-is-first-span {
     font-weight: bold;
@@ -916,6 +960,9 @@ $headerHeight: 56px;
 
 <style lang="scss">
 #make-room-dialog {
+  .el-dialog {
+    max-width: 800px;
+  }
   .el-dialog__body,
   .vue-form-wizard .wizard-header {
     padding-top: 0;
@@ -924,6 +971,9 @@ $headerHeight: 56px;
     padding-bottom: 20px;
   }
   .stage-select {
+    .el-radio {
+      padding: 8px;
+    }
     .el-radio__inner {
       display: none;
     }
@@ -943,6 +993,58 @@ $headerHeight: 56px;
           pointer-events: auto;
         }
       }
+    }
+  }
+}
+
+#battle-confirmation-dialog {
+  .el-dialog__body {
+    padding: 10px 20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #pass-to-entry-dialog {
+    .el-dialog {
+      width: 70%;
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #make-room-dialog {
+    .el-dialog__header {
+      padding: 10px;
+    }
+    .el-dialog__body {
+      padding: 10px;
+    }
+    .wizard-header {
+      padding: 0;
+    }
+    .wizard-tab-content {
+      padding: 30px 0 0 0;
+    }
+    .room-name-input {
+      width: 100%;
+    }
+    .entry-password-input {
+      width: 90%;
+    }
+    .el-form-item {
+      margin-bottom: 12px;
+    }
+    .vue-form-wizard {
+      padding-bottom: 12px;
+    }
+    .make-room-dialog__footer {
+      padding-top: 12px;
+    }
+  }
+
+  #pass-to-entry-dialog {
+    .el-dialog {
+      width: 96%;
     }
   }
 }

@@ -27,6 +27,9 @@
       <el-menu-item class="top-menu-item" disabled index="StageEditor">
         <i class="el-icon-edit"></i>ステージをつくる
       </el-menu-item>
+      <el-menu-item class="top-menu-item" disabled>
+        <i class="el-icon-question"></i>ヘルプ
+      </el-menu-item>
       <el-menu-item
         @click="onVersionInfoClick"
         class="top-menu-item"

@@ -15,11 +15,13 @@
         </p>
       </div>
       <div class="header-right">
-        <el-button
-          @click="chatVisibility = !chatVisibility"
-          circle
-          icon="el-icon-chat-dot-round"
-        ></el-button>
+        <el-badge :hidden="chatBadgeHidden" is-dot>
+          <el-button
+            @click="onChatWindowToggle"
+            circle
+            icon="el-icon-chat-dot-round"
+          ></el-button>
+        </el-badge>
       </div>
     </div>
     <div class="game__body">
@@ -27,7 +29,7 @@
         <reversi-board
           @initialized="onInitialized"
           @stone-put="onStonePut"
-          :board-width="800"
+          :board-width="boardPxWidth"
           :board-status="boardStatus"
           :is-read-only="isJustViewing"
           :player-color="gameData.currentPlayerColor"
@@ -56,10 +58,13 @@
       </div>
     </div>
     <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="true"
       :modal="false"
       :visible.sync="chatVisibility"
       id="chat-window"
-      width="400px"
+      :show-close="false"
+      :width="chatWindowWidth"
     >
       <div class="chat-log">
         <div v-for="logItem in chatLogs" :key="logItem.key" class="log-record">
@@ -108,6 +113,24 @@ export default {
     boardSize: {
       get() {
         return this.$store.state.gameData.boardSize;
+      },
+    },
+    boardPxWidth: {
+      get() {
+        if (this.windowWidth < 800) {
+          return this.windowWidth;
+        } else {
+          return 800;
+        }
+      },
+    },
+    chatWindowWidth: {
+      get() {
+        if (this.windowWidth <= 416) {
+          return `${this.windowWidth * 0.96}px`;
+        } else {
+          return "400px";
+        }
       },
     },
     currentPage: {
@@ -212,6 +235,7 @@ export default {
   },
   data() {
     return {
+      chatBadgeHidden: true,
       chatForm: {
         chatInput: "",
       },
@@ -232,6 +256,7 @@ export default {
       socket: null,
       loseLabelVisibility: false,
       winLabelVisibility: false,
+      windowWidth: 800,
     };
   },
   methods: {
@@ -348,6 +373,11 @@ export default {
             message: parsedData.data.message,
             key: this.chatLogCounter++,
           });
+
+          // new chat notification
+          if (!this.chatVisibility) {
+            this.chatBadgeHidden = false;
+          }
         }
       };
       this.socket.onclose = (e) => {
@@ -358,6 +388,12 @@ export default {
         console.log("onerror");
         console.log(e);
       };
+    },
+    onChatWindowToggle() {
+      this.chatVisibility = !this.chatVisibility;
+      if (this.chatVisibility) {
+        this.chatBadgeHidden = true;
+      }
     },
     onChatSubmit() {
       // send input text to opponent through lambda.
@@ -486,6 +522,13 @@ export default {
         })
       );
     },
+    onWindowResize() {
+      this.windowWidth = window.innerWidth;
+    },
+  },
+  mounted() {
+    this.windowWidth = window.innerWidth;
+    window.addEventListener("resize", this.onWindowResize);
   },
   name: "Game",
 };
@@ -499,6 +542,12 @@ $headerHeight: 56px;
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 
   &--wait {
     cursor: wait;
@@ -527,7 +576,7 @@ $headerHeight: 56px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   align-content: center;
 
   .header-left {
@@ -565,19 +614,27 @@ $headerHeight: 56px;
   position: relative;
   width: 100%;
   height: calc(100% - #{$headerHeight});
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  flex-grow: 1;
+}
+
+.board-container {
+  position: relative;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-}
-
-.board-container {
-  position: relative;
-  width: 800px;
 }
 
 .hajime-label-container,
@@ -665,27 +722,71 @@ $headerHeight: 56px;
     font-size: 200px;
   }
 }
+
+@media screen and (max-width: 550px) {
+  @keyframes hajimeKeyFrames {
+    0% {
+      opacity: 0;
+      font-size: 150px;
+    }
+    6% {
+      opacity: 0.7;
+      font-size: 115px;
+    }
+    12% {
+      opacity: 1;
+      font-size: 92px;
+    }
+    75% {
+      opacity: 1;
+      font-size: 92px;
+    }
+    100% {
+      opacity: 0;
+      font-size: 92px;
+    }
+  }
+}
 </style>
 
 <style lang="scss">
 #game {
-  .el-icon-chat-dot-round {
-    font-size: 20px;
+  .game__header {
+    .el-icon-chat-dot-round {
+      font-size: 20px;
+    }
+    .el-button.is-circle {
+      & + .el-badge__content.is-dot {
+        top: 7px;
+        right: 14px;
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
 }
 
 #chat-window {
+  // no click/tap events on the dialog mask.
+  pointer-events: none;
+
   .el-dialog {
     position: absolute;
     margin: 0;
     margin-top: 0 !important;
     top: 64px;
     right: 8px;
-    height: 540px;
+    height: 510px;
+    pointer-events: auto;
+  }
+  .el-dialog__header {
+    padding: 0;
   }
   .el-dialog__body {
-    height: calc(100% - 100px);
-    padding: 30px 20px 0 20px;
+    padding: 20px 20px 0 20px;
+  }
+  .el-dialog__footer {
+    padding: 20px;
   }
   .el-icon-s-promotion {
     font-size: 24px;
