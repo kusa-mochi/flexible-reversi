@@ -8,11 +8,12 @@
           icon="el-icon-back"
           >退室</el-button
         >
-        <p>
+        <span class="room-number">部屋No.{{gameData.roomId}}</span>
+        <span>
           {{ gameData.currentPlayerColor === 1 ? "黒" : "白" }}({{
             isMyTurn ? "あなた" : "相手"
           }})の番です。
-        </p>
+        </span>
       </div>
       <div class="header-right">
         <el-badge :hidden="chatBadgeHidden" is-dot>
@@ -586,11 +587,17 @@ export default {
     align-content: center;
 
     position: relative;
+    max-width: calc(100% - 62px);
 
     .exit-button {
       position: relative;
       margin: 8px;
       z-index: 10;
+    }
+
+    .room-number {
+      font-size: 16px;
+      margin-right: 8px;
     }
   }
 
