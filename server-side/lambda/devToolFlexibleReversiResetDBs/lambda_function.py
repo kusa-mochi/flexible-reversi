@@ -27,20 +27,20 @@ def lambda_handler(event, context):
                 }
             )
     
-    # id 5以降の部屋情報を削除する。
+    # id 2以降の部屋情報を削除する。
     appDataScan = appData.scan()
     with appData.batch_writer() as batch:
         for each in appDataScan['Items']:
-            if each['id'] >= 5:
+            if each['id'] >= 2:
                 batch.delete_item(
                     Key={
                         'id': each['id']
                     }
                 )
     
-    # id 4の部屋情報をid 5~20にコピーする。
-    vacancyRoomData = appData.get_item(Key={'id': 4})['Item']
-    for roomId in range(5, 21):
+    # id 1の部屋情報をid 2~30にコピーする。
+    vacancyRoomData = appData.get_item(Key={'id': 1})['Item']
+    for roomId in range(2, 31):
         vacancyRoomData['id'] = roomId
         appData.put_item(Item=vacancyRoomData)
     
