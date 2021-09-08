@@ -375,7 +375,7 @@ export default {
           });
 
           // new chat notification
-          if(!this.chatVisibility) {
+          if (!this.chatVisibility) {
             this.chatBadgeHidden = false;
           }
         }
@@ -391,7 +391,7 @@ export default {
     },
     onChatWindowToggle() {
       this.chatVisibility = !this.chatVisibility;
-      if(this.chatVisibility) {
+      if (this.chatVisibility) {
         this.chatBadgeHidden = true;
       }
     },
@@ -725,27 +725,27 @@ $headerHeight: 56px;
 
 @media screen and (max-width: 550px) {
   @keyframes hajimeKeyFrames {
-  0% {
-    opacity: 0;
-    font-size: 150px;
+    0% {
+      opacity: 0;
+      font-size: 150px;
+    }
+    6% {
+      opacity: 0.7;
+      font-size: 115px;
+    }
+    12% {
+      opacity: 1;
+      font-size: 92px;
+    }
+    75% {
+      opacity: 1;
+      font-size: 92px;
+    }
+    100% {
+      opacity: 0;
+      font-size: 92px;
+    }
   }
-  6% {
-    opacity: 0.7;
-    font-size: 115px;
-  }
-  12% {
-    opacity: 1;
-    font-size: 92px;
-  }
-  75% {
-    opacity: 1;
-    font-size: 92px;
-  }
-  100% {
-    opacity: 0;
-    font-size: 92px;
-  }
-}
 }
 </style>
 
@@ -756,7 +756,7 @@ $headerHeight: 56px;
       font-size: 20px;
     }
     .el-button.is-circle {
-      &+.el-badge__content.is-dot {
+      & + .el-badge__content.is-dot {
         top: 7px;
         right: 14px;
         width: 16px;
