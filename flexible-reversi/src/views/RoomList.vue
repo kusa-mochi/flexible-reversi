@@ -107,19 +107,15 @@
                     v-model="makeRoomDialogFormData.requireEntryPassword"
                     >対戦者の入室にパスワードを要求する。</el-checkbox
                   >
-                </el-form-item>
-                <el-form-item>
-                  <div>
-                    <el-input
-                      v-model="makeRoomDialogFormData.entryPassword"
-                      :disabled="!makeRoomDialogFormData.requireEntryPassword"
-                      class="entry-password-input"
-                      placeholder="パスワードを入力してください(20文字以内)"
-                      maxlength="20"
-                      show-password
-                      show-word-limit
-                    ></el-input>
-                  </div>
+                  <el-input
+                    v-model="makeRoomDialogFormData.entryPassword"
+                    :disabled="!makeRoomDialogFormData.requireEntryPassword"
+                    class="entry-password-input"
+                    placeholder="パスワードを入力してください(20文字以内)"
+                    maxlength="20"
+                    show-password
+                    show-word-limit
+                  ></el-input>
                 </el-form-item>
                 <!-- <el-form-item>
               <el-checkbox v-model="makeRoomDialogFormData.canView"
@@ -1025,11 +1021,14 @@ export default {
     .wizard-tab-content {
       padding: 30px 0 0 0;
     }
+    .wizard-card-footer {
+      padding: 20px 0 0 20px;
+    }
     .room-name-input {
       width: 100%;
     }
     .entry-password-input {
-      width: 90%;
+      width: 94%;
     }
     .el-form-item {
       margin-bottom: 12px;
