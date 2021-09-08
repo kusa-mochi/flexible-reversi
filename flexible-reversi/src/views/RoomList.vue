@@ -949,6 +949,10 @@ export default {
 }
 
 .battle-confirmation-dialog {
+  .who-is-first {
+    margin-bottom: 24px;
+  }
+  
   .room-author,
   .who-is-first-span {
     font-weight: bold;
