@@ -536,8 +536,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$headerHeight: 56px;
-
 .game {
   position: relative;
   width: 100%;
@@ -570,7 +568,6 @@ $headerHeight: 56px;
 .game__header {
   position: relative;
   width: 100%;
-  height: $headerHeight;
   background-color: rgba(white, 0.95);
 
   display: flex;
@@ -614,7 +611,6 @@ $headerHeight: 56px;
 .game__body {
   position: relative;
   width: 100%;
-  height: calc(100% - #{$headerHeight});
   overflow: hidden;
 
   display: flex;
