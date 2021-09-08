@@ -167,7 +167,7 @@
         </div>
         <div class="make-room-dialog__footer">
           <div class="footer-left">
-            <el-button @click="onMakeRoomDialogCancel()" type="primary"
+            <el-button @click="onMakeRoomDialogCancel" type="primary"
               >キャンセル</el-button
             >
           </div>
