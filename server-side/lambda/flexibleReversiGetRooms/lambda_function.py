@@ -18,9 +18,8 @@ def rooms_default_dumps(obj):
 
 def send_data(sendProperties):
     try:
-        print(sendProperties['data'])
         am = boto3.client('apigatewaymanagementapi', endpoint_url=sendProperties['url'])
-        print('sending..')
+        print('sending to ' + sendProperties['connectionId'])
         _ = am.post_to_connection(ConnectionId=sendProperties['connectionId'], Data=sendProperties['data'])
     except:
         pass
