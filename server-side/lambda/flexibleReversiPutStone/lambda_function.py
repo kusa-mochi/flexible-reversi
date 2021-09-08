@@ -368,28 +368,28 @@ def lambda_handler(event, context):
     # if game is set
     if retToRoomAuthor['data']['nextPlayer'] == 'youWin' or retToRoomAuthor['data']['nextPlayer'] == 'youLose':
         print('game is set.')
-        sendData = "{\"data\":{\"token\":\"" + roomAuthorToken + "\","
-        sendData += "\"id\":" + str(roomId) + ","
-        sendData += "\"boardLogs\":[],"
-        sendData += "\"canView\":false,"
-        sendData += "\"currentBoard\":[],"
-        sendData += "\"currentPlayer\":true,"
-        sendData += "\"entryPassword\":\"\","
-        sendData += "\"firstPlayer\":true,"
-        sendData += "\"requireEntryPassword\":false,"
-        sendData += "\"roomName\":\"\","
-        sendData += "\"roomState\":\"vacancy\","
-        sendData += "\"thinkingCounter\":0,"
-        sendData += "\"opponentId\":\"4dc4a59af1a341ee468607550985aa4a23437d5061c365f341aad92b09176035\","
-        sendData += "\"opponentName\":\"\","
-        sendData += "\"roomAuthorId\":\"4dc4a59af1a341ee468607550985aa4a23437d5061c365f341aad92b09176035\","
-        sendData += "\"roomAuthor\":\"\""
-        sendData += "}}"
-        response = boto3.client('lambda').invoke(
-            FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiUpdateRoom',
-            InvocationType='Event',
-            Payload=json.dumps({'body':sendData, 'requestContext':{'connectionId':roomAuthorConnectionId}})
-        )
+        # sendData = "{\"data\":{\"token\":\"" + roomAuthorToken + "\","
+        # sendData += "\"id\":" + str(roomId) + ","
+        # sendData += "\"boardLogs\":[],"
+        # sendData += "\"canView\":false,"
+        # sendData += "\"currentBoard\":[],"
+        # sendData += "\"currentPlayer\":true,"
+        # sendData += "\"entryPassword\":\"\","
+        # sendData += "\"firstPlayer\":true,"
+        # sendData += "\"requireEntryPassword\":false,"
+        # sendData += "\"roomName\":\"\","
+        # sendData += "\"roomState\":\"vacancy\","
+        # sendData += "\"thinkingCounter\":0,"
+        # sendData += "\"opponentId\":\"4dc4a59af1a341ee468607550985aa4a23437d5061c365f341aad92b09176035\","
+        # sendData += "\"opponentName\":\"\","
+        # sendData += "\"roomAuthorId\":\"4dc4a59af1a341ee468607550985aa4a23437d5061c365f341aad92b09176035\","
+        # sendData += "\"roomAuthor\":\"\""
+        # sendData += "}}"
+        # response = boto3.client('lambda').invoke(
+        #     FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiUpdateRoom',
+        #     InvocationType='Event',
+        #     Payload=json.dumps({'body':sendData, 'requestContext':{'connectionId':roomAuthorConnectionId}})
+        # )
         return {
             'statusCode': 200,
             'body': json.dumps('gameSet')
