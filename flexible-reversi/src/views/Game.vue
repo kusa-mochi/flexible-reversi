@@ -720,7 +720,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 720px) {
   @keyframes hajimeKeyFrames {
     0% {
       opacity: 0;
