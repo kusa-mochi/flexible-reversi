@@ -64,6 +64,7 @@ def lambda_handler(event, context):
             connectionId = roomAuthorConnectionId
         else:
             # nothing to do
+            print('the player is not a room user.')
             return
     
     # game is set.
