@@ -27,7 +27,7 @@
         <reversi-board
           @initialized="onInitialized"
           @stone-put="onStonePut"
-          :board-width="800"
+          :board-width="boardPxWidth"
           :board-status="boardStatus"
           :is-read-only="isJustViewing"
           :player-color="gameData.currentPlayerColor"
@@ -109,6 +109,17 @@ export default {
       get() {
         return this.$store.state.gameData.boardSize;
       },
+    },
+    boardPxWidth: {
+      get() {
+        if (this.windowWidth < 800) {
+          return this.windowWidth;
+        } else {
+          return 800;
+        }
+      },
+    },
+    },
     },
     currentPage: {
       get() {
@@ -232,6 +243,7 @@ export default {
       socket: null,
       loseLabelVisibility: false,
       winLabelVisibility: false,
+      windowWidth: 800,
     };
   },
   methods: {
@@ -486,6 +498,13 @@ export default {
         })
       );
     },
+    onWindowResize() {
+      this.windowWidth = window.innerWidth;
+    },
+  },
+  mounted() {
+    this.windowWidth = window.innerWidth;
+    window.addEventListener("resize", this.onWindowResize);
   },
   name: "Game",
 };
@@ -499,6 +518,12 @@ $headerHeight: 56px;
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 
   &--wait {
     cursor: wait;
@@ -527,7 +552,7 @@ $headerHeight: 56px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   align-content: center;
 
   .header-left {
@@ -565,19 +590,27 @@ $headerHeight: 56px;
   position: relative;
   width: 100%;
   height: calc(100% - #{$headerHeight});
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  flex-grow: 1;
+}
+
+.board-container {
+  position: relative;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-}
-
-.board-container {
-  position: relative;
-  width: 800px;
 }
 
 .hajime-label-container,
