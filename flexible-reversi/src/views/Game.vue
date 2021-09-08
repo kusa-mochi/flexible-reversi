@@ -367,6 +367,7 @@ export default {
         } else if (parsedData.dataType === "exitRoomDuringGame") {
           console.log("received exitRoom");
           this.onGameSet(true, "oppponentExit");
+          this.resetGameData();
         } else if (parsedData.dataType === "sendChat") {
           this.$store.dispatch("playSound", "receive-chat.mp3");
           this.chatLogs.unshift({
@@ -433,17 +434,21 @@ export default {
           this.onGameSet(false);
           window.setTimeout(() => {
             this.$store.dispatch("playSound", "open-door.mp3");
+            this.socket.send(
+            JSON.stringify({
+                action: "exitRoom",
+                data: {
+                  token: this.token,
+                  roomId: this.gameData.roomId,
+                },
+              })
+            );
+            this.resetGameData();
             // go to the room list page.
             this.$router.push("/room-list");
           }, 2000);
         });
       } else {
-        // reset params.
-        this.isJustViewing = true;
-        this.isMyTurn = false;
-        this.isGameReady = false;
-        this.isGaming = false;
-
         this.$store.dispatch("playSound", "open-door.mp3");
 
         // send exit signal to the lambda.
@@ -456,6 +461,8 @@ export default {
             },
           })
         );
+
+        this.resetGameData();
 
         // go to the room list page.
         this.$router.push("/room-list");
@@ -480,12 +487,6 @@ export default {
         }, 3000);
       }
       this.$store.dispatch("playSound", "dodon.mp3");
-
-      // reset params.
-      this.isJustViewing = true;
-      this.isMyTurn = false;
-      this.isGameReady = false;
-      this.isGaming = false;
 
       // reason of game set
       switch (whyGameSet) {
@@ -527,6 +528,11 @@ export default {
     onWindowResize() {
       this.windowWidth = window.innerWidth;
     },
+    resetGameData() {
+      this.chatBadgeHidden = true;
+      this.chatVisibility = false;
+      this.$store.commit("resetGameData");
+    }
   },
   mounted() {
     this.windowWidth = window.innerWidth;

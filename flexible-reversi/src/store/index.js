@@ -95,6 +95,16 @@ export default new Vuex.Store({
     playSound(state, fileName) {
       new Audio(require(`@/assets/sounds/${fileName}`)).play();
     },
+    resetGameData(state) {
+      state.gameData.currentPlayerColor = 1;
+      state.gameData.isJustViewing = true;
+      state.gameData.opponentNickname = "";
+      state.gameData.roomId = -1;
+      state.gameData.myColor = -1;
+      state.isGameReady = false;
+      state.isMyTurn = false;
+      state.isGaming = false;
+    },
     stopBgm(state) {
       if (!state.bgmPlayer) {
         state.bgmPlayer.pause();
@@ -137,6 +147,9 @@ export default new Vuex.Store({
     },
     playSound(context, fileName) {
       context.commit("playSound", fileName);
+    },
+    resetGameData(context) {
+      context.commit("resetGameData");
     },
     stopBgm(context) {
       context.commit("stopBgm");

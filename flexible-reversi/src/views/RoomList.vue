@@ -470,6 +470,7 @@ export default {
   methods: {
     battleConfirmationDialogOnCancel() {
       this.$store.dispatch("playSound", "cancel-button.mp3");
+      this.$store.commit("resetGameData");
       this.battleConfirmationDialogVisible = false;
     },
     battleConfirmationDialogOnStart() {
@@ -579,6 +580,7 @@ export default {
     onMakeRoomDialogCancel() {
       console.log("onMakeRoomDialogCancel");
       this.$store.dispatch("playSound", "cancel-button.mp3");
+      this.$store.commit("resetGameData");
       this.makeRoomDialogVisible = false;
       this.socket.send(
         JSON.stringify({
@@ -686,6 +688,7 @@ export default {
     },
     onPasswordToEntryDialogCancel() {
       this.$store.dispatch("playSound", "cancel-button.mp3");
+      this.$store.commit("resetGameData");
       this.passwordToEntryDialogVisible = false;
     },
     onPasswordToEntryDialogOk() {
