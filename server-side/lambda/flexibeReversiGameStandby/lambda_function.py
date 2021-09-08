@@ -114,12 +114,12 @@ def lambda_handler(event, context):
             ReturnValues='UPDATED_NEW'
             )
         
-        # # notify all players of the status of each room.
-        # response = boto3.client('lambda').invoke(
-        #     FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiGetRooms',
-        #     InvocationType='Event',
-        #     Payload=json.dumps({'body':"{\"data\":{\"token\":\"" + token + "\"}}", 'requestContext':{'connectionId':connectionId}})
-        # )
+        # notify all players of the status of each room.
+        response = boto3.client('lambda').invoke(
+            FunctionName='arn:aws:lambda:ap-northeast-1:280196608156:function:flexibleReversiGetRooms',
+            InvocationType='Event',
+            Payload=json.dumps({'body':"{\"data\":{\"token\":\"" + token + "\"}}", 'requestContext':{'connectionId':connectionId}})
+        )
     
     return {
         'statusCode': 200,
