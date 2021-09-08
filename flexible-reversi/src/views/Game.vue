@@ -722,6 +722,31 @@ $headerHeight: 56px;
     font-size: 200px;
   }
 }
+
+@media screen and (max-width: 550px) {
+  @keyframes hajimeKeyFrames {
+  0% {
+    opacity: 0;
+    font-size: 150px;
+  }
+  6% {
+    opacity: 0.7;
+    font-size: 115px;
+  }
+  12% {
+    opacity: 1;
+    font-size: 92px;
+  }
+  75% {
+    opacity: 1;
+    font-size: 92px;
+  }
+  100% {
+    opacity: 0;
+    font-size: 92px;
+  }
+}
+}
 </style>
 
 <style lang="scss">
