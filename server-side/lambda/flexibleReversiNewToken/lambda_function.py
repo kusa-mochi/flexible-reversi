@@ -17,7 +17,7 @@ def lambda_handler(event, context):
     
     # 現在時刻
     now = datetime.datetime.now()
-    nowString = str(int(now.timestamp()))
+    nowString = (now.strftime('%Y-%m-%d %H:%M:%S.%f'))
     print(nowString)
     
     # トークンの有効期限
