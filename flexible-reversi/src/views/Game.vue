@@ -475,6 +475,7 @@ export default {
     // gameResult: true=win, false=lose
     onGameSet(gameResult, whyGameSet) {
       console.log("game is set.");
+      this.isGaming = false;
       if (gameResult) {
         this.winLabelVisibility = true;
         window.setTimeout(() => {
