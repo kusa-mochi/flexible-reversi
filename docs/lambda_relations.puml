@@ -13,6 +13,7 @@ frame flexibleReversi_Lambdas {
     agent putStone
     agent exitRoom
     agent exitRoomDuringGame
+    agent sendChat
 
     updateRoom --> getRooms
     putStone --> updateRoom
