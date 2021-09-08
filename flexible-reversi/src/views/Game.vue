@@ -396,19 +396,20 @@ export default {
       }
     },
     onChatSubmit() {
-      // send input text to opponent through lambda.
-      this.socket.send(
-        JSON.stringify({
-          action: "sendChat",
-          data: {
-            token: this.token,
-            message: this.chatForm.chatInput,
-            roomId: this.gameData.roomId,
-          },
-        })
-      );
-
-      this.chatForm.chatInput = "";
+      window.setTimeout(() => {
+        // send input text to opponent through lambda.
+        this.socket.send(
+          JSON.stringify({
+            action: "sendChat",
+            data: {
+              token: this.token,
+              message: this.chatForm.chatInput,
+              roomId: this.gameData.roomId,
+            },
+          })
+        );
+        this.chatForm.chatInput = "";
+      }, 100);
     },
     onExitButtonClick() {
       if (this.isGaming) {
