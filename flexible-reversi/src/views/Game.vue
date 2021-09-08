@@ -15,11 +15,13 @@
         </p>
       </div>
       <div class="header-right">
-        <el-button
-          @click="chatVisibility = !chatVisibility"
-          circle
-          icon="el-icon-chat-dot-round"
-        ></el-button>
+        <el-badge :hidden="chatBadgeHidden" is-dot>
+          <el-button
+            @click="onChatWindowToggle"
+            circle
+            icon="el-icon-chat-dot-round"
+          ></el-button>
+        </el-badge>
       </div>
     </div>
     <div class="game__body">
@@ -56,10 +58,13 @@
       </div>
     </div>
     <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="true"
       :modal="false"
       :visible.sync="chatVisibility"
       id="chat-window"
-      width="400px"
+      :show-close="false"
+      :width="chatWindowWidth"
     >
       <div class="chat-log">
         <div v-for="logItem in chatLogs" :key="logItem.key" class="log-record">
@@ -119,7 +124,14 @@ export default {
         }
       },
     },
-    },
+    chatWindowWidth: {
+      get() {
+        if (this.windowWidth <= 416) {
+          return `${this.windowWidth * 0.96}px`;
+        } else {
+          return "400px";
+        }
+      },
     },
     currentPage: {
       get() {
@@ -223,6 +235,7 @@ export default {
   },
   data() {
     return {
+      chatBadgeHidden: true,
       chatForm: {
         chatInput: "",
       },
@@ -360,6 +373,11 @@ export default {
             message: parsedData.data.message,
             key: this.chatLogCounter++,
           });
+
+          // new chat notification
+          if(!this.chatVisibility) {
+            this.chatBadgeHidden = false;
+          }
         }
       };
       this.socket.onclose = (e) => {
@@ -370,6 +388,12 @@ export default {
         console.log("onerror");
         console.log(e);
       };
+    },
+    onChatWindowToggle() {
+      this.chatVisibility = !this.chatVisibility;
+      if(this.chatVisibility) {
+        this.chatBadgeHidden = true;
+      }
     },
     onChatSubmit() {
       // send input text to opponent through lambda.
@@ -702,23 +726,42 @@ $headerHeight: 56px;
 
 <style lang="scss">
 #game {
-  .el-icon-chat-dot-round {
-    font-size: 20px;
+  .game__header {
+    .el-icon-chat-dot-round {
+      font-size: 20px;
+    }
+    .el-button.is-circle {
+      &+.el-badge__content.is-dot {
+        top: 7px;
+        right: 14px;
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
 }
 
 #chat-window {
+  // no click/tap events on the dialog mask.
+  pointer-events: none;
+
   .el-dialog {
     position: absolute;
     margin: 0;
     margin-top: 0 !important;
     top: 64px;
     right: 8px;
-    height: 540px;
+    height: 510px;
+    pointer-events: auto;
+  }
+  .el-dialog__header {
+    padding: 0;
   }
   .el-dialog__body {
-    height: calc(100% - 100px);
-    padding: 30px 20px 0 20px;
+    padding: 20px 20px 0 20px;
+  }
+  .el-dialog__footer {
+    padding: 20px;
   }
   .el-icon-s-promotion {
     font-size: 24px;
