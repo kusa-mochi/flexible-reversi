@@ -607,6 +607,8 @@ export default {
     .room-number {
       font-size: 16px;
       margin-right: 8px;
+      padding: 8px;
+      background-color: rgba(#169632, 0.1);
     }
   }
 
