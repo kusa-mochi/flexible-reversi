@@ -25,7 +25,7 @@
             </tr>
             <tr>
               <td>バージョン</td>
-              <td>1.0.0</td>
+              <td>0.1.1-alpha</td>
             </tr>
             <tr>
               <td>作者</td>
