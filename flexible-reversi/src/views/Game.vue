@@ -385,6 +385,8 @@ export default {
       this.socket.onclose = (e) => {
         console.log("onclose");
         console.log(e);
+        // reconnect
+        this.initializeWebSocket();
       };
       this.socket.onerror = (e) => {
         console.log("onerror");
