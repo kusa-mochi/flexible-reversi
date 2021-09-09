@@ -94,8 +94,18 @@
           </thead>
           <tbody>
             <tr>
-              <td>1.0.0</td>
-              <td>新規リリース</td>
+              <td>0.1.1-alpha</td>
+              <td>
+                <ul>
+                  <li>
+                    WebSocket接続が自動切断された際に自動で再接続するよう修正。
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>0.1.0-alpha</td>
+              <td>新規アルファ版リリース</td>
             </tr>
           </tbody>
         </table>
