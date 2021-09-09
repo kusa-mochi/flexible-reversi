@@ -8,6 +8,38 @@
 
 <script>
 export default {
+  computed: {
+    serverUrl: {
+      get() {
+        return this.$store.state.serverUrl;
+      },
+    },
+    token: {
+      get() {
+        return this.$store.state.token;
+      },
+    },
+  },
+  created() {
+    window.addEventListener("beforeunload", this.onBeforeUnloadApp);
+  },
+  destroyed() {
+    window.removeEventListener("beforeunload", this.onBeforeUnloadApp);
+  },
+  methods: {
+    onBeforeUnloadApp() {
+      if (!this.token) return;
+      const socket = new WebSocket(this.serverUrl);
+      socket.send(
+        JSON.stringify({
+          action: "deleteToken",
+          data: {
+            token: this.token,
+          },
+        })
+      );
+    },
+  },
   name: "App",
 };
 </script>
